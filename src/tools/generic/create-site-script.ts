@@ -96,7 +96,11 @@ cli({
         css,
         js,
         ...(runAt ? { runAt } : {}),
-        origin: { type: 'agent', note: 'created via localmd Connect' },
+        // The shell's own name, not a hardcoded one: this tool is in the shared
+        // base, so a script created through WebCLI used to be labelled
+        // "created via localmd Connect" — visible to the user when they read a
+        // rule back (get_site_script) or open the options page.
+        origin: { type: 'agent', note: `created via ${chrome.runtime.getManifest().name}` },
       },
       existing?.id ?? makeSiteScriptId(),
       Date.now(),
