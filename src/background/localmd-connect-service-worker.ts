@@ -1,7 +1,7 @@
 /**
  * localmd Connect service worker — the entry point of the third shell
- * (manifest.localmd.json / "localmd Connect"), the paid companion extension for
- * localmd.app. It exposes the generic browser tools (incl. eval_js + the recon
+ * (manifest.localmd.json / "localmd Connect"), the companion extension for
+ * localmd.app (free and open source since 2026-09-07). It exposes the generic browser tools (incl. eval_js + the recon
  * primitives) PLUS persistent SITE SCRIPTS that localmd's own agent drives —
  * create/list/enable/delete/preview (userScripts registration,
  * src/site-scripts/*). Site adapters (find_adapters / run_adapter) were retired

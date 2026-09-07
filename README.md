@@ -6,13 +6,13 @@ built from it:
 - **WebCLI** (`manifest.webcli.json` → `dist-webcli/`) — the shared primitive
   base (the generic browser tools, `eval_js`, the recon primitives, persistent
   site scripts) exposed to CLI agents over a WS-daemon transport.
-- **localmd Connect** (`manifest.localmd.json` → `dist-localmd/`) — the paid
+- **localmd Connect** (`manifest.localmd.json` → `dist-localmd/`) — the
   companion for localmd.app: the same base plus knowledge-base capture tools and
   the browser's own data behind optional permissions.
 
 The **full extension** ("Web Agent" — the in-extension agent, adapters,
-SidePanel) is not here. It lives in the private `web-agent` repo, which depends
-on this one as a git submodule.
+SidePanel) is not here. It lives in the [`web-agent`](https://github.com/whitefoxx/web-agent)
+repo, which depends on this one as a git submodule.
 
 Both shells ride the user's real, signed-in Chrome. Reading is free; a WRITE
 (post, send, delete…) always pauses on a confirmation in the calling app —

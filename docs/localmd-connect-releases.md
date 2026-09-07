@@ -128,9 +128,11 @@ catches code drift; nothing catches the rest.
    whole extra transport and two extra allowed origins
    ([localmd-connect.md](./localmd-connect.md) §12), so testing it proves
    nothing about the artifact you are uploading. With "Allow user scripts" on,
-   cover at minimum one pipeline adapter, one func adapter, and a site script
-   surviving a page reload — driven from localmd.app itself, since the store
-   build has no daemon to drive it with.
+   cover at minimum a capture landing in the inbox, a highlight surviving a
+   reload, one recon tool, and a site script surviving a page reload — driven
+   from localmd.app itself, since the store build has no daemon to drive it
+   with. (This line used to name a pipeline adapter and a func adapter; 0.2.0
+   removed both, which made the checklist ask for a test that cannot be run.)
 
 6. **Package it** — `npm run pack:localmd`. Never hand-zip `dist-localmd/`: the
    dashboard rejects a manifest carrying `key` ("key field is not allowed in
@@ -260,6 +262,17 @@ Three consequences that matter to the store:
   `offscreen.js` was pulling full-shell UI code into this bundle).
 - **The listing had to be rewritten**, not swept: adapters were its second
   headline, one of its three value chips, and an entire screenshot.
+- **No paid tier any more, and a new icon.** localmd.app became free and open
+  source on 2026-09-07, so every "part of the paid tier" line came out of the
+  listing, the hero image, the README and the service worker's header — and the
+  licence gate the handoff doc told localmd to build was never implemented, so
+  nothing functional changed. The icon's lightning bolt became a **mouse
+  cursor**: the extension clicks for you, it is not a speed boost.
+  `public/icons/localmd-connect.svg` is the source, but `store/…/render.mjs`
+  carries its own copy of the glyph path — **change both**, then regenerate the
+  four PNGs (sharp, never qlmanage: it bakes a white background) and re-run
+  `render.mjs` + `raster.mjs`. Changing the icon changes the uploaded artifact,
+  so the zip must be repacked.
 
 **What the shell gained instead.**
 

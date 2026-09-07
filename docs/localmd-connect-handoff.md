@@ -90,9 +90,11 @@ hide_selectors, css, highlight, dry_run_js}` (read) — persistent
    generic tools are identical either way, so nothing is lost in the interim.
 3. **Presence / reconnect** (`src/stores/mcp.ts`): reuse the relayExt polling
    (focus/visibility/5s-while-waiting) per marker.
-4. **Licence**: gate exactly like the WebCLI row — connect and callTool blocked
-   when `restricted` (`stores/licence.ts`). It is part of the paid tier;
-   `BUNDLED_TOOL_SOURCES` unchanged.
+4. **Licence**: ~~gate exactly like the WebCLI row — connect and callTool
+   blocked when `restricted` (`stores/licence.ts`). It is part of the paid
+   tier;~~ **superseded 2026-09-07** — localmd.app is free and open source, and
+   no licence gate was ever implemented (`stores/licence.ts` does not exist).
+   Nothing to gate. `BUNDLED_TOOL_SOURCES` unchanged.
 5. **Naming**: tools surface as `mcp__<sanitized-server>__generic__run_adapter`
    etc. — 36 tools will trip the defer threshold like WebCLI's 28 already do;
    the existing `enable_tools` deferred flow handles it. Consider keeping

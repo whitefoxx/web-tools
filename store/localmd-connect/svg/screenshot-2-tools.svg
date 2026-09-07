@@ -22,7 +22,7 @@
       <path d="M50 36H36v56h14"/>
       <path d="M78 36h14v56H78"/>
     </g>
-    <path d="M70 32 L52 70 h11 L58 96 L78 56 h-11 Z" fill="#fff"/>
+    <path d="M49.2 41 L49.2 84.2 L59.2 74.5 L65.9 91 L72.4 88.3 L65.7 72.1 L78.9 72.1 Z" fill="#fff"/>
   </g><text x="134" y="93" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0.3" opacity="1">localmd Connect</text><text x="72" y="186" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="46" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0" opacity="1">50+ tools your agent can call</text><text x="72" y="230" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="26" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">The low-level building blocks, plus what only this extension adds.</text><text x="72" y="274" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Navigate &amp; read</text><g>
     <rect x="320" y="252" width="112" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
     <text x="376" y="272.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">open_url</text>

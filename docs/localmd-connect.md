@@ -7,9 +7,12 @@
 ## 1. What it is
 
 **localmd Connect** (`manifest.localmd.json`, name
-`localmd Connect - Browser Superpowers`) is the paid companion extension for
+`localmd Connect - Browser Superpowers`) is the companion extension for
 [localmd.app](https://localmd.app) — an in-browser AI knowledge-base agent by
-the same author. localmd already drives WebCLI's 28 generic browser tools over
+the same author. **Both are free and open source as of 2026-09-07**; until then
+this shell was gated behind localmd.app's paid tier, and older text below (and
+in `localmd-connect-handoff.md`) still reflects that — the pricing statements
+there are historical, the licence gate they describe was never implemented. localmd already drives WebCLI's 28 generic browser tools over
 the postMessage relay; this shell is WebCLI's headless base PLUS the two
 full-shell capabilities that most amplify localmd's research workflows:
 

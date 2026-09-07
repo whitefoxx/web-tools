@@ -82,7 +82,7 @@ function logo(x, y, size) {
       <path d="M50 36H36v56h14"/>
       <path d="M78 36h14v56H78"/>
     </g>
-    <path d="M70 32 L52 70 h11 L58 96 L78 56 h-11 Z" fill="#fff"/>
+    <path d="M49.2 41 L49.2 84.2 L59.2 74.5 L65.9 91 L72.4 88.3 L65.7 72.1 L78.9 72.1 Z" fill="#fff"/>
   </g>`;
 }
 
@@ -208,14 +208,15 @@ cards.push({
       fg: C.chipFg,
     });
     s += `<g transform="translate(${(W - chipRowWidth(VALUE_CHIPS, 22, 15, 12)) / 2} 0)">${f.svg}</g>`;
-    // Said plainly and early: this is a companion, and it is part of a paid
-    // tier. A user who learns that only after installing feels tricked.
+    // Said plainly and early: this is a companion and does nothing alone. The
+    // second line used to disclose a paid tier; localmd.app is free and open
+    // source as of 2026-09-07, so it now says that instead.
     s += text(W / 2, 640, 'A companion extension for localmd.app — it does nothing on its own.', {
       size: 24,
       fill: C.muted,
       anchor: 'middle',
     });
-    s += text(W / 2, 690, 'Using it in localmd.app is part of the paid tier.', {
+    s += text(W / 2, 690, 'localmd.app is free and open source.', {
       size: 22,
       fill: C.muted,
       anchor: 'middle',

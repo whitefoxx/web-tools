@@ -27,10 +27,10 @@ localmd Connect gives the AI agent in **localmd.app** a pair of hands in your
 own browser — and gives you a one-key way to put what you are reading into your
 knowledge base.
 
-**localmd.app** is a knowledge base that runs entirely in your browser, over a
-folder of plain Markdown files on your own disk. This extension is its
-companion, and the two are meant to be used together: it lets that agent reach
-the live web the way you do — signed in, in your real Chrome.
+**localmd.app** is a free, open-source knowledge base that runs entirely in your
+browser, over a folder of plain Markdown files on your own disk. This extension
+is its companion, and the two are meant to be used together: it lets that agent
+reach the live web the way you do — signed in, in your real Chrome.
 
 **50+ browser tools.** The low-level primitives an agent actually needs: open a
 page and read it as clean text or Markdown, list what is clickable, click, type,
@@ -102,7 +102,7 @@ runs in your browser and on your machine
 ━━━ BEFORE YOU INSTALL ━━━
 
 • This is a **companion extension**. On its own it does nothing — it needs
-localmd.app, and using it there is part of localmd.app's paid tier.
+localmd.app, which is free and open source.
 • Site scripts need Chrome's **"Allow user scripts"** switch, on this
 extension's details page. It takes one click, the popup walks you through it,
 and everything else works without it.
