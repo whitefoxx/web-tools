@@ -68,3 +68,12 @@ npx skills add whitefoxx/web-tools -g       # install the skills (auto-detects C
 npx -y github:whitefoxx/web-tools           # run the daemon — a git install pulls only the runtime deps
 BRIDGE_PORT=9378 npx -y github:whitefoxx/web-tools
 ```
+
+## Licence
+
+[MIT](./LICENSE) — © 2026 Yunbiao Cheng.
+
+Use it, change it, ship it, sell what you build with it. The adapter catalog in
+the sibling `web-agent-marketplace` repo derives from
+[opencli](https://github.com/jackwener/opencli) (Apache-2.0) and carries that
+project's terms and attribution.
