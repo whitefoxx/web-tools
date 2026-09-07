@@ -249,10 +249,17 @@ section (single purpose, per-permission justifications including the new
 re-rastered: the toolbelt gained two rows and needed tighter spacing to clear
 the 800px edge (measured, not eyeballed — 706/800).
 
-Before uploading: run the §1 CRX check for 0.3.0 first (it was marked PUBLISHED
-on the maintainer's word, not from the download), then §4 from step 4.
+Before uploading: the 0.3.0 CRX check is done (see its entry — the live build
+carries no `userScripts`, confirming this is a real permission delta). Pick up
+§4 from step 4.
 
-### 0.3.0 — 2026-08-06 · submitted 2026-08-07 · **PUBLISHED** (confirmed live by the maintainer 2026-09-07; the §1 CRX check was not re-run at that point — do it before 0.4.0 is uploaded)
+### 0.3.0 — 2026-08-06 · submitted 2026-08-07 · **PUBLISHED** (CRX-confirmed 2026-09-07)
+
+> The §5 download on 2026-09-07 returned `0.3.0`, `WebCLI - Browser Control for
+> Agents`, permissions `debugger, tabs, tabGroups, scripting, storage, cookies,
+> downloads, alarms` — **no `userScripts`**, which is what makes 0.4.0 a genuine
+> permission delta — and a `key` (the store's own, added on publish) plus the
+> `update_url`. Confirmed from the artifact, not from intent.
 
 **Web-app access REMOVED** — the whole 0.2.0 headline reversed, deliberately.
 The "call the tools from your own web app" use case moved wholesale to the new
