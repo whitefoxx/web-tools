@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WebCLI - Browser Control for Agents",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3svKbklrVv6RigEsgRWiHvniGj/THuIKR8tXIfNZz18JDWJqgHq+povIjqzYVaRvlJNVJZ/vDYy21/ouZiKN7lWe9ycdyYnj0lNC1U5MkUWMHkvIfnY7oafyGuF/TTqJZIrj2rdv7N3E+YcseKOY8q4fZ95AsshNgOLGtNm0kVklYXDe66V8VQ4ZY0o33QnuIo5z7p5aMA9LOJsJqA9AI5q8ahTrgQIlTyh6aZ58SB7JnWsYxLOsKocoJHmjjLZpgmfFrE/bL4LnyEJgL0WMEK8pPROwoWPA/S67mluIe6Abb1Tzp/3/OjyUDViwi8hjgxYDz9MhwBBtVgFPBfNZPwIDAQAB",
   "description": "Headless bridge exposing your logged-in Chrome as browser tools for CLI AI agents like Claude Code and Codex.",
   "permissions": [

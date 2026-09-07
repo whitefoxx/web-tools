@@ -167,9 +167,10 @@ const W = 1280,
   H = 800;
 
 /** What the product is, in three nouns — generic tools FIRST, because they are
- * what works everywhere; adapters are the specialisation on top. Rendered twice
- * (chips + centring), so it lives in one place — see chipRowWidth. */
-const VALUE_CHIPS = ['30+ browser tools', '~300 site adapters', 'your logged-in Chrome'];
+ * what works everywhere; capture is what the user does with them every day.
+ * Rendered twice (chips + centring), so it lives in one place — see
+ * chipRowWidth. (Site adapters were the middle noun until 0.2.0 removed them.) */
+const VALUE_CHIPS = ['50+ browser tools', 'one-key capture', 'your logged-in Chrome'];
 
 // S1 — HERO
 cards.push({
@@ -224,10 +225,10 @@ cards.push({
 });
 
 // S2 — TOOLBELT
-// The breadth shot, and deliberately the FIRST thing after the hero: adapters
-// are the differentiator, but the generic primitives are what makes the agent
-// able to do anything at all on a site nobody wrote an adapter for. Site
-// scripts live here as one row rather than owning a screenshot of their own.
+// The breadth shot, and deliberately the FIRST thing after the hero: the generic
+// primitives are what make the agent able to do anything at all on any site, and
+// the rows this shell adds — capture, highlights, recon — are what it adds on
+// top. Site scripts live here as one row rather than owning a screenshot.
 cards.push({
   id: 'screenshot-2-tools',
   w: W,
@@ -236,8 +237,8 @@ cards.push({
   render() {
     let s = background(W, H, [[1080, 120, 560, 'glowB']]);
     s += brandRow(72, 60);
-    s += text(72, 186, '30+ tools your agent can call', { size: 46, weight: 700 });
-    s += text(72, 230, 'The low-level building blocks, plus two things only this extension has.', {
+    s += text(72, 186, '50+ tools your agent can call', { size: 46, weight: 700 });
+    s += text(72, 230, 'The low-level building blocks, plus what only this extension adds.', {
       size: 26,
       fill: C.sec,
     });
@@ -276,7 +277,16 @@ cards.push({
       },
       { t: 'Tabs', c: ['list_tabs', 'get_active_tab', 'manage_tabs', 'close_tab'] },
       { t: 'Page-declared tools', c: ['list_webmcp_tools', 'call_webmcp_tool'] },
-      { t: 'Site adapters', c: ['find_adapters', 'run_adapter'], hi: true },
+      {
+        t: 'Recon & your own JS',
+        c: ['find_structured_data', 'get_a11y_tree', 'capture_network', 'eval_js'],
+      },
+      { t: 'Capture', c: ['clip_page', 'list_inbox', 'ack_inbox'], hi: true },
+      { t: 'Highlights', c: ['get_highlights', 'delete_highlights'], hi: true },
+      {
+        t: "The browser's own data",
+        c: ['search_bookmarks', 'search_history', 'list_reading_list', 'list_recently_closed'],
+      },
       {
         t: 'Site scripts',
         c: [
@@ -289,84 +299,70 @@ cards.push({
         hi: true,
       },
     ];
-    let y = 290;
+    // Eleven groups now (0.2.0 traded two adapter chips for recon, capture,
+    // highlights and browser data), so the rhythm is tighter than it was at
+    // eight. The last row must clear the 800px edge — measure it, do not eyeball.
+    let y = 272;
     for (const g of groups) {
-      s += text(72, y + 4, g.t, { size: 21, weight: 700, fill: g.hi ? C.blue : C.amberSoft });
-      const f = chipFlow(320, y - 21, W - 320 - 72, g.c, {
-        size: 18,
-        h: 32,
-        rowGap: 9,
+      s += text(72, y + 2, g.t, { size: 20, weight: 700, fill: g.hi ? C.blue : C.amberSoft });
+      const f = chipFlow(320, y - 20, W - 320 - 72, g.c, {
+        size: 17,
+        h: 29,
+        rowGap: 7,
         ...(g.hi
           ? { fill: 'rgba(88,166,255,0.2)', stroke: 'rgba(88,166,255,0.5)', fg: '#DCEBFF' }
           : {}),
       });
       s += f.svg;
-      y = Math.max(y + 48, f.endY + 30);
+      y = Math.max(y + 40, f.endY + 22);
     }
     return svgDoc(W, H, s);
   },
 });
 
-// S3 — ADAPTERS
+// S3 — CAPTURE
+// Replaces the adapter story (removed in 0.2.0). This is what a user does with
+// the extension every day: read something, press one key, and it is in the
+// knowledge base. Categories and gestures only — never a list of site names
+// (the 0.1.0 rejection was exactly that, and screenshots count as metadata).
 cards.push({
-  id: 'screenshot-3-adapters',
+  id: 'screenshot-3-capture',
   w: W,
   h: H,
-  label: 'Screenshot 3 · Site adapters',
+  label: 'Screenshot 3 · Capture',
   render() {
     let s = background(W, H, [[980, 120, 620, 'glowB']]);
     s += brandRow(72, 60);
-    s += text(72, 190, 'Ready-made tools for real sites', { size: 46, weight: 700 });
-    s += text(72, 236, '294 adapters across 28 sites — your agent finds the right one.', {
+    s += text(72, 190, 'One key, and it is in your notes', { size: 46, weight: 700 });
+    s += text(72, 236, 'Capture what you are reading — the agent writes it up for you.', {
       size: 26,
       fill: C.sec,
     });
 
-    // Categories, NOT site names. The first submission was rejected for keyword
-    // spam over the brand list this graphic and the description both carried
-    // (localmd-connect-releases.md §5, 0.1.0). Store metadata — description,
-    // screenshots and promo tiles alike — must not enumerate third-party
-    // trademarks; the catalogue itself is the place for the list. Counts are a
-    // release-time snapshot of marketplace/index.json and sum to 294.
-    const sites = [
-      'Social feeds · 103',
-      'Forums & Q&A · 64',
-      'Video · 47',
-      'AI assistants · 39',
-      'Books & reading · 25',
-      'Research & reference · 12',
-      'Product discovery · 4',
+    const kinds = [
+      'The whole page',
+      'Just your selection',
+      'A region you drag',
+      'A PDF, as the file',
+      'Every tab in the window',
     ];
-    const cf = chipFlow(72, 296, W - 144, sites, { size: 20, h: 40 });
+    const cf = chipFlow(72, 296, W - 144, kinds, { size: 20, h: 40 });
     s += cf.svg;
 
-    // The two calls, as the agent actually makes them — a RESEARCH example, in
-    // English, because the reader is someone filling a knowledge base. The arg
-    // column sits at +250 (`find_adapters` is 13 mono chars at size 26, ~203px,
-    // so a smaller offset welds the brace to the tool name) and the args render
-    // at 22, which fits ~62 chars before the panel edge; the run_adapter line
-    // is 57 and would be flush against it at 24.
+    // The gestures, as the user performs them. Mono label column at +250: the
+    // longest key line is 14 chars at size 26 (~219px), so a smaller offset
+    // would weld it to the description — the same trap the adapter card noted.
     const y0 = cf.endY + 64;
     const ARG = { size: 22, font: MONO, fill: C.sec };
     s += panel(72, y0, W - 144, 190);
-    s += text(104, y0 + 52, 'find_adapters', { size: 26, font: MONO, fill: C.blue });
-    s += text(104 + 250, y0 + 52, '{ query: "search academic papers" }', ARG);
-    s += text(104, y0 + 104, 'run_adapter', { size: 26, font: MONO, fill: C.blue });
-    s += text(
-      104 + 250,
-      y0 + 104,
-      '{ site: "arxiv", name: "search", args: { query: "RAG" } }',
-      ARG,
-    );
-    s += text(
-      104,
-      y0 + 152,
-      'Loads on demand, checksum-verified. Nothing is installed, nothing persists.',
-      {
-        size: 21,
-        fill: C.muted,
-      },
-    );
+    s += text(104, y0 + 52, 'Alt+Shift+S', { size: 26, font: MONO, fill: C.blue });
+    s += text(104 + 250, y0 + 52, 'clip this page into today\u2019s note', ARG);
+    s += text(104, y0 + 104, 'Alt+Shift+A', { size: 26, font: MONO, fill: C.blue });
+    s += text(104 + 250, y0 + 104, 'drag a rectangle, annotate it, send it', ARG);
+    s += text(104, y0 + 152, 'Highlight as you read — your marks are still there next visit.', {
+      size: 21,
+      fill: C.muted,
+    });
     s += text(
       W / 2,
       y0 + 268,
@@ -400,7 +396,7 @@ cards.push({
     // spill over the accent bar (the webcli set shipped that bug once).
     const nodes = [
       { t: 'localmd.app', sub: ['your KB agent', 'in this browser'] },
-      { t: 'localmd Connect', sub: ['this extension', 'tools + adapters'] },
+      { t: 'localmd Connect', sub: ['this extension', 'tools + capture'] },
       { t: 'Your Chrome', sub: ['real tabs', 'logged-in'] },
     ];
     // Height derived from the tallest node, never a constant: the webcli set
@@ -474,7 +470,7 @@ cards.push({
       [
         '2',
         'Allow user scripts',
-        "Turn the switch on in the extension's details page. Adapters and site scripts need it.",
+        "Turn the switch on in the extension's details page. Site scripts need it; nothing else does.",
       ],
       [
         '3',
@@ -514,7 +510,7 @@ cards.push({
     s += logo(112, 196, 168);
     s += text(330, 250, 'localmd Connect', { size: 66, weight: 800, spacing: 0.5 });
     // The subline says what this IS and who it is for; the chips below already
-    // enumerate the capabilities, so repeating "site adapters" here spends the
+    // enumerate the capabilities, so repeating "one-key capture" here spends the
     // one readable line in a marquee on something the reader is about to see.
     s += text(
       330,
@@ -525,7 +521,7 @@ cards.push({
         fill: C.sec,
       },
     );
-    const chips = ['30+ browser tools', '~300 site adapters', 'your real Chrome'];
+    const chips = ['50+ browser tools', 'one-key capture', 'your real Chrome'];
     s += chipFlow(330, 358, w - 400, chips, { size: 21, h: 44 }).svg;
     return svgDoc(w, h, s);
   },
@@ -556,7 +552,7 @@ cards.push({
       fill: C.sec,
       anchor: 'middle',
     });
-    s += text(w / 2, 244, 'browser tools · adapters', {
+    s += text(w / 2, 244, 'browser tools · capture', {
       size: 14,
       fill: C.muted,
       anchor: 'middle',

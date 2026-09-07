@@ -103,7 +103,7 @@ ask; if yes, the file is not optional.
 | always                                                                 | `manifest.webcli.json` → `description` if touched — **≤132 chars**, and `name` ≤45                                                                                                                                                                                             | the dashboard REJECTS the upload; a 0.2.0 attempt died on 134 chars. Now pinned by `tests/webcli-tool-surface.test.ts` |
 | always                                                                 | §4 below — a new entry, marked **PUBLISHED** only after §5 step 10                                                                                                                                                                                                             | 0.1.0 sat here labelled as shipped while the store served 0.0.1 (§4)                                                   |
 | tool added / removed / renamed                                         | `tests/webcli-tool-surface.test.ts` (count + membership), `store/webcli/store-listing.md` (the enumerated toolbelt), `store/webcli/render.mjs` (screenshot 3 chips) → re-render + re-raster                                                                                    | the store screenshots are IMAGES; nothing type-checks them                                                             |
-| tool surface or guidance                                               | `bridge/` submodule (SKILL.md + README) → **push first** (§5 step 9)                                                                                                                                                                                                    | the skill reaches users instantly, the extension waits on review                                                       |
+| tool surface or guidance                                               | `skills/webcli/SKILL.md` + README in THIS repo → **push first** (§4 step 9)                                                                                                                                                                                                    | the skill reaches users instantly, the extension waits on review                                                       |
 | a tool's args                                                          | that tool's description string, and `WEBCLI_INSTRUCTIONS` if it changes the recommended loop                                                                                                                                                                                   | descriptions ARE the interface in an agent-free shell (§11)                                                            |
 | manifest `permissions` / `host_permissions` / `externally_connectable` | prepare the dashboard justification text; expect a slower review                                                                                                                                                                                                               | a silent permission delta is the #1 review stall                                                                       |
 | `name`                                                                 | `controlled-tabs.ts` `LEGACY_TITLES` if the part BEFORE the dash changed                                                                                                                                                                                                       | the name is the tab-group title; changing it orphans existing groups (§13 of webcli.md)                                |
@@ -170,11 +170,11 @@ ask; if yes, the file is not optional.
 7. **Upload** in the dashboard → Package → Upload new package. Then update, in the
    same draft, anything §3 changed: description, screenshots, promo tiles.
 8. **Submit for review.** Publishing is manual — the draft sits until submitted.
-9. **Ship the skills side.** The daemon + skills live in the `bridge/`
-   submodule (public repo `whitefoxx/web-tools`) and users install them
-   separately with `npx`. If the release changes the tool surface or the guidance
-   the skill teaches, **push that submodule first** — the skill text reaches users
-   the moment it is pushed, whereas the extension waits on review, and a skill that
+9. **Ship the skills side.** The daemon + skills live in THIS repo
+   (`bridge/server.mjs`, `skills/`) and users install them separately with `npx`.
+   If the release changes the tool surface or the guidance the skill teaches,
+   **push before the extension is approved** — the skill text reaches users the
+   moment it is pushed, whereas the extension waits on review, and a skill that
    names a tool the installed extension lacks is worse than a stale one.
 10. **After it goes live**, re-download the CRX (§1) and confirm the version and
     the headline strings, then add the §6 entry below and flip it to **PUBLISHED**.
@@ -197,6 +197,60 @@ _,hs=struct.unpack('<II', b[4:12])
 m=json.loads(zipfile.ZipFile(io.BytesIO(b[12+hs:])).read('manifest.json'))
 print(m['version'], m['name'])"
 ```
+
+### 0.4.0 — 2026-09-07 · **PREPARED** (not yet uploaded)
+
+The first release cut from **`web-tools`** rather than `web-agent`, and the
+first that adds a permission since 0.0.1. Expect a slower review.
+
+**The shell grew from 28 tools to 39.** What the extension can be asked to do:
+
+- **`eval_js`** — run JavaScript in the page's own origin (its cookies, its
+  globals), returning JSON. This is what turns "no tool for this site" into a
+  problem the calling agent can solve during the conversation.
+- **Reconnaissance** — `find_structured_data` (JSON-LD / embedded state),
+  `get_a11y_tree`, `capture_network` (requests WITH their response bodies, via
+  the debugger, so it also sees what the page world cannot), and `find_in_dom`
+  (value → selector, the reverse lookup). Together with `eval_js` these are the
+  perception half of working out an unfamiliar site.
+- **Site scripts** — `create_site_script`, `preview_site_script`,
+  `list_site_scripts`, `get_site_script`, `set_site_script_enabled`,
+  `delete_site_script`: persistent, user-approved page rules (hide / css / js)
+  re-registered on every service-worker start, plus a popup section listing them
+  with pause and delete. `get_site_script` returns a saved rule's full source —
+  a script the user cannot read back is one they cannot audit.
+
+**This adds the `userScripts` permission** (site scripts run in Chrome's
+isolated USER_SCRIPT world). It is the one permission delta in this release, it
+is what the review will focus on, and the justification text is written out in
+`store/webcli/store-listing.md`. Chrome gates the API behind a switch the user
+turns on themselves, so nothing runs until they do and every other tool works
+without it.
+
+**The skills repo is gone — its contents are here.** `web-tools-skills` was
+folded into this repo (`bridge/server.mjs`, `skills/`), so the install command
+changed:
+
+```
+npx skills add whitefoxx/web-tools -g          # was: whitefoxx/webcli-skills
+npx -y github:whitefoxx/web-tools              # the daemon
+```
+
+**The published 0.3.0 listing points at a repository that does not exist**
+(`whitefoxx/webcli-skills`, renamed twice since). Anyone following the store
+page today gets a 404 from step 2. That makes the listing update part of this
+release, not an optional sweep.
+
+Store copy swept accordingly (`store/webcli/`): summary and toolbelt at 35+,
+the new recon / site-script rows, the corrected install command, a "before you
+install" note about the Allow-user-scripts switch, and a full Dashboard-fields
+section (single purpose, per-permission justifications including the new
+`userScripts`, **remote code: NO**, data usage). `render.mjs` re-rendered and
+re-rastered: the toolbelt gained two rows and needed tighter spacing to clear
+the 800px edge (measured, not eyeballed — 706/800).
+
+Before uploading: run the §1 CRX check for 0.3.0 first (it was marked PUBLISHED
+on the maintainer's word, not from the download), then §4 from step 4.
 
 ### 0.3.0 — 2026-08-06 · submitted 2026-08-07 · **PUBLISHED** (confirmed live by the maintainer 2026-09-07; the §1 CRX check was not re-run at that point — do it before 0.4.0 is uploaded)
 
@@ -337,7 +391,7 @@ work too**, since that release never reached users. No permissions added;
 `externally_connectable` is gone from the manifest — with it, localmd.app's
 built-in access. A web app reaches the tools only from an origin the user adds in
 the popup, over a relay content script registered at runtime. Default: empty list,
-nobody. Page-side protocol in the `webcli-skills` README; **localmd.app requires a
+nobody. Page-side protocol in this repo's README; **localmd.app requires a
 code change** (`chrome.runtime.connect(id)` no longer reaches WebCLI) and the page
 no longer needs the extension id at all — the relay hands it over via
 `<html data-webcli-relay>`.

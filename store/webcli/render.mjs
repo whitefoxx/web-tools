@@ -308,7 +308,7 @@ cards.push({
   render() {
     let s = background(W, H, [[1080, 120, 560, 'glowP']]);
     s += brandRow(72, 60);
-    s += text(72, 186, '20+ browser primitives', { size: 46, weight: 700 });
+    s += text(72, 186, '35+ browser primitives', { size: 46, weight: 700 });
     s += text(72, 230, 'The low-level building blocks agents actually need — not a black box.', {
       size: 26,
       fill: C.sec,
@@ -343,17 +343,31 @@ cards.push({
           'get_dom_outline',
           'wait_for_selector',
           'find_in_page',
+          'find_in_dom',
         ],
+      },
+      // The reconnaissance row is 0.4.0's headline: it is what lets an agent work
+      // out an unfamiliar site instead of waiting for someone to add support.
+      {
+        t: 'Recon & your own JS',
+        c: ['find_structured_data', 'get_a11y_tree', 'capture_network', 'eval_js'],
+      },
+      {
+        t: 'Persistent page rules',
+        c: ['create_site_script', 'preview_site_script', 'list_site_scripts', 'delete_site_script'],
       },
       { t: 'Tabs', c: ['list_tabs', 'get_active_tab', 'manage_tabs', 'close_tab'] },
       { t: 'Page-declared tools', c: ['list_webmcp_tools', 'call_webmcp_tool'] },
     ];
-    let y = 300;
+    // Eight groups now (recon + site scripts joined in 0.4.0), so the rhythm is
+    // tighter than it was at six: start higher and advance less. The bottom of
+    // the last row must stay clear of the 800px edge — measure, don't eyeball.
+    let y = 284;
     for (const g of groups) {
       s += text(72, y + 4, g.t, { size: 22, weight: 700, fill: C.amberSoft });
-      const f = chipFlow(320, y - 22, W - 320 - 72, g.c, { size: 19, h: 34, rowGap: 10 });
+      const f = chipFlow(320, y - 22, W - 320 - 72, g.c, { size: 19, h: 32, rowGap: 8 });
       s += f.svg;
-      y = Math.max(y + 52, f.endY + 34);
+      y = Math.max(y + 46, f.endY + 26);
     }
     return svgDoc(W, H, s);
   },
@@ -467,7 +481,7 @@ cards.push({
       th = 120;
     s += `<rect x="${tx}" y="${ty}" width="${tw}" height="${th}" rx="14" fill="#05070F" stroke="rgba(255,255,255,0.10)"/>`;
     s += `<circle cx="${tx + 24}" cy="${ty + 24}" r="6" fill="#ff5f56"/><circle cx="${tx + 44}" cy="${ty + 24}" r="6" fill="#ffbd2e"/><circle cx="${tx + 64}" cy="${ty + 24}" r="6" fill="#27c93f"/>`;
-    s += text(tx + 28, ty + 72, '$ npx -y github:whitefoxx/webcli-skills', {
+    s += text(tx + 28, ty + 72, '$ npx -y github:whitefoxx/web-tools', {
       size: 24,
       font: MONO,
       fill: '#8CF5A0',

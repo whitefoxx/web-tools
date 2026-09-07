@@ -98,10 +98,16 @@ catches code drift; nothing catches the rest.
 
    ```bash
    node -e "const m=require('./dist-localmd/manifest.json');console.log(m.version,m.name)"
-   for f in web-relay.js sandbox.html offscreen.html offscreen.js userscript-runner.js; do
+   # Since 0.2.0 only these two are emitted (the adapter-eval trio went with the
+   # adapters):
+   for f in web-relay.js page-tools.js; do
      ls dist-localmd/$f >/dev/null || echo "MISSING $f"
    done
-   node -e "const m=require('./dist-localmd/manifest.json');console.log(JSON.stringify(m.sandbox),m.web_accessible_resources?'WAR ok':'WAR MISSING')"
+   # …and these must NOT be there, nor a sandbox/WAR entry in the manifest:
+   for f in sandbox.html offscreen.html offscreen.js; do
+     [ -e dist-localmd/$f ] && echo "STALE $f — adapter-eval artifact, rebuild clean"
+   done
+   node -e "const m=require('./dist-localmd/manifest.json');console.log('sandbox:',m.sandbox,'| WAR:',m.web_accessible_resources,'| offscreen perm:',m.permissions.includes('offscreen'))"
 
    # The dev-only capability must NOT be in the upload. All of these must be 0,
    # and `alarms` must be absent — the shipping build has no daemon to redial.
@@ -112,9 +118,10 @@ catches code drift; nothing catches the rest.
    node -e "const m=require('./dist-localmd/manifest.json');console.log('alarms:',m.permissions.includes('alarms'))"
    ```
 
-   The adapter runtime is the part that fails silently: without
-   `sandbox.pages`, the WAR entry, or `userscript-runner.js`, generic tools keep
-   working and every func adapter dies.
+   All three of the last line should print `undefined | undefined | false`. The
+   adapter runtime used to be the part that failed silently; since 0.2.0 the risk
+   is the opposite — a stale `dist-localmd/` still carrying those artifacts means
+   you are about to upload the pre-0.2.0 build.
 
    Then smoke-test **`dist-localmd/`, not `dist-localmd-dev/`**. The dev build
    is not a stand-in here the way a dev-identity build usually is: it carries a
@@ -227,6 +234,79 @@ Post-publication follow-ups, done 2026-08-18 (six days late — the log said
    catalogue row is already gone; only the relay's `webcli:` envelope tag
    remains, which is a wire-format constant and not a product reference.
 
+### 0.2.0 — 2026-09-07 · **PREPARED** (not yet uploaded)
+
+Supersedes the 0.1.1 plan below, which was never submitted — its tab-lifecycle
+fix ships inside this release. The first release cut from **`web-tools`** rather
+than `web-agent`. The tool surface went **36 → 58**, one permission was
+**removed**, and the remote-code answer flips from **YES to NO**.
+
+**Site adapters are gone.** `find_adapters` and `run_adapter` are no longer
+registered, and the ~294-entry marketplace is not consulted by this shell at
+all. They were labelled experimental on 2026-09-05 and retired on 2026-09-06:
+a per-site catalogue rots (every entry needs a checksum rotation and a
+real-browser re-verify when a site changes its markup), and most of it was not
+knowledge-base work. What replaces them is capability, not a catalogue — see the
+recon tools below and `docs/localmd-connect.md` §15.
+
+Three consequences that matter to the store:
+
+- **Remote code: NO.** Nothing is fetched from GitHub at runtime any more.
+  This is the single biggest review-surface improvement in the release.
+- **The `offscreen` permission is removed** — it existed to evaluate adapter
+  source in a sandboxed document. With it went the emitted `sandbox.html`,
+  `offscreen.html/js` and the `userscript-runner.js` web-accessible resource,
+  which had kept shipping as dead weight after the tools were gone (and
+  `offscreen.js` was pulling full-shell UI code into this bundle).
+- **The listing had to be rewritten**, not swept: adapters were its second
+  headline, one of its three value chips, and an entire screenshot.
+
+**What the shell gained instead.**
+
+- **Capture, the everyday path** — `clip_page` (whole page / selection, with a
+  TextQuote anchor to cite back), the browser-side capture inbox (`list_inbox`,
+  `ack_inbox`), region screenshot with annotation, a PDF in a tab filed as the
+  file, and "save every tab in this window". Context menu + keyboard shortcuts,
+  so capturing costs a keystroke.
+- **Highlights** — mark passages in any page, write a note on one, they survive
+  the next visit; `get_highlights` / `delete_highlights` let the agent read back
+  what the user marked by hand. `clip_page` carries a page's highlights with it.
+- **The in-page toolbar's prompts** — translate / explain / a prompt the user
+  wrote, answered in a popover by localmd's own model over MCP sampling (this
+  shell holds no API key).
+- **The browser's own data behind OPTIONAL permissions** — bookmarks, history,
+  reading list, recently-closed. Granted per-switch in the popup, revocable,
+  and absent from the install prompt.
+- **Recon + `eval_js`** — `find_structured_data`, `get_a11y_tree`,
+  `capture_network`, `find_in_dom`, and page-origin JavaScript. This is how a
+  site with no ready-made tool gets reached now: the agent works it out live and
+  the user saves the recipe as a skill of their own.
+- **`get_site_script`** — a saved site script's full source. A rule the user
+  cannot read back is one they cannot audit; the options page grew a
+  tap-to-expand view of the same.
+- **A write gate on the generic tools.** `click` and `press_key` recognise a
+  write control (a submit button, a post/send/delete label, Cmd/Ctrl+Enter) and
+  refuse it unless the call carries `allow_write`, so localmd's confirmation
+  card cannot be bypassed by driving the page's own UI by hand. This closed a
+  real hole: a tweet was posted during testing with no confirmation.
+- The 0.1.1 tab-lifecycle fix (pool tabs reaped, agent window closes when only
+  its placeholder is left).
+
+**Listing + assets rewritten** (`store/localmd-connect/`): summary and value
+chips lead with browser tools + one-key capture; the adapter section is replaced
+by capture / highlights / recon; `screenshot-3-adapters` is replaced by
+`screenshot-3-capture`; the toolbelt screenshot gained capture, highlights,
+recon and browser-data rows (re-measured to clear the 800px edge); the Dashboard
+fields drop the `offscreen` justification, gain `contextMenus` and the optional
+browser-data permissions, and answer remote code **NO**. Still no site names
+anywhere — the 0.1.0 rejection stands as the rule.
+
+**Before uploading:** §6's runbook, with one amendment — step 5's artifact check
+lists `sandbox.html`, `offscreen.html`, `offscreen.js` and `userscript-runner.js`
+as must-exist. As of this release they must be **ABSENT**; only `web-relay.js`
+and `page-tools.js` are expected. Step 6's smoke test should cover capture,
+highlights, a site script surviving a reload, and the write gate — not adapters.
+
 ### 0.1.1 — PLANNED (tab lifecycle)
 
 Not yet submitted. One code change since 0.1.0 (`ff1d6bb`), and it touches
@@ -321,12 +401,15 @@ Paste the whole block. Everything must print what the comments say.
 ```bash
 node -e "const m=require('./dist-localmd/manifest.json');console.log(m.version, '|', m.name)"
 
-# The adapter runtime fails SILENTLY when one of these is missing: generic tools
-# keep working and every func adapter dies.
-for f in web-relay.js sandbox.html offscreen.html offscreen.js userscript-runner.js; do
+# Since 0.2.0 the adapter-eval trio is NOT emitted. web-relay.js and
+# page-tools.js are; the rest must be absent (a stale dist means a stale upload).
+for f in web-relay.js page-tools.js; do
   ls dist-localmd/$f >/dev/null || echo "MISSING $f"
 done
-node -e "const m=require('./dist-localmd/manifest.json');console.log(JSON.stringify(m.sandbox), m.web_accessible_resources?'WAR ok':'WAR MISSING')"
+for f in sandbox.html offscreen.html offscreen.js userscript-runner.js; do
+  [ -e dist-localmd/$f ] && echo "STALE $f — pre-0.2.0 adapter-eval artifact"
+done
+node -e "const m=require('./dist-localmd/manifest.json');console.log('sandbox:', m.sandbox, '| WAR:', m.web_accessible_resources, '| offscreen perm:', m.permissions.includes('offscreen'))"
 
 # Dev-only capability must NOT be in the upload. All three counts must be 0, and
 # alarms must be false — the shipping build has no daemon to redial.
@@ -355,17 +438,21 @@ Chrome will refuse to load it while the store copy is installed. Either:
   reinstall from the store afterwards), or
 - do it in a separate Chrome profile that has no store install.
 
-Then, with **"Allow user scripts" ON** in the extension popup, driven from
-`https://localmd.app` (the store build has no daemon to drive it with), cover at
-minimum:
+Then, driven from `https://localmd.app` (the store build has no daemon to drive
+it with), cover at minimum:
 
-1. one **pipeline** adapter (e.g. `run_adapter {site:"hackernews", name:"best"}`),
-2. one **func** adapter — these are the ones that die when the sandbox/offscreen/
-   runner artifacts are missing (e.g. `run_adapter {site:"douban", name:"search",
-   args:{keyword:"…"}}`),
-3. a **site script** surviving a page reload,
-4. **tab hygiene**: after an adapter run, ten quiet seconds should leave no pool
-   tab and no agent window (docs/tests/platform.md §1).
+1. **capture** — clip a page and a selection, a region screenshot, and check they
+   land in the inbox and get written up,
+2. **highlights** — mark a passage, reload the page, it is still there; the agent
+   can read it back with `get_highlights`,
+3. **the write gate** — ask for something that posts on a real site: the
+   confirmation card must appear, naming the control, and Skip must actually stop
+   it (this is the hole 0.2.0 closed),
+4. **a site script** surviving a page reload (needs **"Allow user scripts" ON**;
+   everything else works without it), and `get_site_script` reading its source
+   back,
+5. **tab hygiene**: ten quiet seconds after a task should leave no stray tab and
+   no agent window (docs/tests/platform.md §1).
 
 ### 7. Package
 

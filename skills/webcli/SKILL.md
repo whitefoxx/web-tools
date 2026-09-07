@@ -15,8 +15,8 @@ Everything runs on the user's machine, in their real Chrome session (no re-auth)
 The WebCLI extension dials OUT to a local daemon (default port **9376**). Start it:
 
 ```bash
-npx -y github:whitefoxx/web-tools-skills            # runs the bridge on 9376
-# or a specific port:  BRIDGE_PORT=9376 npx -y github:whitefoxx/web-tools-skills
+npx -y github:whitefoxx/web-tools            # runs the bridge on 9376
+# or a specific port:  BRIDGE_PORT=9376 npx -y github:whitefoxx/web-tools
 ```
 
 Then check it's connected (the extension auto-connects within ~1 min; the user may

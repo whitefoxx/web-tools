@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "localmd Connect - Browser Superpowers",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlXAT970pG3ksbuUS2Z1ogXCXy47FrcE78HDKTXkUSMWh6llCVSDjZzp41SsoHXZH6fSXxTNf8SmrcIQhqM2oWFGkrMryRHn+ciuOEPzv2wk8Hxg2EO9v/l4Xnus3Cd0X91rDf+hOmICRBw2l7hpt8mAkvPUgXuZPd0L/mAc8hCICqVV387k3Cw20Z2VOyNQFzhod48f0TSmGzOErBZi0xzlahUDGgb5AxaLxLzVoAphEc9K+/IgRft6JpkQq82akTCF4IOGP1edoT/GK8qOP9FrgVNIMs3GJXOioUlbmfR4i9ZAh/MI2rbmTKQ25TyInVKtWk6evWmDnGtbPL7MqdwIDAQAB",
-  "description": "Companion for localmd.app - site adapters, site scripts, and browser tools for your in-browser AI agent.",
+  "description": "Companion for localmd.app - browser tools, page capture and site scripts for your in-browser AI agent.",
   "permissions": [
     "debugger",
     "tabs",

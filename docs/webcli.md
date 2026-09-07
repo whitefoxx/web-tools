@@ -275,7 +275,7 @@ change the port or disable it, set `chrome.storage.local` `bridgePort` /
 ## 9. Dedicated WebCLI skills repo + own port (done)
 
 WebCLI has its **own** public skills repo — **[`whitefoxx/web-tools`](https://github.com/whitefoxx/web-tools)**
-— mirroring `web-agent-skills`, but generic-only: a slim daemon (`server.mjs`,
+— a slim generic-only daemon (`bridge/server.mjs`,
 default port **9376**, `GET /ping /status /tools` + `POST /command`, no adapter/
 explore "control tools") + a `webcli` skill teaching the generic-tool loop. Install
 with `npx skills add whitefoxx/web-tools -g`; run the daemon with

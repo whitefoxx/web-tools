@@ -23,112 +23,145 @@
       <path d="M78 36h14v56H78"/>
     </g>
     <path d="M70 32 L52 70 h11 L58 96 L78 56 h-11 Z" fill="#fff"/>
-  </g><text x="134" y="93" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0.3" opacity="1">localmd Connect</text><text x="72" y="186" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="46" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0" opacity="1">30+ tools your agent can call</text><text x="72" y="230" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="26" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">The low-level building blocks, plus two things only this extension has.</text><text x="72" y="294" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Navigate &amp; read</text><g>
-    <rect x="320" y="269" width="116" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="378" y="291.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">open_url</text>
+  </g><text x="134" y="93" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0.3" opacity="1">localmd Connect</text><text x="72" y="186" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="46" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0" opacity="1">50+ tools your agent can call</text><text x="72" y="230" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="26" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">The low-level building blocks, plus what only this extension adds.</text><text x="72" y="274" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Navigate &amp; read</text><g>
+    <rect x="320" y="252" width="112" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="376" y="272.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">open_url</text>
   </g><g>
-    <rect x="448" y="269" width="170" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="533" y="291.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_page_text</text>
+    <rect x="444" y="252" width="163" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="525.5" y="272.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_page_text</text>
   </g><g>
-    <rect x="630" y="269" width="127" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="693.5" y="291.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">fetch_url</text>
+    <rect x="619" y="252" width="122" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="680" y="272.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">fetch_url</text>
   </g><g>
-    <rect x="769" y="269" width="138" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="838" y="291.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">screenshot</text>
+    <rect x="753" y="252" width="132" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="819" y="272.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">screenshot</text>
   </g><g>
-    <rect x="919" y="269" width="149" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="993.5" y="291.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">scroll_page</text>
-  </g><text x="72" y="342" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Search &amp; crawl</text><g>
-    <rect x="320" y="317" width="138" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="389" y="339.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">web_search</text>
+    <rect x="897" y="252" width="142" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="968" y="272.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">scroll_page</text>
+  </g><text x="72" y="314" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Search &amp; crawl</text><g>
+    <rect x="320" y="292" width="132" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="386" y="312.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">web_search</text>
   </g><g>
-    <rect x="470" y="317" width="138" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="539" y="339.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">list_links</text>
-  </g><text x="72" y="390" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Interact</text><g>
-    <rect x="320" y="365" width="84" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="362" y="387.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">click</text>
+    <rect x="464" y="292" width="132" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="530" y="312.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">list_links</text>
+  </g><text x="72" y="354" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Interact</text><g>
+    <rect x="320" y="332" width="81" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="360.5" y="352.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">click</text>
   </g><g>
-    <rect x="416" y="365" width="127" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="479.5" y="387.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">type_into</text>
+    <rect x="413" y="332" width="122" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="474" y="352.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">type_into</text>
   </g><g>
-    <rect x="555" y="365" width="127" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="618.5" y="387.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">fill_form</text>
+    <rect x="547" y="332" width="122" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="608" y="352.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">fill_form</text>
   </g><g>
-    <rect x="694" y="365" width="127" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="757.5" y="387.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">press_key</text>
+    <rect x="681" y="332" width="122" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="742" y="352.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">press_key</text>
   </g><g>
-    <rect x="833" y="365" width="170" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="918" y="387.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">select_option</text>
+    <rect x="815" y="332" width="163" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="896.5" y="352.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">select_option</text>
   </g><g>
-    <rect x="1015" y="365" width="84" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="1057" y="387.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">hover</text>
+    <rect x="990" y="332" width="81" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="1030.5" y="352.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">hover</text>
   </g><g>
-    <rect x="320" y="406" width="170" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="405" y="428.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">drag_and_drop</text>
+    <rect x="320" y="368" width="163" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="401.5" y="388.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">drag_and_drop</text>
   </g><g>
-    <rect x="502" y="406" width="149" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="576.5" y="428.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">file_upload</text>
+    <rect x="495" y="368" width="142" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="566" y="388.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">file_upload</text>
   </g><g>
-    <rect x="663" y="406" width="170" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="748" y="428.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">handle_dialog</text>
-  </g><text x="72" y="472" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Perceive the DOM</text><g>
-    <rect x="320" y="447" width="203" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="421.5" y="469.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_interactives</text>
+    <rect x="649" y="368" width="163" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="730.5" y="388.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">handle_dialog</text>
+  </g><text x="72" y="421" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Perceive the DOM</text><g>
+    <rect x="320" y="399" width="193" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="416.5" y="419.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_interactives</text>
   </g><g>
-    <rect x="535" y="447" width="116" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="593" y="469.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_html</text>
+    <rect x="525" y="399" width="112" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="581" y="419.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_html</text>
   </g><g>
-    <rect x="663" y="447" width="127" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="726.5" y="469.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">query_dom</text>
+    <rect x="649" y="399" width="122" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="710" y="419.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">query_dom</text>
   </g><g>
-    <rect x="802" y="447" width="192" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="898" y="469.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_dom_outline</text>
+    <rect x="783" y="399" width="183" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="874.5" y="419.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_dom_outline</text>
   </g><g>
-    <rect x="320" y="488" width="214" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="427" y="510.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">wait_for_selector</text>
+    <rect x="978" y="399" width="203" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="1079.5" y="419.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">wait_for_selector</text>
   </g><g>
-    <rect x="546" y="488" width="160" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="626" y="510.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">find_in_page</text>
+    <rect x="320" y="435" width="152" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="396" y="455.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">find_in_page</text>
   </g><g>
-    <rect x="718" y="488" width="149" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="792.5" y="510.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">find_in_dom</text>
-  </g><text x="72" y="554" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Tabs</text><g>
-    <rect x="320" y="529" width="127" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="383.5" y="551.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">list_tabs</text>
+    <rect x="484" y="435" width="142" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="555" y="455.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">find_in_dom</text>
+  </g><text x="72" y="488" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Tabs</text><g>
+    <rect x="320" y="466" width="122" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="381" y="486.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">list_tabs</text>
   </g><g>
-    <rect x="459" y="529" width="181" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="549.5" y="551.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_active_tab</text>
+    <rect x="454" y="466" width="173" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="540.5" y="486.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_active_tab</text>
   </g><g>
-    <rect x="652" y="529" width="149" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="726.5" y="551.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">manage_tabs</text>
+    <rect x="639" y="466" width="142" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="710" y="486.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">manage_tabs</text>
   </g><g>
-    <rect x="813" y="529" width="127" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="876.5" y="551.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">close_tab</text>
-  </g><text x="72" y="602" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Page-declared tools</text><g>
-    <rect x="320" y="577" width="214" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="427" y="599.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">list_webmcp_tools</text>
+    <rect x="793" y="466" width="122" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="854" y="486.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">close_tab</text>
+  </g><text x="72" y="528" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Page-declared tools</text><g>
+    <rect x="320" y="506" width="203" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="421.5" y="526.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">list_webmcp_tools</text>
   </g><g>
-    <rect x="546" y="577" width="203" height="32" rx="16" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
-    <text x="647.5" y="599.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">call_webmcp_tool</text>
-  </g><text x="72" y="650" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#58A6FF" text-anchor="start" letter-spacing="0" opacity="1">Site adapters</text><g>
-    <rect x="320" y="625" width="170" height="32" rx="16" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
-    <text x="405" y="647.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">find_adapters</text>
+    <rect x="535" y="506" width="193" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="631.5" y="526.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">call_webmcp_tool</text>
+  </g><text x="72" y="568" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">Recon &amp; your own JS</text><g>
+    <rect x="320" y="546" width="234" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="437" y="566.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">find_structured_data</text>
   </g><g>
-    <rect x="502" y="625" width="149" height="32" rx="16" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
-    <text x="576.5" y="647.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">run_adapter</text>
-  </g><text x="72" y="698" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#58A6FF" text-anchor="start" letter-spacing="0" opacity="1">Site scripts</text><g>
-    <rect x="320" y="673" width="224" height="32" rx="16" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
-    <text x="432" y="695.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">create_site_script</text>
+    <rect x="566" y="546" width="163" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="647.5" y="566.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">get_a11y_tree</text>
   </g><g>
-    <rect x="556" y="673" width="235" height="32" rx="16" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
-    <text x="673.5" y="695.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">preview_site_script</text>
+    <rect x="741" y="546" width="183" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="832.5" y="566.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">capture_network</text>
   </g><g>
-    <rect x="803" y="673" width="214" height="32" rx="16" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
-    <text x="910" y="695.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">list_site_scripts</text>
+    <rect x="936" y="546" width="101" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="986.5" y="566.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">eval_js</text>
+  </g><text x="72" y="608" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#58A6FF" text-anchor="start" letter-spacing="0" opacity="1">Capture</text><g>
+    <rect x="320" y="586" width="122" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="381" y="606.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">clip_page</text>
   </g><g>
-    <rect x="320" y="714" width="278" height="32" rx="16" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
-    <text x="459" y="736.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">set_site_script_enabled</text>
+    <rect x="454" y="586" width="132" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="520" y="606.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">list_inbox</text>
   </g><g>
-    <rect x="610" y="714" width="224" height="32" rx="16" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
-    <text x="722" y="736.12" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="18" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">delete_site_script</text>
+    <rect x="598" y="586" width="122" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="659" y="606.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">ack_inbox</text>
+  </g><text x="72" y="648" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#58A6FF" text-anchor="start" letter-spacing="0" opacity="1">Highlights</text><g>
+    <rect x="320" y="626" width="173" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="406.5" y="646.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">get_highlights</text>
+  </g><g>
+    <rect x="505" y="626" width="203" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="606.5" y="646.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">delete_highlights</text>
+  </g><text x="72" y="688" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#FFD9A0" text-anchor="start" letter-spacing="0" opacity="1">The browser's own data</text><g>
+    <rect x="320" y="666" width="193" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="416.5" y="686.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">search_bookmarks</text>
+  </g><g>
+    <rect x="525" y="666" width="173" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="611.5" y="686.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">search_history</text>
+  </g><g>
+    <rect x="710" y="666" width="203" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="811.5" y="686.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">list_reading_list</text>
+  </g><g>
+    <rect x="925" y="666" width="234" height="29" rx="14.5" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
+    <text x="1042" y="686.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">list_recently_closed</text>
+  </g><text x="72" y="728" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="700" fill="#58A6FF" text-anchor="start" letter-spacing="0" opacity="1">Site scripts</text><g>
+    <rect x="320" y="706" width="214" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="427" y="726.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">create_site_script</text>
+  </g><g>
+    <rect x="546" y="706" width="224" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="658" y="726.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">preview_site_script</text>
+  </g><g>
+    <rect x="782" y="706" width="203" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="883.5" y="726.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">list_site_scripts</text>
+  </g><g>
+    <rect x="320" y="742" width="265" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="452.5" y="762.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">set_site_script_enabled</text>
+  </g><g>
+    <rect x="597" y="742" width="214" height="29" rx="14.5" fill="rgba(88,166,255,0.2)" stroke="rgba(88,166,255,0.5)"/>
+    <text x="704" y="762.28" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" font-weight="400" fill="#DCEBFF" text-anchor="middle" letter-spacing="0" opacity="1">delete_site_script</text>
   </g></svg>
