@@ -22,5 +22,5 @@
       <path d="M50 36H36v56h14"/>
       <path d="M78 36h14v56H78"/>
     </g>
-    <path d="M49.2 41 L49.2 84.2 L59.2 74.5 L65.9 91 L72.4 88.3 L65.7 72.1 L78.9 72.1 Z" fill="#fff"/>
+    <path d="M0 0 L0 16 L3.7 12.4 L6.2 18.5 L8.6 17.5 L6.1 11.5 L11 11.5 Z" transform="translate(38 36) rotate(-22) scale(3.3)" fill="#fff" stroke="#2f6fd0" stroke-width="1.15" stroke-linejoin="round"/>
   </g><text x="220" y="176" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="34" font-weight="800" fill="#F2F7FF" text-anchor="middle" letter-spacing="0.3" opacity="1">localmd Connect</text><text x="220" y="212" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#A9BFDC" text-anchor="middle" letter-spacing="0" opacity="1">Browser superpowers for localmd.app</text><text x="220" y="244" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="14" font-weight="400" fill="#6E86A6" text-anchor="middle" letter-spacing="0" opacity="1">browser tools · capture</text></svg>

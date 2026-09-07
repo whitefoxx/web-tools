@@ -82,7 +82,7 @@ function logo(x, y, size) {
       <path d="M50 36H36v56h14"/>
       <path d="M78 36h14v56H78"/>
     </g>
-    <path d="M49.2 41 L49.2 84.2 L59.2 74.5 L65.9 91 L72.4 88.3 L65.7 72.1 L78.9 72.1 Z" fill="#fff"/>
+    <path d="M0 0 L0 16 L3.7 12.4 L6.2 18.5 L8.6 17.5 L6.1 11.5 L11 11.5 Z" transform="translate(38 36) rotate(-22) scale(3.3)" fill="#fff" stroke="#2f6fd0" stroke-width="1.15" stroke-linejoin="round"/>
   </g>`;
 }
 

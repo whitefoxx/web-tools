@@ -267,7 +267,11 @@ Three consequences that matter to the store:
   listing, the hero image, the README and the service worker's header — and the
   licence gate the handoff doc told localmd to build was never implemented, so
   nothing functional changed. The icon's lightning bolt became a **mouse
-  cursor**: the extension clicks for you, it is not a speed boost.
+  cursor**: the extension clicks for you, it is not a speed boost. It lies along
+  the icon's diagonal — tip aimed at the top-left corner of `[`, tail running
+  out past the bottom-right of `]` — which means it crosses the bracket arms, so
+  it carries a background-blue outline and reads as sitting on top of them
+  instead of merging into them (both are white).
   `public/icons/localmd-connect.svg` is the source, but `store/…/render.mjs`
   carries its own copy of the glyph path — **change both**, then regenerate the
   four PNGs (sharp, never qlmanage: it bakes a white background) and re-run
