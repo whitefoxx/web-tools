@@ -35,9 +35,20 @@ registration file (registry `cli()` is last-write-wins on (site, name)).
   `--mode localmd-dev` (WS daemon on 9378 exists ONLY in the dev build — a dev
   build is not a valid smoke test of the upload artifact). The shipping build's
   only way in is a page on `https://localmd.app`.
-- `pnpm run build:all` covers the SHIPPING targets only. After changing anything
-  a dev build exercises, rebuild the dev variant too, and reload both the
-  extension and the page (a content-script change never reaches an open tab).
+- **`pnpm run build:all` covers the SHIPPING targets ONLY** — it does not touch
+  `dist-webcli-dev/` or `dist-localmd-dev/`. Those are what you actually load
+  while testing, so a fix can look like it failed when it was simply never in
+  the bundle under test. This has now cost two debugging rounds (findings F-67,
+  and again while smoke-testing 0.4.0), so treat it as a rule, not a tip:
+
+  ```sh
+  pnpm run build:webcli:dev && pnpm run build:localmd:dev   # after ANY src change you will test
+  ```
+
+  Then reload the extension AND the page — a content-script change never reaches
+  an already-open tab. When a change appears not to have taken, check the build
+  timestamp before you touch the code:
+  `ls -la dist-*/assets/*service-worker*.js`.
 
 ## Releasing
 
