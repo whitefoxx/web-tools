@@ -268,10 +268,11 @@ Three consequences that matter to the store:
   licence gate the handoff doc told localmd to build was never implemented, so
   nothing functional changed. The icon's lightning bolt became a **mouse
   cursor**: the extension clicks for you, it is not a speed boost. It lies along
-  the icon's diagonal — tip aimed at the top-left corner of `[`, tail running
-  out past the bottom-right of `]` — which means it crosses the bracket arms, so
-  it carries a background-blue outline and reads as sitting on top of them
-  instead of merging into them (both are white).
+  the icon's diagonal, tip aimed at the top-left corner of `[`. A larger draft
+  crossed the bracket arms and needed a background-blue outline to stay legible
+  against them (both are white); the shipped glyph is small enough to clear all
+  four strokes, so the outline came off with it — check the geometry, not the
+  look, before adding one back.
   `public/icons/localmd-connect.svg` is the source, but `store/…/render.mjs`
   carries its own copy of the glyph path — **change both**, then regenerate the
   four PNGs (sharp, never qlmanage: it bakes a white background) and re-run

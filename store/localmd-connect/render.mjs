@@ -82,7 +82,7 @@ function logo(x, y, size) {
       <path d="M50 36H36v56h14"/>
       <path d="M78 36h14v56H78"/>
     </g>
-    <path d="M0 0 L0 16 L3.7 12.4 L6.2 18.5 L8.6 17.5 L6.1 11.5 L11 11.5 Z" transform="translate(44 43) rotate(-22) scale(2.8)" fill="#fff" stroke="#2f6fd0" stroke-width="1.15" stroke-linejoin="round"/>
+    <path d="M0 0 L0 16 L3.7 12.4 L6.2 18.5 L8.6 17.5 L6.1 11.5 L11 11.5 Z" transform="translate(45.8 45.5) rotate(-22) scale(2.5)" fill="#fff"/>
   </g>`;
 }
 
@@ -166,11 +166,17 @@ const cards = [];
 const W = 1280,
   H = 800;
 
-/** What the product is, in three nouns — generic tools FIRST, because they are
- * what works everywhere; capture is what the user does with them every day.
- * Rendered twice (chips + centring), so it lives in one place — see
- * chipRowWidth. (Site adapters were the middle noun until 0.2.0 removed them.) */
-const VALUE_CHIPS = ['50+ browser tools', 'one-key capture', 'your logged-in Chrome'];
+/** What the product is, in three phrases — CAPTURE first: it is the visible end
+ * of "stop ferrying context by hand", and the thing that shows this is not a
+ * standalone browser toy. Rendered twice (chips + centring), so it lives in one
+ * place — see chipRowWidth.
+ *
+ * Counting BASE TOOLS is fine — they are the foundation, and a primitive does
+ * not rot when a page changes. Counting SITES is the catalogue model this
+ * product abandoned, and is what got submission #1 rejected. Capture leads
+ * anyway, because it is what the user does every day.
+ * (Site adapters were the middle noun until 0.2.0 removed them.) */
+const VALUE_CHIPS = ['clips into your folder', '50+ browser tools', 'your logged-in Chrome'];
 
 // S1 — HERO
 cards.push({
@@ -194,7 +200,7 @@ cards.push({
       W / 2,
       404,
       [
-        'Browser superpowers for localmd.app —',
+        'Browser superpowers for localmd.app,',
         'your AI knowledge base that lives in the browser.',
       ],
       42,
@@ -211,7 +217,7 @@ cards.push({
     // Said plainly and early: this is a companion and does nothing alone. The
     // second line used to disclose a paid tier; localmd.app is free and open
     // source as of 2026-09-07, so it now says that instead.
-    s += text(W / 2, 640, 'A companion extension for localmd.app — it does nothing on its own.', {
+    s += text(W / 2, 640, 'A companion extension for localmd.app. It does nothing on its own.', {
       size: 24,
       fill: C.muted,
       anchor: 'middle',
@@ -335,7 +341,7 @@ cards.push({
     let s = background(W, H, [[980, 120, 620, 'glowB']]);
     s += brandRow(72, 60);
     s += text(72, 190, 'One key, and it is in your notes', { size: 46, weight: 700 });
-    s += text(72, 236, 'Capture what you are reading — the agent writes it up for you.', {
+    s += text(72, 236, 'Capture what you are reading. The agent writes it up for you.', {
       size: 26,
       fill: C.sec,
     });
@@ -360,14 +366,14 @@ cards.push({
     s += text(104 + 250, y0 + 52, 'clip this page into today\u2019s note', ARG);
     s += text(104, y0 + 104, 'Alt+Shift+A', { size: 26, font: MONO, fill: C.blue });
     s += text(104 + 250, y0 + 104, 'drag a rectangle, annotate it, send it', ARG);
-    s += text(104, y0 + 152, 'Highlight as you read — your marks are still there next visit.', {
+    s += text(104, y0 + 152, 'Highlight as you read. Your marks are still there next visit.', {
       size: 21,
       fill: C.muted,
     });
     s += text(
       W / 2,
       y0 + 268,
-      'Works on the sites that need you signed in — it is your own browser session.',
+      'Works on the sites that need you signed in. It is your own browser session.',
       {
         size: 24,
         fill: C.sec,
@@ -435,14 +441,14 @@ cards.push({
     s += text(
       W / 2,
       634,
-      'One site can reach it — localmd.app. That list is built in, not a setting.',
+      'One site can reach it: localmd.app. That list is built in, not a setting.',
       {
         size: 24,
         fill: C.sec,
         anchor: 'middle',
       },
     );
-    s += text(W / 2, 682, 'Nothing is sent anywhere else. The browser is the whole system.', {
+    s += text(W / 2, 682, 'No server of ours, no daemon. What you send your model still goes to your provider.', {
       size: 22,
       fill: C.muted,
       anchor: 'middle',
@@ -466,7 +472,7 @@ cards.push({
       [
         '1',
         'Install it',
-        'Add it from the Chrome Web Store. There is no window to keep open — only a small toolbar popup.',
+        'Add it from the Chrome Web Store. There is no window to keep open, just a small toolbar popup.',
       ],
       [
         '2',
@@ -487,7 +493,7 @@ cards.push({
       s += lines(150, y + 48, wrap(d, 76), 32, { size: 22, fill: C.sec });
       y += 148;
     });
-    s += text(72, 730, 'Need the knowledge base itself? It lives at localmd.app — free to start.', {
+    s += text(72, 730, 'Need the knowledge base itself? It lives at localmd.app, free and open source.', {
       size: 22,
       fill: C.muted,
     });
@@ -516,13 +522,13 @@ cards.push({
     s += text(
       330,
       312,
-      'Browser superpowers for localmd.app — your in-browser AI knowledge base.',
+      'Browser superpowers for localmd.app, your in-browser AI knowledge base.',
       {
         size: 28,
         fill: C.sec,
       },
     );
-    const chips = ['50+ browser tools', 'one-key capture', 'your real Chrome'];
+    const chips = ['clips into your folder', '50+ browser tools', 'your real Chrome'];
     s += chipFlow(330, 358, w - 400, chips, { size: 21, h: 44 }).svg;
     return svgDoc(w, h, s);
   },

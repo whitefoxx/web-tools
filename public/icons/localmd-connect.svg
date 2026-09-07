@@ -7,5 +7,11 @@
     <path d="M50 36H36v56h14"/>
     <path d="M78 36h14v56H78"/>
   </g>
-  <path d="M0 0 L0 16 L3.7 12.4 L6.2 18.5 L8.6 17.5 L6.1 11.5 L11 11.5 Z" transform="translate(44 43) rotate(-22) scale(2.8)" fill="#fff" stroke="#2f6fd0" stroke-width="1.15" stroke-linejoin="round"/>
+  <!-- The cursor lies along the diagonal, tip aimed at the top-left corner of
+       "[" and tail running out past the bottom-right of "]". It clears every
+       bracket stroke on all four sides (x 45.8-82.1, y 45.5-82.6 against arms at
+       y 31.5-40.5 / 87.5-96.5 and verticals at x 31.5-40.5 / 87.5-96.5), which
+       is why it needs no outline — an earlier, larger version crossed the arms
+       and carried a background-blue stroke to stay legible against them. -->
+  <path d="M0 0 L0 16 L3.7 12.4 L6.2 18.5 L8.6 17.5 L6.1 11.5 L11 11.5 Z" transform="translate(45.8 45.5) rotate(-22) scale(2.5)" fill="#fff"/>
 </svg>
