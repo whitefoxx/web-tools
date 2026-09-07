@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1020"/>
+      <stop offset="1" stop-color="#1A1236"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4F6BFF"/>
+      <stop offset="1" stop-color="#A44DFF"/>
+    </linearGradient>
+    <linearGradient id="globe" gradientUnits="userSpaceOnUse" x1="91" y1="83" x2="421" y2="413">
+      <stop offset="0" stop-color="#4F6BFF"/>
+      <stop offset="1" stop-color="#A44DFF"/>
+    </linearGradient>
+    <radialGradient id="glowB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4F6BFF" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#4F6BFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowP" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#A44DFF" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#A44DFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs><rect width="1280" height="800" fill="url(#bg)"/><circle cx="220" cy="170" r="620" fill="url(#glowB)"/><circle cx="1120" cy="720" r="640" fill="url(#glowP)"/><g transform="translate(540 96) scale(0.390625)">
+    <g transform="translate(256 256) scale(1.43) translate(-256 -248)">
+      <g transform="translate(256 248)" stroke="url(#globe)" stroke-width="28.6" fill="none" stroke-linecap="round">
+        <circle cx="0" cy="0" r="165"/>
+        <ellipse cx="0" cy="0" rx="72" ry="165" stroke-opacity="0.75"/>
+        <line x1="-165" y1="0" x2="165" y2="0" stroke-opacity="0.75"/>
+      </g>
+      <g transform="translate(303 315) scale(1.62) translate(-329 -341)">
+        <path d="M 300 272 L 300 384 L 330 354 L 386 354 Z" fill="#F5A623"/>
+      </g>
+    </g>
+  </g><text x="640" y="420" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="96" font-weight="800" fill="#F5F7FF" text-anchor="middle" letter-spacing="1" opacity="1">WebCLI</text><text x="640" y="486" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="400" fill="#AEB7D4" text-anchor="middle" letter-spacing="0" opacity="1">A headless browser-control bridge that hands AI agents</text><text x="640" y="528" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="400" fill="#AEB7D4" text-anchor="middle" letter-spacing="0" opacity="1">the keys to your real, logged-in Chrome.</text><g transform="translate(326 0)"><g>
+    <rect x="0" y="580" width="175" height="46" rx="23" fill="rgba(245,166,35,0.12)" stroke="rgba(245,166,35,0.35)"/>
+    <text x="87.5" y="610.48" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="22" font-weight="400" fill="#FFD9A0" text-anchor="middle" letter-spacing="0" opacity="1">Claude Code</text>
+  </g><g>
+    <rect x="187" y="580" width="96" height="46" rx="23" fill="rgba(245,166,35,0.12)" stroke="rgba(245,166,35,0.35)"/>
+    <text x="235" y="610.48" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="22" font-weight="400" fill="#FFD9A0" text-anchor="middle" letter-spacing="0" opacity="1">Codex</text>
+  </g><g>
+    <rect x="295" y="580" width="334" height="46" rx="23" fill="rgba(245,166,35,0.12)" stroke="rgba(245,166,35,0.35)"/>
+    <text x="462" y="610.48" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="22" font-weight="400" fill="#FFD9A0" text-anchor="middle" letter-spacing="0" opacity="1">any agent that can curl</text>
+  </g></g><text x="640" y="700" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="400" fill="#727C9C" text-anchor="middle" letter-spacing="0" opacity="1">No in-browser agent  ·  plain HTTP, no MCP setup  ·  your real Chrome session</text></svg>

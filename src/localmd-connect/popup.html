@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>localmd Connect</title>
+    <style>
+      :root {
+        --fg: #14181f;
+        --fg-2: #5b6472;
+        --muted: #8a94a3;
+        --border: #e6e9ee;
+        --bg: #ffffff;
+        --card: #f7f8fa;
+        --card-hover: #eef1f5;
+        --accent: #2563eb;
+        --green: #12a150;
+        --amber: #b45309;
+        --red: #d92d20;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --fg: #e8eaed;
+          --fg-2: #a9b1bd;
+          --muted: #7c8695;
+          --border: #2a2f38;
+          --bg: #16191f;
+          --card: #1e222a;
+          --card-hover: #262b34;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        width: 328px;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          13px/1.5 -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          'PingFang SC',
+          sans-serif;
+        padding: 12px 14px 10px;
+      }
+      svg {
+        display: block;
+      }
+      .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .brand {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+      .ghost {
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--fg-2);
+        cursor: pointer;
+      }
+      .ghost:hover {
+        background: var(--card-hover);
+        color: var(--fg);
+      }
+
+      .bar-actions {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+
+      /* ⓪ which knowledge base — the destination every button below shares. */
+      .kb {
+        position: relative;
+        margin-bottom: 10px;
+      }
+      .kb-current {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        width: 100%;
+        font: inherit;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--fg-2);
+        text-align: left;
+        padding: 7px 9px;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        background: var(--card);
+        cursor: pointer;
+      }
+      .kb-current:hover {
+        background: var(--card-hover);
+        color: var(--fg);
+      }
+      .kb-current[disabled] {
+        cursor: default;
+        opacity: 0.75;
+      }
+      /* Says what this row IS. A folder icon and a name could be anything —
+         the popup's whole job is telling you where a capture is going. */
+      .kb-label {
+        flex: 0 0 auto;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .kb-name {
+        color: var(--fg);
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .kb-current[disabled] .kb-name,
+      .kb-name.none {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .kb-caret {
+        margin-left: auto;
+        display: grid;
+        place-items: center;
+        transition: transform 0.15s ease;
+      }
+      .kb-current[aria-expanded='true'] .kb-caret {
+        transform: rotate(180deg);
+      }
+      /* Floats over what follows. A picker that pushed the page down would move
+         the button the user is about to press — and the popup has no room to
+         grow, so the buttons would leave the window entirely. */
+      .kb-list {
+        position: absolute;
+        z-index: 10;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        list-style: none;
+        margin: 0;
+        padding: 4px;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        background: var(--bg);
+        box-shadow:
+          0 10px 24px rgba(0, 0, 0, 0.16),
+          0 2px 6px rgba(0, 0, 0, 0.08);
+        max-height: 208px;
+        overflow-y: auto;
+      }
+      .kb-list[hidden] {
+        display: none;
+      }
+      .kb-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        width: 100%;
+        font: inherit;
+        font-size: 12.5px;
+        color: var(--fg-2);
+        text-align: left;
+        padding: 6px 8px;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        cursor: pointer;
+      }
+      .kb-item:hover {
+        background: var(--card);
+        color: var(--fg);
+      }
+      .kb-item.on {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .kb-empty {
+        padding: 6px 8px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .page {
+        padding-bottom: 11px;
+        border-bottom: 1px solid var(--border);
+      }
+      .page-title {
+        font-size: 14.5px;
+        font-weight: 600;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      /* Where the page is from, and whether the folder has it — one line, because
+         they are one thought. The chip keeps its width; the host gives up its
+         tail. */
+      .page-host-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .page-host {
+        flex: 1;
+        min-width: 0;
+        color: var(--muted);
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .page-status {
+        flex: 0 0 auto;
+      }
+      .page-state {
+        margin-top: 7px;
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .page-state:empty {
+        margin-top: 0;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        align-self: flex-start;
+        padding: 3px 9px 3px 7px;
+        border-radius: 999px;
+        font-size: 11.5px;
+        font-weight: 500;
+      }
+      .chip.saved {
+        background: color-mix(in srgb, var(--green) 14%, transparent);
+        color: var(--green);
+      }
+      .chip.marks {
+        background: var(--card);
+        color: var(--fg-2);
+      }
+      button.chip {
+        border: 0;
+        font-family: inherit;
+        cursor: pointer;
+      }
+      button.chip:hover {
+        background: var(--card-hover);
+        color: var(--fg);
+      }
+      .chip.plain {
+        background: var(--card);
+        color: var(--muted);
+      }
+      .path {
+        color: var(--muted);
+        font-size: 11.5px;
+        word-break: break-all;
+      }
+
+      /* The page's own highlights, as a menu — same floating rule as the folder
+         picker: nothing below may move. */
+      .marks-wrap {
+        position: relative;
+        align-self: flex-start;
+      }
+      .mark-menu {
+        position: absolute;
+        z-index: 10;
+        top: calc(100% + 4px);
+        left: 0;
+        width: 288px;
+        list-style: none;
+        margin: 0;
+        padding: 4px;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        background: var(--bg);
+        box-shadow:
+          0 10px 24px rgba(0, 0, 0, 0.16),
+          0 2px 6px rgba(0, 0, 0, 0.08);
+        max-height: 232px;
+        overflow-y: auto;
+      }
+      .mark-menu[hidden] {
+        display: none;
+      }
+      .mark-row {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+        text-align: left;
+        font: inherit;
+        font-size: 12.5px;
+        color: var(--fg);
+        padding: 7px 8px;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        cursor: pointer;
+      }
+      .mark-row:hover {
+        background: var(--card);
+      }
+      .mark-dot {
+        flex: 0 0 auto;
+        width: 9px;
+        height: 9px;
+        margin-top: 5px;
+        border-radius: 50%;
+      }
+      .mark-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .mark-quote {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .mark-note {
+        margin-top: 2px;
+        color: var(--fg-2);
+        font-size: 11.5px;
+        font-style: italic;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .mark-all {
+        width: 100%;
+        text-align: left;
+        font: inherit;
+        font-size: 11.5px;
+        color: var(--muted);
+        padding: 7px 8px;
+        margin-top: 2px;
+        border: 0;
+        border-top: 1px solid var(--border);
+        border-radius: 0 0 6px 6px;
+        background: transparent;
+        cursor: pointer;
+      }
+      .mark-all:hover {
+        color: var(--accent);
+      }
+
+      .actions {
+        padding-top: 11px;
+      }
+      .primary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        font: inherit;
+        font-size: 13.5px;
+        font-weight: 600;
+        padding: 10px 12px;
+        border: 0;
+        border-radius: 10px;
+        background: var(--accent);
+        color: #fff;
+        cursor: pointer;
+        transition: filter 0.12s ease;
+      }
+      .primary:hover:not(:disabled) {
+        filter: brightness(1.08);
+      }
+      /* Clip is the reason the popup is open; Chat is the other whole-page
+         gesture, so they share a row and the sizes say which is which. */
+      .row-main {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 7px;
+      }
+      .secondary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font: inherit;
+        font-size: 12.5px;
+        font-weight: 500;
+        padding: 10px 8px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--card);
+        color: var(--fg-2);
+        cursor: pointer;
+      }
+      .secondary:hover:not(:disabled) {
+        background: var(--card-hover);
+        color: var(--fg);
+      }
+      .secondary:disabled {
+        opacity: 0.42;
+        cursor: default;
+      }
+      .minor {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 7px;
+        margin-top: 7px;
+      }
+      /* Icon on the left of the label, like the two buttons above them — a
+         column layout made these read as a different kind of control. */
+      .tile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        font: inherit;
+        font-size: 12px;
+        color: var(--fg-2);
+        padding: 9px 8px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--card);
+        cursor: pointer;
+        transition:
+          background 0.12s ease,
+          color 0.12s ease;
+      }
+      .tile:hover:not(:disabled) {
+        background: var(--card-hover);
+        color: var(--fg);
+      }
+      .primary:disabled,
+      .tile:disabled {
+        opacity: 0.42;
+        cursor: default;
+      }
+      .note {
+        margin-top: 9px;
+        font-size: 12px;
+        color: var(--muted);
+        min-height: 1.25em;
+      }
+
+      .warn {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 10px;
+        padding: 9px 11px;
+        border-radius: 9px;
+        background: color-mix(in srgb, var(--amber) 12%, transparent);
+        color: var(--amber);
+        font-size: 12px;
+      }
+      .warn:not(.show) {
+        display: none;
+      }
+      .copy {
+        margin-left: auto;
+        flex: 0 0 auto;
+        font: inherit;
+        font-size: 11.5px;
+        padding: 4px 9px;
+        border: 1px solid currentColor;
+        border-radius: 7px;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      .foot {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 12px;
+        padding-top: 9px;
+        border-top: 1px solid var(--border);
+        font-size: 11.5px;
+        color: var(--muted);
+      }
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--muted);
+        flex: 0 0 auto;
+      }
+      .dot.on {
+        background: var(--green);
+      }
+      .foot .link {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font: inherit;
+        font-size: 11.5px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .foot .link:hover {
+        color: var(--accent);
+      }
+      .ver {
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="bar">
+      <span class="brand">localmd Connect</span>
+      <span class="bar-actions">
+        <button class="ghost" id="openApp" title="Open localmd" aria-label="Open localmd"></button>
+        <button class="ghost" id="openOptions" title="Settings" aria-label="Settings"></button>
+      </span>
+    </header>
+
+    <!-- ⓪ WHICH KNOWLEDGE BASE — where everything below is going. -->
+    <section class="kb">
+      <button class="kb-current" id="kbCurrent" aria-expanded="false" aria-controls="kbList">
+        <span class="ico" id="icoFolder"></span>
+        <span class="kb-label">Knowledge base</span>
+        <span class="kb-name" id="kbName">—</span>
+        <span class="kb-caret" id="icoCaret"></span>
+      </button>
+      <ul class="kb-list" id="kbList" hidden></ul>
+    </section>
+
+    <!-- ① THIS PAGE — what the popup is opened to find out. -->
+    <section class="page">
+      <div class="page-title" id="pageTitle">—</div>
+      <div class="page-host-row">
+        <span class="page-host" id="pageHost"></span>
+        <span class="page-status" id="pageStatus"></span>
+      </div>
+      <div class="page-state" id="pageState"></div>
+    </section>
+
+    <!-- ② WHAT TO DO WITH IT. -->
+    <section class="actions">
+      <div class="row-main">
+        <button
+          class="primary"
+          id="clipPage"
+          title="Save this page into your knowledge base (Alt+Shift+S)"
+        >
+          <span class="ico" id="icoClip"></span><span>Clip this page</span>
+        </button>
+        <button
+          class="secondary"
+          id="askPage"
+          title="Open localmd with this page attached (Alt+Shift+L)"
+        >
+          <span class="ico" id="icoAsk"></span><span>Chat</span>
+        </button>
+      </div>
+      <div class="minor">
+        <button class="tile" id="shotRegion" title="Drag a rectangle and annotate it (Alt+Shift+A)">
+          <span class="ico" id="icoRegion"></span><span>Region</span>
+        </button>
+        <button
+          class="tile"
+          id="shotPage"
+          title="The whole page, scrolled and stitched into one image"
+        >
+          <span class="ico" id="icoFull"></span><span>Full page</span>
+        </button>
+      </div>
+      <div class="note" id="actionNote"></div>
+    </section>
+
+    <!-- ③ Anything actually wrong, said plainly. Not a setting: a problem. -->
+    <div class="warn" id="userScriptsWarn">
+      <span>Turn on <b>Allow user scripts</b> so adapters and site scripts can run.</span>
+      <button class="copy" id="openSettings">Open</button>
+    </div>
+
+    <footer class="foot">
+      <span class="status"
+        ><span class="dot" id="dot"></span><span id="statusText">Checking…</span></span
+      >
+      <button class="link" id="openMarks" title="Every passage you have highlighted">
+        <span class="ico" id="icoMarks"></span><span>Annotations</span>
+      </button>
+      <span class="ver" id="ver"></span>
+    </footer>
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>

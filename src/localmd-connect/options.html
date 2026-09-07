@@ -1,0 +1,1110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>localmd Connect — Settings</title>
+    <style>
+      :root {
+        --fg: #14181f;
+        --fg-2: #5b6472;
+        --muted: #8a94a3;
+        --border: #e6e9ee;
+        --bg: #ffffff;
+        --card: #f7f8fa;
+        --card-hover: #eef1f5;
+        --accent: #2563eb;
+        --green: #12a150;
+        --amber: #b45309;
+        /* Used by the destructive controls, and until now never defined — so
+           `color: var(--red)` was resolving to nothing and the one hover state
+           that was supposed to warn did not change colour at all. */
+        --red: #d92d20;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --fg: #e8eaed;
+          --fg-2: #a9b1bd;
+          --muted: #7c8695;
+          --border: #2a2f38;
+          --bg: #16191f;
+          --card: #1e222a;
+          --card-hover: #262b34;
+          --red: #f97066;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          14px/1.6 -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          'PingFang SC',
+          sans-serif;
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: 6px;
+      }
+
+      /* One page, two panes: what there is to change on the left, the thing
+         being changed on the right. Sections used to be stacked, which made the
+         page a scroll through five topics to reach the sixth. */
+      .shell {
+        display: grid;
+        grid-template-columns: 232px minmax(0, 1fr);
+        height: 100vh;
+        overflow: hidden;
+        /* The whole thing is centred, nav included. Pinning the nav to the
+           window's left edge while centring the pane it drives put the two
+           halves of one control surface at opposite ends of a wide screen,
+           with the eye travelling the gap on every click. */
+        max-width: 1080px;
+        margin-inline: auto;
+      }
+      @media (min-width: 1081px) {
+        .side {
+          border-left: 1px solid var(--border);
+        }
+      }
+      .side {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 22px 14px 18px;
+        border-right: 1px solid var(--border);
+        background: var(--card);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 0 8px;
+      }
+      /* The product's own mark, not a gear in a coloured box: this page is the
+         one place the extension introduces itself. The SVG carries its own
+         rounded square, so nothing here paints a background behind it. */
+      .brand-mark {
+        display: block;
+        width: 28px;
+        height: 28px;
+        flex: 0 0 auto;
+      }
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.25;
+        min-width: 0;
+      }
+      .brand-name {
+        font-size: 13.5px;
+        font-weight: 600;
+      }
+      .brand-ver {
+        font-size: 11.5px;
+        color: var(--muted);
+      }
+      .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        width: 100%;
+        font: inherit;
+        font-size: 13.5px;
+        text-align: left;
+        color: var(--fg-2);
+        padding: 8px 10px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        cursor: pointer;
+      }
+      .nav-item .ico {
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+      }
+      .nav-item:hover {
+        background: var(--card-hover);
+        color: var(--fg);
+      }
+      .nav-item.on {
+        background: color-mix(in srgb, var(--accent) 12%, transparent);
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .nav-item.on .ico {
+        color: var(--accent);
+      }
+      .nav-item .badge {
+        margin-left: auto;
+        font-size: 11.5px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .nav-item.on .badge {
+        color: var(--accent);
+      }
+      .side-foot {
+        margin-top: auto;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--muted);
+        font-size: 12.5px;
+        text-decoration: none;
+      }
+      /* localmd's mark, not this extension's: the link goes to the app. */
+      .foot-mark {
+        width: 15px;
+        height: 15px;
+        flex: 0 0 auto;
+        opacity: 0.85;
+      }
+      .side-foot:hover .foot-mark {
+        opacity: 1;
+      }
+      .side-foot:hover {
+        color: var(--accent);
+      }
+
+      /* One topic fills the pane. What the topic IS — its heading, its
+         explanation, its search box — stays put; only the list under it moves,
+         so the box you are typing in never scrolls away from the results it is
+         filtering. */
+      .main {
+        /* Centred in what the sidebar leaves, not pinned to its edge: on a wide
+           window a left-aligned column drifts far from the middle of the
+           screen while a stripe of empty page sits beside it. */
+        max-width: 760px;
+        width: 100%;
+        margin-inline: auto;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 34px 32px 0;
+      }
+      section {
+        margin: 0;
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        padding-bottom: 40px;
+        /* Room for a focus ring on a full-width control. The section clips
+           (it scrolls, or it owns a scroller), and the outline of a 100%-wide
+           search box sits 4px outside it — so both of its sides were cut off
+           while the top and bottom showed. Pulled back by the same amount, so
+           nothing moves. */
+        padding-inline: 4px;
+        margin-inline: -4px;
+      }
+      /* A section that owns a scroller does not scroll itself. */
+      section:has(> .scroller) {
+        overflow: hidden;
+        padding-bottom: 0;
+      }
+      /* `0 1 auto`, not `1 1 auto`: an empty list must take no room, or the
+         "nothing here yet" line under it would sit at the bottom of the window
+         instead of under the search box. */
+      .scroller {
+        flex: 0 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        padding-bottom: 40px;
+        padding-inline: 4px;
+        margin-inline: -4px;
+      }
+      section[hidden] {
+        display: none;
+      }
+      h2 {
+        font-size: 19px;
+        margin: 0 0 6px;
+        display: flex;
+        align-items: baseline;
+        gap: 9px;
+      }
+      h2 .count {
+        font-size: 12.5px;
+        font-weight: 400;
+        color: var(--muted);
+      }
+      .about {
+        color: var(--fg-2);
+        font-size: 13.5px;
+        margin: 0 0 18px;
+        max-width: 62ch;
+      }
+      .row {
+        display: flex;
+        align-items: baseline;
+        gap: 9px;
+        font-size: 13.5px;
+        padding: 5px 0;
+      }
+      .row .why {
+        color: var(--muted);
+        font-size: 12.5px;
+      }
+      input[type='text'],
+      input:not([type]) {
+        width: 100%;
+        font: inherit;
+        font-size: 13px;
+        padding: 7px 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--card);
+        color: var(--fg);
+      }
+      .list {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      /* Annotations: a page, then the passages under it. */
+      .mark-page {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: var(--card);
+      }
+      .mark-page.focus {
+        border-color: var(--accent);
+      }
+      .mark-page-head {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+      .mark-page-title {
+        font-weight: 600;
+        font-size: 13.5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .mark-page-host {
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .mark-page-clear {
+        margin-left: auto;
+        font: inherit;
+        font-size: 12px;
+        padding: 3px 9px;
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .mark-page-clear:hover {
+        color: var(--red);
+        border-color: currentColor;
+      }
+      .mark {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        width: 100%;
+        text-align: left;
+        font: inherit;
+        font-size: 13px;
+        padding: 7px 8px;
+        margin-top: 6px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--fg);
+        cursor: pointer;
+      }
+      .mark:hover {
+        background: var(--bg);
+      }
+      .swatch {
+        flex: 0 0 auto;
+        width: 10px;
+        height: 10px;
+        margin-top: 5px;
+        border-radius: 50%;
+      }
+      .mark-text {
+        flex: 1;
+        min-width: 0;
+      }
+      .mark-quote {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .mark-note {
+        margin-top: 3px;
+        color: var(--fg-2);
+        font-size: 12.5px;
+        font-style: italic;
+      }
+      .mark-when {
+        flex: 0 0 auto;
+        color: var(--muted);
+        font-size: 11.5px;
+        margin-top: 2px;
+      }
+      .item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 7px 10px;
+        border-radius: 8px;
+        background: var(--card);
+        font-size: 13px;
+      }
+      .item .name {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      /* A row with a preview beside the name: the PREVIEW takes the free space,
+         so it reads on from the name it belongs to instead of being pushed
+         across the row to sit against the buttons. */
+      .item:has(.kind) .name {
+        flex: 0 0 auto;
+        font-weight: 500;
+      }
+      .item .kind {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .item .name.off {
+        color: var(--muted);
+        text-decoration: line-through;
+      }
+      .item .kind {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .item button {
+        font: inherit;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 2px 4px;
+        border-radius: 6px;
+      }
+      .item button:hover {
+        background: var(--card-hover);
+        color: var(--fg);
+      }
+      .item button.active {
+        background: var(--card-hover);
+        color: var(--accent);
+      }
+      /* Site script rows expand to show their full source (matches / selectors /
+         css / js) — persistent injected code must be inspectable. */
+      .script-entry {
+        display: flex;
+        flex-direction: column;
+      }
+      .script-code {
+        margin: 5px 2px 3px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .script-code .code-label {
+        font-size: 10.5px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 3px;
+      }
+      .script-code pre {
+        margin: 0;
+        padding: 8px 10px;
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        background: var(--bg);
+        color: var(--fg-2);
+        font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow: auto;
+        max-height: 240px;
+      }
+      /* Per-row actions: quiet until the row is hovered, so a list of quotes
+         reads as quotes and not as a row of controls. */
+      .mark-act {
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border: 0;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        opacity: 0;
+      }
+      .mark:hover .mark-act,
+      .mark:focus-within .mark-act {
+        opacity: 1;
+      }
+      .mark-act:hover {
+        background: var(--card-hover);
+        color: var(--fg);
+      }
+      .mark-act svg {
+        display: block;
+      }
+      /* The note, edited where it is read — the passage it belongs to is the
+         line above it, and that context is most of what makes it editable. */
+      .note-edit {
+        margin-top: 6px;
+      }
+      .note-edit textarea {
+        min-height: 52px;
+        font-size: 12.5px;
+      }
+      .note-edit-row {
+        display: flex;
+        gap: 7px;
+        margin-top: 7px;
+      }
+      .note-edit .btn {
+        font-size: 12px;
+        padding: 4px 10px;
+      }
+
+      /* One dialog for the page, instead of the browser's. A native confirm()
+         is a different typeface, a different button order and a bar pinned to
+         the top of the window that says the page's URL — it reads as the
+         browser interrupting, not as this page asking. */
+      .modal[hidden] {
+        display: none;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: rgb(0 0 0 / 38%);
+      }
+      .modal-card {
+        width: 100%;
+        max-width: 420px;
+        padding: 20px 22px 18px;
+        border-radius: 14px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 60px rgb(0 0 0 / 28%);
+      }
+      .modal-card h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+      .modal-card p {
+        margin: 0;
+        color: var(--fg-2);
+        font-size: 13.5px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+      }
+      .modal-card p:empty {
+        display: none;
+      }
+      .modal-row {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .btn.danger {
+        background: var(--red);
+        border-color: var(--red);
+        color: #fff;
+      }
+      .btn.danger:hover {
+        filter: brightness(1.08);
+        background: var(--red);
+      }
+
+      .empty {
+        color: var(--muted);
+        font-size: 12.5px;
+        margin-top: 10px;
+      }
+
+      /* The tool's own switches, above the list they govern: one line, so the
+         thing you came to look at (the highlights) is still what you see first.
+         Annotations and Highlighting used to be two nav entries for one
+         feature — your content and the four switches that produce it. */
+      .settings-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 20px;
+        margin-bottom: 12px;
+      }
+      .opt-in {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13.5px;
+      }
+      /* The blacklist is the bulky half — an input and a list — and the rarely
+         used one, so it folds. */
+      .fold {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 0 12px;
+        margin-bottom: 14px;
+      }
+      .fold > summary {
+        cursor: pointer;
+        padding: 9px 0;
+        font-size: 13px;
+        color: var(--fg-2);
+        list-style-position: inside;
+      }
+      .fold[open] > summary {
+        color: var(--fg);
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 11px;
+      }
+      .fold > :last-child {
+        margin-bottom: 12px;
+      }
+      /* A rule the user did not make and cannot unmake. */
+      /* A labelled control on its own line, with room for a note underneath. */
+      .field {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .field > label {
+        flex: 0 0 auto;
+        font-size: 13.5px;
+        font-weight: 500;
+      }
+      .field input:not([type='checkbox']) {
+        width: auto;
+        flex: 0 1 260px;
+        min-width: 170px;
+      }
+      /* A plain control after a labelled one needs its own room: without this
+         the focus ring of the blacklist box (2px, offset 2px) overlapped the
+         colour swatches sitting directly above it. */
+      .field + input,
+      .field + .list {
+        margin-top: 16px;
+      }
+      /* A free-text box with suggestions behind it. The datalist alone shows
+         nothing until you type, so there was no sign the list existed — the
+         caret is that sign, and it opens the picker. Still free text: "formal
+         Japanese" is a fine answer and no list would have it. */
+      .combo {
+        position: relative;
+        display: flex;
+        flex: 0 1 260px;
+        min-width: 170px;
+      }
+      .field .combo > input {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding-right: 30px;
+      }
+      /* Our own list rather than a <datalist>. That control failed twice here:
+         it shows no arrow until the field is focused (so nothing said the
+         suggestions existed), and it FILTERS by what is already typed — with a
+         language in the box the list came up empty, which reads as broken. */
+      .combo-menu {
+        position: absolute;
+        z-index: 5;
+        top: calc(100% + 5px);
+        left: 0;
+        right: 0;
+        max-height: 232px;
+        overflow-y: auto;
+        padding: 4px;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        background: var(--bg);
+        box-shadow: 0 10px 28px rgb(0 0 0 / 18%);
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      .combo-menu[hidden] {
+        display: none;
+      }
+      .combo-menu button {
+        font: inherit;
+        font-size: 13px;
+        text-align: left;
+        padding: 6px 9px;
+        border: 0;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--fg);
+        cursor: pointer;
+      }
+      .combo-menu button:hover {
+        background: var(--card-hover);
+      }
+      .combo-menu button.on {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .combo .caret {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        border: 0;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .combo .caret:hover {
+        background: var(--card-hover);
+        color: var(--fg);
+      }
+      .hint {
+        flex: 1 1 100%;
+        color: var(--muted);
+        font-size: 12.5px;
+        margin: -2px 0 0;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12.5px;
+        background: var(--card);
+        padding: 1px 5px;
+        border-radius: 5px;
+      }
+      .btn {
+        font: inherit;
+        font-size: 13px;
+        padding: 7px 13px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--fg);
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: var(--card-hover);
+      }
+      .btn.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .btn.primary:hover {
+        filter: brightness(1.08);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .actions.tight {
+        margin-top: 10px;
+      }
+      /* The colour a new highlight gets. Shown as the colours themselves —
+         a dropdown of the word "yellow" is a worse way to pick yellow. */
+      .swatches {
+        display: flex;
+        gap: 8px;
+      }
+      .swatches button {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        box-shadow: 0 0 0 1px var(--border) inset;
+        cursor: pointer;
+      }
+      .swatches button.on {
+        border-color: var(--fg);
+      }
+
+      /* The quick-ask editor: what you are writing on the left, what the
+         variables mean on the right — the questions arrive together. */
+      .editor {
+        margin-top: 14px;
+        padding: 14px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 250px;
+        gap: 16px;
+      }
+      .editor[hidden] {
+        display: none;
+      }
+      .editor h3 {
+        margin: 0 0 4px;
+        font-size: 13.5px;
+      }
+      .fields {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-width: 0;
+      }
+      .fields label {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        font-size: 12.5px;
+        color: var(--fg-2);
+      }
+      textarea {
+        width: 100%;
+        font: inherit;
+        font-size: 13px;
+        line-height: 1.6;
+        padding: 9px 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--card);
+        color: var(--fg);
+        resize: vertical;
+        min-height: 108px;
+      }
+      .help {
+        background: var(--card);
+        border-radius: 10px;
+        padding: 12px 13px;
+        font-size: 12.5px;
+        line-height: 1.6;
+        color: var(--fg-2);
+        align-self: start;
+      }
+      .help p {
+        margin: 0 0 9px;
+      }
+      .help p:last-child {
+        margin: 0;
+      }
+      .fields .opt {
+        color: var(--muted);
+      }
+      .help b {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .help .eg {
+        display: block;
+        margin-top: 5px;
+        color: var(--muted);
+      }
+      @media (max-width: 900px) {
+        .editor {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+      .tag {
+        display: inline-block;
+        margin-left: 7px;
+        padding: 1px 6px;
+        border-radius: 5px;
+        background: var(--card-hover);
+        color: var(--fg-2);
+        font-size: 11px;
+      }
+      .tag.write {
+        background: color-mix(in srgb, var(--amber) 16%, transparent);
+        color: var(--amber);
+      }
+      .warn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 14px;
+        border-radius: 10px;
+        background: color-mix(in srgb, var(--amber) 12%, transparent);
+        color: var(--amber);
+        font-size: 13px;
+        margin-bottom: 16px;
+      }
+      .warn:not(.show) {
+        display: none;
+      }
+      .warn button,
+      .cmd button {
+        margin-left: auto;
+        font: inherit;
+        font-size: 12.5px;
+        padding: 5px 11px;
+        border: 1px solid currentColor;
+        border-radius: 8px;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+      }
+      .cmd {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        padding: 9px 12px;
+        border-radius: 8px;
+        background: var(--card);
+      }
+      .cmd code {
+        font-size: 12px;
+        word-break: break-all;
+      }
+      @media (max-width: 720px) {
+        .shell {
+          grid-template-columns: minmax(0, 1fr);
+          height: auto;
+          overflow: visible;
+        }
+        .side {
+          position: static;
+          height: auto;
+          border-right: 0;
+          border-bottom: 1px solid var(--border);
+        }
+        .nav {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        /* Narrow enough that a fixed header costs more than it gives: the whole
+           page scrolls again. */
+        .main {
+          height: auto;
+          overflow: visible;
+          padding: 24px 20px 60px;
+        }
+        section,
+        .scroller {
+          overflow: visible;
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="side">
+        <div class="brand">
+          <img class="brand-mark" id="brandMark" alt="" />
+          <span class="brand-text">
+            <span class="brand-name">localmd Connect</span>
+            <span class="brand-ver" id="ver"></span>
+          </span>
+        </div>
+        <nav class="nav" id="nav" aria-label="Settings sections"></nav>
+        <a class="side-foot" id="docLink" href="#" target="_blank" rel="noreferrer">
+          <img class="foot-mark" id="footMark" alt="" />localmd.app
+        </a>
+      </aside>
+
+      <main class="main" id="main">
+        <div class="warn" id="userScriptsWarn">
+          <span
+            >Turn on <b>Allow user scripts</b> for this extension so site scripts can
+            run.</span
+          >
+          <button id="openSettings">Open Chrome settings</button>
+        </div>
+
+        <section id="annotations" data-nav="Highlights" data-icon="mark">
+          <h2>Highlights <span class="count" id="markCount"></span></h2>
+          <p class="about">
+            Select text on any page to highlight it in five colours and write a note on it.
+            Highlights come back when you revisit the page, your agent can read them, and opening
+            one here takes you to the passage — re-found by its text, so it survives a page that has
+            been edited since.
+          </p>
+          <div class="settings-row">
+            <label class="opt-in"
+              ><input type="checkbox" id="hlEnabled" />Highlight on every site</label
+            >
+            <label class="opt-in"
+              ><input type="checkbox" id="barOn" />Show the toolbar when I select text</label
+            >
+          </div>
+          <div class="settings-row">
+            <span class="opt-in"
+              >New highlight colour <span class="swatches" id="hlColors"></span
+            ></span>
+          </div>
+          <details class="fold" id="hlFold">
+            <summary>Sites to stay off <span class="count" id="hlState"></span></summary>
+            <input id="hlBlock" placeholder="Stay off this site — a hostname, then Enter" />
+            <div id="hlList" class="list"></div>
+            <div class="empty" id="hlNote"></div>
+          </details>
+          <input id="markSearch" placeholder="Search the text, a note, or a site" />
+          <div id="markList" class="list scroller"></div>
+          <div class="empty" id="markEmpty">Nothing highlighted yet.</div>
+        </section>
+
+        <section id="prompts" data-nav="Prompts" data-icon="spark">
+          <h2>Prompts <span class="count" id="promptCount"></span></h2>
+          <p class="about">
+            Select text on any page and run one of these on it without leaving: the answer opens in
+            a popover, on whatever model localmd is set up with. Translate and Explain ship as
+            worked examples, and “Ask…” has no prompt at all — it asks you for one. Write your own
+            for anything you do often. (The speech bubble beside them on the toolbar takes the
+            passage to localmd to keep talking instead.)
+          </p>
+          <div class="field">
+            <label for="promptLang">Answer in</label>
+            <span class="combo">
+              <input id="promptLang" placeholder="English" autocomplete="off" />
+              <button
+                class="caret"
+                id="langOpen"
+                tabindex="-1"
+                aria-label="Show languages"
+              ></button>
+              <div class="combo-menu" id="langMenu" hidden></div>
+            </span>
+            <p class="hint">
+              What <code>${lang}</code> becomes. Free text — "formal Japanese" is a fine answer.
+              Leave it empty to follow your browser's language.
+            </p>
+          </div>
+          <div id="promptList" class="list"></div>
+          <div class="empty" id="promptEmpty"></div>
+          <div class="actions tight">
+            <button class="btn primary" id="promptAdd">New prompt</button>
+            <button class="btn" id="promptReset">Restore the defaults</button>
+          </div>
+
+          <div class="editor" id="promptEditor" hidden>
+            <div class="fields">
+              <h3 id="promptEditorTitle">New prompt</h3>
+              <label
+                >Name
+                <input id="promptName" placeholder="Summarise" />
+              </label>
+              <label
+                >Prompt <span class="opt">— leave empty to be asked each time</span>
+                <textarea id="promptText"></textarea>
+              </label>
+              <div class="actions">
+                <button class="btn primary" id="promptSave">Save</button>
+                <button class="btn" id="promptCancel">Cancel</button>
+              </div>
+            </div>
+            <div class="help">
+              <h3>How to write a prompt</h3>
+              <p>
+                <b>${content}</b> — the text you selected. Leave it out and the selection is added
+                at the end of your prompt, in triple quotes.
+              </p>
+              <p><b>${lang}</b> — the language set above, so one prompt serves every language.</p>
+              <p>
+                Leave the prompt <b>empty</b> and the page asks you for it each time — what you type
+                becomes the prompt, variables and all. That is what “Ask…” is.
+              </p>
+              <p>
+                Example:
+                <span class="eg" id="promptExample"></span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="browser-data" data-nav="Browser data" data-icon="data">
+          <h2>Browser data <span class="count" id="permCount"></span></h2>
+          <p class="about">
+            Your bookmarks, history, reading list and recently closed tabs — off by default, and
+            each one separate. Switch on only what you want localmd to be able to read; switching
+            one off revokes it immediately. This is the only place they can be granted: a web page
+            cannot ask for them, and neither can the assistant.
+          </p>
+          <div id="permList" class="list"></div>
+        </section>
+
+        <section id="site-scripts" data-nav="Site scripts" data-icon="code">
+          <h2>Site scripts <span class="count" id="scriptsCount"></span> <span class="count" title="Experimental: may change shape or go away; nothing you rely on is persisted by it">experimental</span></h2>
+          <p class="about">
+            Persistent rules that run on matching pages (hide ads, inject CSS/JS). Your agent
+            creates them with your confirmation — this list is your override: pause or delete any of
+            them here.
+          </p>
+          <div id="scriptList" class="list"></div>
+          <div class="empty" id="scriptsEmpty">No site scripts yet.</div>
+        </section>
+
+        <section id="cliSetup" data-nav="CLI agents" data-icon="terminal" hidden>
+          <h2>CLI agents <span class="count">dev build · testing only</span></h2>
+          <p class="about">
+            A <strong>development/testing affordance only</strong>, present in this dev build so a
+            CLI agent can drive the extension while it is being worked on — it is absent from the
+            shipped build. Driving the browser from a CLI agent as a product is <strong>WebCLI</strong>'s
+            job, not this extension's; localmd Connect ships to talk to localmd.app alone.
+          </p>
+          <div class="cmd">
+            <code id="cmdDaemon">BRIDGE_PORT=9378 npx -y github:whitefoxx/web-tools-skills</code>
+            <button data-copy="cmdDaemon">Copy</button>
+          </div>
+          <div class="empty" id="daemonHint"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal" id="modal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <h3 id="modalTitle"></h3>
+        <p id="modalBody"></p>
+        <div class="modal-row">
+          <button class="btn" id="modalCancel">Cancel</button>
+          <button class="btn danger" id="modalOk">Remove</button>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./options.ts"></script>
+  </body>
+</html>

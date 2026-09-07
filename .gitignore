@@ -1,0 +1,21 @@
+node_modules
+dist-webcli
+dist-webcli-dev
+dist-localmd
+dist-localmd-dev
+.DS_Store
+*.log
+.env
+.vite
+
+# Local-only editor / tooling dirs (.claude/ can hold plaintext API tokens).
+.claude/
+.chrometmp/
+.vscode/
+
+# RSA private keys whose public halves are the manifests' "key" fields. Only
+# needed to re-derive an id or sign a .crx outside the Web Store — never commit.
+# WebCLI dev id hjdcccloaonnfpojpiaadabkhjggilha; localmd Connect dev id
+# enodecpmlecfpmofogpmbagdcfheamgf.
+extension-key-webcli.pem
+extension-key-localmd.pem

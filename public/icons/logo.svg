@@ -1,0 +1,27 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Web Agent product mark (variant 3): gradient wire-globe + agent cursor.
+       Source of truth for the rasterized PNG toolbar/store icons in this dir.
+       The whole mark is uniformly scaled (1.43×) about its own centre and
+       recentred to (256,256) so the globe nearly fills the 512 box — only a few
+       px margin — instead of floating small in the middle. -->
+  <defs>
+    <linearGradient id="wa-logo-globe" gradientUnits="userSpaceOnUse" x1="91" y1="83" x2="421" y2="413">
+      <stop offset="0%" stop-color="#4F6BFF"/>
+      <stop offset="100%" stop-color="#A44DFF"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(256 256) scale(1.43) translate(-256 -248)">
+    <g transform="translate(256, 248)" stroke="url(#wa-logo-globe)" stroke-width="28.6" fill="none" stroke-linecap="round">
+      <circle cx="0" cy="0" r="165"/>
+      <ellipse cx="0" cy="0" rx="72" ry="165" stroke-opacity="0.75"/>
+      <line x1="-165" y1="0" x2="165" y2="0" stroke-opacity="0.75"/>
+    </g>
+    <!-- Agent cursor: solid amber (the brand accent), enlarged 1.62× (was 1.35×,
+         bumped ~1.2×) and nudged up-left (centroid 329,341 → lands at 303,315, the
+         anchor stays fixed under scale), so it reads prominently against the cool
+         globe. -->
+    <g transform="translate(303 315) scale(1.62) translate(-329 -341)">
+      <path d="M 300 272 L 300 384 L 330 354 L 386 354 Z" fill="#F5A623"/>
+    </g>
+  </g>
+</svg>

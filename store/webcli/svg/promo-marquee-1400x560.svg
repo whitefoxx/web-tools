@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="560" viewBox="0 0 1400 560">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1020"/>
+      <stop offset="1" stop-color="#1A1236"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4F6BFF"/>
+      <stop offset="1" stop-color="#A44DFF"/>
+    </linearGradient>
+    <linearGradient id="globe" gradientUnits="userSpaceOnUse" x1="91" y1="83" x2="421" y2="413">
+      <stop offset="0" stop-color="#4F6BFF"/>
+      <stop offset="1" stop-color="#A44DFF"/>
+    </linearGradient>
+    <radialGradient id="glowB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4F6BFF" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#4F6BFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowP" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#A44DFF" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#A44DFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs><rect width="1400" height="560" fill="url(#bg)"/><circle cx="300" cy="280" r="620" fill="url(#glowB)"/><circle cx="1180" cy="300" r="620" fill="url(#glowP)"/><g transform="translate(110 150) scale(0.5078125)">
+    <g transform="translate(256 256) scale(1.43) translate(-256 -248)">
+      <g transform="translate(256 248)" stroke="url(#globe)" stroke-width="28.6" fill="none" stroke-linecap="round">
+        <circle cx="0" cy="0" r="165"/>
+        <ellipse cx="0" cy="0" rx="72" ry="165" stroke-opacity="0.75"/>
+        <line x1="-165" y1="0" x2="165" y2="0" stroke-opacity="0.75"/>
+      </g>
+      <g transform="translate(303 315) scale(1.62) translate(-329 -341)">
+        <path d="M 300 272 L 300 384 L 330 354 L 386 354 Z" fill="#F5A623"/>
+      </g>
+    </g>
+  </g><text x="430" y="250" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="104" font-weight="800" fill="#F5F7FF" text-anchor="start" letter-spacing="1" opacity="1">WebCLI</text><text x="432" y="312" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="34" font-weight="400" fill="#AEB7D4" text-anchor="start" letter-spacing="0" opacity="1">Give Claude Code, Codex and other AI agents</text><text x="432" y="362" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="34" font-weight="400" fill="#AEB7D4" text-anchor="start" letter-spacing="0" opacity="1">control of your real, logged-in Chrome.</text><g>
+    <rect x="432" y="400" width="126" height="42" rx="21" fill="rgba(79,107,255,0.13)" stroke="rgba(124,146,255,0.28)"/>
+    <text x="495" y="427.8" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="20" font-weight="400" fill="#C7D0FF" text-anchor="middle" letter-spacing="0" opacity="1">open_url</text>
+  </g><g>
+    <rect x="570" y="400" width="150" height="42" rx="21" fill="rgba(79,107,255,0.13)" stroke="rgba(124,146,255,0.28)"/>
+    <text x="645" y="427.8" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="20" font-weight="400" fill="#C7D0FF" text-anchor="middle" letter-spacing="0" opacity="1">web_search</text>
+  </g><g>
+    <rect x="732" y="400" width="90" height="42" rx="21" fill="rgba(79,107,255,0.13)" stroke="rgba(124,146,255,0.28)"/>
+    <text x="777" y="427.8" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="20" font-weight="400" fill="#C7D0FF" text-anchor="middle" letter-spacing="0" opacity="1">click</text>
+  </g><g>
+    <rect x="834" y="400" width="186" height="42" rx="21" fill="rgba(79,107,255,0.13)" stroke="rgba(124,146,255,0.28)"/>
+    <text x="927" y="427.8" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="20" font-weight="400" fill="#C7D0FF" text-anchor="middle" letter-spacing="0" opacity="1">get_page_text</text>
+  </g><g>
+    <rect x="1032" y="400" width="150" height="42" rx="21" fill="rgba(79,107,255,0.13)" stroke="rgba(124,146,255,0.28)"/>
+    <text x="1107" y="427.8" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="20" font-weight="400" fill="#C7D0FF" text-anchor="middle" letter-spacing="0" opacity="1">screenshot</text>
+  </g><g>
+    <rect x="432" y="454" width="150" height="42" rx="21" fill="rgba(79,107,255,0.13)" stroke="rgba(124,146,255,0.28)"/>
+    <text x="507" y="481.8" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="20" font-weight="400" fill="#C7D0FF" text-anchor="middle" letter-spacing="0" opacity="1">list_links</text>
+  </g><g>
+    <rect x="594" y="454" width="126" height="42" rx="21" fill="rgba(79,107,255,0.13)" stroke="rgba(124,146,255,0.28)"/>
+    <text x="657" y="481.8" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="20" font-weight="400" fill="#C7D0FF" text-anchor="middle" letter-spacing="0" opacity="1">+21 more</text>
+  </g></svg>

@@ -1,0 +1,49 @@
+{
+  "name": "web-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Open base for the agent-free browser shells: WebCLI + localmd Connect. The full Web Agent extension (private) depends on this repo as a git submodule.",
+  "scripts": {
+    "dev": "vite",
+    "build:webcli": "vite build --mode webcli",
+    "build:webcli:dev": "vite build --mode webcli-dev",
+    "build:localmd": "vite build --mode localmd",
+    "build:localmd:dev": "vite build --mode localmd-dev",
+    "build:all": "pnpm run build:webcli && pnpm run build:localmd",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "pnpm run typecheck && pnpm run lint && pnpm run format:check && pnpm run test",
+    "pack:webcli": "node scripts/pack-store.mjs webcli",
+    "pack:localmd": "node scripts/pack-store.mjs localmd"
+  },
+  "dependencies": {
+    "dompurify": "^3.4.2",
+    "marked": "^18.0.3",
+    "preact": "^10.24.3",
+    "turndown": "^7.2.0"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.28",
+    "@eslint/js": "^10.0.1",
+    "@preact/preset-vite": "^2.9.1",
+    "@types/chrome": "^0.0.287",
+    "@types/dompurify": "^3.0.5",
+    "@types/node": "^25.7.0",
+    "@types/turndown": "^5.0.5",
+    "eslint": "^10.3.0",
+    "globals": "^17.6.0",
+    "jsdom": "^29.1.1",
+    "prettier": "^3.8.3",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.59.3",
+    "vite": "^5.4.10",
+    "vitest": "^4.1.6"
+  },
+  "packageManager": "pnpm@10.30.3"
+}

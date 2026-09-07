@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="280" viewBox="0 0 440 280">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#081221"/>
+      <stop offset="1" stop-color="#0E2743"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#58A6FF"/>
+      <stop offset="1" stop-color="#2F6FED"/>
+    </linearGradient>
+    <radialGradient id="glowB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#58A6FF" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#58A6FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowD" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2F6FED" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#2F6FED" stop-opacity="0"/>
+    </radialGradient>
+  </defs><rect width="440" height="280" fill="url(#bg)"/><circle cx="110" cy="90" r="260" fill="url(#glowB)"/><circle cx="360" cy="250" r="240" fill="url(#glowD)"/><g transform="translate(176 34) scale(0.6875)">
+    <rect width="128" height="128" rx="28" fill="url(#brand)"/>
+    <g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M50 36H36v56h14"/>
+      <path d="M78 36h14v56H78"/>
+    </g>
+    <path d="M70 32 L52 70 h11 L58 96 L78 56 h-11 Z" fill="#fff"/>
+  </g><text x="220" y="176" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="34" font-weight="800" fill="#F2F7FF" text-anchor="middle" letter-spacing="0.3" opacity="1">localmd Connect</text><text x="220" y="212" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#A9BFDC" text-anchor="middle" letter-spacing="0" opacity="1">Browser superpowers for localmd.app</text><text x="220" y="244" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="14" font-weight="400" fill="#6E86A6" text-anchor="middle" letter-spacing="0" opacity="1">browser tools · adapters</text></svg>

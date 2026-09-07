@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WebCLI</title>
+    <style>
+      :root {
+        --fg: #1f2328;
+        --muted: #6b7280;
+        --border: #e5e7eb;
+        --card: #f6f8fa;
+        --green: #16a34a;
+        --red: #ef4444;
+        --link: #2563eb;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        width: 320px;
+        font:
+          13px/1.5 -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+        color: var(--fg);
+        padding: 14px 14px 12px;
+      }
+      .head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 7px;
+      }
+      .title {
+        font-size: 17px;
+        font-weight: 700;
+      }
+      .ver {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .row {
+        padding: 11px 12px;
+      }
+      .row + .row {
+        border-top: 1px solid var(--border);
+      }
+      .status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+      }
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--red);
+        flex: none;
+      }
+      .dot.on {
+        background: var(--green);
+      }
+      .kv {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .kv .label {
+        color: var(--muted);
+        flex: none;
+      }
+      .kv .val {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+      }
+      /* Segmented control instead of a <select>: the choice is binary, so both
+         states can be visible at once — one tap, no dropdown, and nothing whose
+         intrinsic width depends on its longest option text. */
+      .seg {
+        display: flex;
+        flex: none;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--card);
+      }
+      .seg button {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        font: inherit;
+        font-size: 12px;
+        padding: 3px 11px;
+        cursor: pointer;
+        transition:
+          background 120ms,
+          color 120ms;
+      }
+      .seg button + button {
+        border-left: 1px solid var(--border);
+      }
+      .seg button:hover:not([aria-pressed='true']) {
+        color: var(--fg);
+      }
+      .seg button[aria-pressed='true'] {
+        background: var(--link);
+        color: #fff;
+        font-weight: 600;
+      }
+      .kv .count {
+        flex: none;
+        margin-left: auto;
+        white-space: nowrap;
+        color: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+      }
+      button.copy {
+        flex: none;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--link);
+        border-radius: 7px;
+        padding: 3px 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      button.copy:active {
+        background: var(--card);
+      }
+      /* The pitch sits ABOVE the card, with the title: it is what the product
+         is, not one of its settings. The card below holds only live state and
+         controls. */
+      .intro {
+        font-size: 12.5px;
+        line-height: 1.55;
+        margin-bottom: 12px;
+      }
+      .intro b {
+        font-weight: 600;
+      }
+      .uses {
+        margin: 7px 0 0;
+        padding: 0;
+        list-style: none;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .uses li {
+        padding-left: 13px;
+        position: relative;
+        margin-top: 3px;
+      }
+      .uses li::before {
+        content: '›';
+        position: absolute;
+        left: 2px;
+        color: var(--link);
+      }
+      /* Setup is a disclosure, open only while there is nothing connected — the
+         two commands matter exactly once, then they are clutter above the state
+         the user actually came to check. */
+      details.setup {
+        background: var(--card);
+      }
+      details.setup > summary {
+        padding: 11px 12px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--fg);
+        list-style: none;
+      }
+      details.setup > summary::-webkit-details-marker {
+        display: none;
+      }
+      details.setup > summary::before {
+        content: '▸ ';
+        color: var(--muted);
+      }
+      details.setup[open] > summary::before {
+        content: '▾ ';
+      }
+      .step {
+        padding: 0 12px 11px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .step + .step {
+        border-top: 1px dashed var(--border);
+        padding-top: 9px;
+      }
+      /* The hint fills in from the first SW answer; until then don't render an
+         empty band of padding under step 2. */
+      .step:empty {
+        display: none;
+      }
+      .cmd {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+      }
+      .cmd code,
+      .cmd input {
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        white-space: nowrap;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 4px 6px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        color: var(--fg);
+      }
+      .cmd input:focus {
+        outline: none;
+        border-color: var(--link);
+      }
+      .step .after {
+        margin-top: 6px;
+      }
+      .step a {
+        color: var(--link);
+      }
+      .kv.wrap {
+        flex-wrap: wrap;
+      }
+      .kv .sub {
+        flex-basis: 100%;
+        margin-top: 5px;
+        font-size: 11px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+      .scripts .warn {
+        flex-basis: 100%;
+        margin: 6px 0 2px;
+        font-size: 11px;
+        line-height: 1.45;
+        color: var(--warn, #b26a00);
+      }
+      .srow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 0;
+        border-top: 1px solid var(--border, rgba(127, 127, 127, 0.18));
+      }
+      .srow .sname {
+        flex: 1;
+        min-width: 0;
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .srow .sname.off {
+        color: var(--muted);
+        text-decoration: line-through;
+      }
+      .srow .sdel {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 13px;
+        padding: 2px 4px;
+      }
+      .srow .sdel:hover {
+        color: var(--warn, #b26a00);
+      }
+      .empty {
+        font-size: 11px;
+        color: var(--muted);
+        padding: 6px 0 2px;
+      }
+      .foot {
+        text-align: center;
+        margin-top: 12px;
+      }
+      .foot a {
+        color: var(--link);
+        text-decoration: none;
+        font-size: 13px;
+      }
+      .foot a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="head">
+      <span class="title">WebCLI</span>
+      <span class="ver" id="ver"></span>
+    </div>
+    <div class="intro">
+      Let <b>your AI agent</b> drive <b>your logged-in Chrome</b>.
+      <ul class="uses">
+        <li>Web navigation and form filling</li>
+        <li>Data extraction from signed-in pages</li>
+        <li>LLM-driven automated testing</li>
+        <li>General-purpose browser control for agents</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="row status">
+        <span class="dot" id="dot"></span><span id="statusText">Checking…</span>
+      </div>
+      <div class="row kv wrap">
+        <span class="label">Tools</span>
+        <div class="seg" id="profileSeg" role="group" aria-label="Tool set">
+          <button type="button" data-profile="full" aria-pressed="true">All</button>
+          <button type="button" data-profile="core" aria-pressed="false">Core</button>
+        </div>
+        <span class="count" id="profileCount">…</span>
+        <div class="sub" id="profileDesc"></div>
+      </div>
+      <details class="setup" id="setup">
+        <summary>Set up your agent</summary>
+        <div class="step">
+          Ask your agent to run this command to install the WebCLI skill:
+          <div class="cmd">
+            <code id="cmdSkill">npx skills add whitefoxx/web-tools-skills -g</code>
+            <button class="copy" data-copy="cmdSkill">Copy</button>
+          </div>
+          <div class="after">Then ask your agent to use the browser.</div>
+        </div>
+        <div class="step" id="setupHint"></div>
+      </details>
+    </div>
+    <div class="card scripts" id="scriptsCard">
+      <div class="row kv wrap">
+        <span class="label">Site scripts</span>
+        <span class="count" id="scriptsCount"></span>
+        <div class="sub">
+          Persistent page fixes your agent installs (hide clutter, restyle, run a
+          snippet). You can pause or delete any of them here.
+        </div>
+        <div class="warn" id="scriptsWarn" hidden>
+          Turn on <b>Allow user scripts</b> for WebCLI at chrome://extensions so
+          these can run.
+        </div>
+      </div>
+      <div id="scriptList"></div>
+      <div class="empty" id="scriptsEmpty">No site scripts yet.</div>
+    </div>
+    <div class="foot">
+      <a id="docLink" href="#" target="_blank" rel="noreferrer">Documentation</a>
+    </div>
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,69 @@
+{
+  "manifest_version": 3,
+  "name": "localmd Connect - Browser Superpowers",
+  "version": "0.1.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlXAT970pG3ksbuUS2Z1ogXCXy47FrcE78HDKTXkUSMWh6llCVSDjZzp41SsoHXZH6fSXxTNf8SmrcIQhqM2oWFGkrMryRHn+ciuOEPzv2wk8Hxg2EO9v/l4Xnus3Cd0X91rDf+hOmICRBw2l7hpt8mAkvPUgXuZPd0L/mAc8hCICqVV387k3Cw20Z2VOyNQFzhod48f0TSmGzOErBZi0xzlahUDGgb5AxaLxLzVoAphEc9K+/IgRft6JpkQq82akTCF4IOGP1edoT/GK8qOP9FrgVNIMs3GJXOioUlbmfR4i9ZAh/MI2rbmTKQ25TyInVKtWk6evWmDnGtbPL7MqdwIDAQAB",
+  "description": "Companion for localmd.app - site adapters, site scripts, and browser tools for your in-browser AI agent.",
+  "permissions": [
+    "debugger",
+    "tabs",
+    "tabGroups",
+    "scripting",
+    "storage",
+    "cookies",
+    "downloads",
+    "userScripts",
+    "contextMenus"
+  ],
+  "optional_permissions": [
+    "bookmarks",
+    "history",
+    "readingList",
+    "sessions"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "icons/localmd-connect-16.png",
+    "32": "icons/localmd-connect-32.png",
+    "48": "icons/localmd-connect-48.png",
+    "128": "icons/localmd-connect-128.png"
+  },
+  "background": {
+    "service_worker": "src/background/localmd-connect-service-worker.ts",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "localmd Connect",
+    "default_popup": "src/localmd-connect/popup.html"
+  },
+  "options_ui": {
+    "page": "src/localmd-connect/options.html",
+    "open_in_tab": true
+  },
+  "commands": {
+    "clip-page": {
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      },
+      "description": "Clip this page to localmd"
+    },
+    "ask-localmd": {
+      "suggested_key": {
+        "default": "Alt+Shift+L"
+      },
+      "description": "Ask localmd about this page"
+    },
+    "screenshot-region": {
+      "suggested_key": {
+        "default": "Alt+Shift+A"
+      },
+      "description": "Screenshot a region to localmd"
+    },
+    "screenshot-page": {
+      "description": "Capture the whole page to localmd"
+    }
+  },
+  "minimum_chrome_version": "138"
+}

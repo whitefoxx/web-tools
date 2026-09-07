@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#081221"/>
+      <stop offset="1" stop-color="#0E2743"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#58A6FF"/>
+      <stop offset="1" stop-color="#2F6FED"/>
+    </linearGradient>
+    <radialGradient id="glowB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#58A6FF" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#58A6FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowD" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2F6FED" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#2F6FED" stop-opacity="0"/>
+    </radialGradient>
+  </defs><rect width="1280" height="800" fill="url(#bg)"/><circle cx="640" cy="720" r="720" fill="url(#glowD)"/><g transform="translate(72 60) scale(0.359375)">
+    <rect width="128" height="128" rx="28" fill="url(#brand)"/>
+    <g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M50 36H36v56h14"/>
+      <path d="M78 36h14v56H78"/>
+    </g>
+    <path d="M70 32 L52 70 h11 L58 96 L78 56 h-11 Z" fill="#fff"/>
+  </g><text x="134" y="93" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0.3" opacity="1">localmd Connect</text><text x="72" y="190" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="46" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0" opacity="1">Three steps, then forget it exists</text><circle cx="104" cy="286" r="26" fill="url(#brand)"/><text x="104" y="295" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="28" font-weight="800" fill="#F2F7FF" text-anchor="middle" letter-spacing="0" opacity="1">1</text><text x="150" y="280" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0" opacity="1">Install it</text><text x="150" y="316" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">Add it from the Chrome Web Store. There is no window to keep open — only a</text><text x="150" y="348" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">small toolbar popup.</text><circle cx="104" cy="434" r="26" fill="url(#brand)"/><text x="104" y="443" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="28" font-weight="800" fill="#F2F7FF" text-anchor="middle" letter-spacing="0" opacity="1">2</text><text x="150" y="428" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0" opacity="1">Allow user scripts</text><text x="150" y="464" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">Turn the switch on in the extension's details page. Adapters and site</text><text x="150" y="496" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">scripts need it.</text><circle cx="104" cy="582" r="26" fill="url(#brand)"/><text x="104" y="591" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="28" font-weight="800" fill="#F2F7FF" text-anchor="middle" letter-spacing="0" opacity="1">3</text><text x="150" y="576" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0" opacity="1">Open localmd.app</text><text x="150" y="612" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">Nothing to configure. The Tools panel says Connected, and your agent has the</text><text x="150" y="644" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">tools.</text><text x="72" y="730" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="400" fill="#6E86A6" text-anchor="start" letter-spacing="0" opacity="1">Need the knowledge base itself? It lives at localmd.app — free to start.</text></svg>
