@@ -22,7 +22,7 @@
       <path d="M50 36H36v56h14"/>
       <path d="M78 36h14v56H78"/>
     </g>
-    <path d="M0 0 L0 16 L3.7 12.4 L6.2 18.5 L8.6 17.5 L6.1 11.5 L11 11.5 Z" transform="translate(38 36) rotate(-22) scale(3.3)" fill="#fff" stroke="#2f6fd0" stroke-width="1.15" stroke-linejoin="round"/>
+    <path d="M0 0 L0 16 L3.7 12.4 L6.2 18.5 L8.6 17.5 L6.1 11.5 L11 11.5 Z" transform="translate(44 43) rotate(-22) scale(2.8)" fill="#fff" stroke="#2f6fd0" stroke-width="1.15" stroke-linejoin="round"/>
   </g><text x="134" y="93" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0.3" opacity="1">localmd Connect</text><text x="72" y="190" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="46" font-weight="700" fill="#F2F7FF" text-anchor="start" letter-spacing="0" opacity="1">One key, and it is in your notes</text><text x="72" y="236" font-family="-apple-system,'SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="26" font-weight="400" fill="#A9BFDC" text-anchor="start" letter-spacing="0" opacity="1">Capture what you are reading — the agent writes it up for you.</text><g>
     <rect x="72" y="296" width="198" height="40" rx="20" fill="rgba(88,166,255,0.12)" stroke="rgba(88,166,255,0.30)"/>
     <text x="171" y="322.8" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="20" font-weight="400" fill="#BBD6FF" text-anchor="middle" letter-spacing="0" opacity="1">The whole page</text>
