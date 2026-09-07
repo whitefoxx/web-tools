@@ -37,7 +37,7 @@ import {
   siteScriptsRunnable,
 } from '../site-scripts/register';
 
-const DOC_URL = 'https://github.com/whitefoxx/web-tools-skills#readme';
+const DOC_URL = 'https://github.com/whitefoxx/web-tools#readme';
 
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 

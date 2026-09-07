@@ -152,7 +152,7 @@ const bridge = createBridge({
 // No audit UI in this shell — a no-op recorder satisfies both transports.
 const recordCall = (): void => {};
 
-// ── WS bridge — DEV BUILD ONLY (webcli-bridge daemon on 9378) ──
+// ── WS bridge — DEV BUILD ONLY (bridge daemon on 9378) ──
 // The shipping extension has no way in from outside the browser. This branch
 // exists so a CLI agent can drive the shell while developing it, and
 // `__LOCALMD_DEV__` is a build-time literal, so the bundler drops the whole

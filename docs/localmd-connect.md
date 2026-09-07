@@ -268,7 +268,7 @@ finds the extension through the `data-localmd-connect` marker, whose value is
   `offscreen.html` + `offscreen.js`, `userscript-runner.js`, icons.
 - Real-machine smoke (docs/tests methodology): load `dist-localmd` unpacked
   (id must match §9) → enable "Allow user scripts" → popup shows the seeded
-  origin. Drive via `BRIDGE_PORT=9378 node webcli-bridge/server.mjs` and
+  origin. Drive via `BRIDGE_PORT=9378 node bridge/server.mjs` and
   `/command`: `generic__find_adapters {query:"hackernews"}` →
   `generic__run_adapter {site:"hackernews", name:"top"}` (pipeline, no toggle
   needed) → a func adapter on a public site (tab lands in the "localmd Connect"
@@ -281,7 +281,7 @@ finds the extension through the `data-localmd-connect` marker, whose value is
 
 ## 11. No skills repo — decided, not deferred (2026-08-06)
 
-WebCLI ships a public skills repo (`whitefoxx/web-tools-skills`: daemon +
+WebCLI ships a public skills repo (`whitefoxx/web-tools`: daemon +
 `SKILL.md`) because its consumer is a CLI agent, and the WS transport carries
 **no** `instructions` — a hand-maintained skill file is the only channel that
 reaches it. localmd Connect does not get one, and the asymmetry is the point:
@@ -301,12 +301,12 @@ reaches it. localmd Connect does not get one, and the asymmetry is the point:
 
 The WS bridge is **dev-only** (§12), so there is no shipped CLI path for a
 skill to serve in the first place. What remains true for the dev build: it is
-driven by the GENERIC daemon from `web-tools-skills` (`BRIDGE_PORT=9378 npx -y
-github:whitefoxx/web-tools-skills`), which is transport-only and knows nothing
+driven by the GENERIC daemon in this repo's `bridge/` (`BRIDGE_PORT=9378 npx -y
+github:whitefoxx/web-tools`), which is transport-only and knows nothing
 about either shell's tool set, and a CLI agent on it gets the catalog but not
 the `instructions` — so the write-confirm contract (§7) reaches it only through
 the tool descriptions. That is acceptable for a testing path. If a CLI path
-ever ships, the cheap fix is a skill file in this repo's `webcli-bridge/`
+ever ships, the cheap fix is a skill file in this repo's `bridge/`
 sibling, not a new public repo.
 
 ## 12. Two builds: `localmd` ships, `localmd-dev` can be driven
@@ -1830,7 +1830,7 @@ know what a skill is. That fits localmd better than a new spec kind would:
   beyond what §15.5 asks of this shell.
 
   **Superseded (2026-09-06):** the earlier plan pre-wrote per-site skills (a
-  `docs/adapter-skills/` staging area, later `web-tools-skills/skills/adapters/`).
+  `docs/adapter-skills/` staging area, later this repo's `skills/adapters/`).
   Real-machine testing exposed that maintaining per-site skills in ANY form is a
   maintenance nightmare, so the project ships **none** — only the base + a couple
   of hints (`reach-a-site`), while users' own agents build and save their own.

@@ -264,7 +264,7 @@ for the record of what 0.1.0-era testing covered:
 ```bash
 npm run build:all          # dist/ (full) + dist-webcli/ (WebCLI)
 # Load unpacked dist-webcli/ at chrome://extensions (ID hjdccc…)
-npx -y github:whitefoxx/web-tools-skills   # the WebCLI daemon on 9376 (WebCLI dials it)
+npx -y github:whitefoxx/web-tools   # the WebCLI daemon on 9376 (WebCLI dials it)
 ```
 
 WebCLI defaults to port **9376** (a distinct port from the full bridge's 8787, so both can run
@@ -274,20 +274,20 @@ change the port or disable it, set `chrome.storage.local` `bridgePort` /
 
 ## 9. Dedicated WebCLI skills repo + own port (done)
 
-WebCLI has its **own** public skills repo — **[`whitefoxx/web-tools-skills`](https://github.com/whitefoxx/web-tools-skills)**
+WebCLI has its **own** public skills repo — **[`whitefoxx/web-tools`](https://github.com/whitefoxx/web-tools)**
 — mirroring `web-agent-skills`, but generic-only: a slim daemon (`server.mjs`,
 default port **9376**, `GET /ping /status /tools` + `POST /command`, no adapter/
 explore "control tools") + a `webcli` skill teaching the generic-tool loop. Install
-with `npx skills add whitefoxx/web-tools-skills -g`; run the daemon with
-`npx -y github:whitefoxx/web-tools-skills`. The popup's Documentation link points
+with `npx skills add whitefoxx/web-tools -g`; run the daemon with
+`npx -y github:whitefoxx/web-tools`. The popup's Documentation link points
 there. The separate port lets WebCLI and the full Web Agent bridge run
 simultaneously without competing for a daemon's single connection.
 
-Mounted here as a **git submodule at `webcli-bridge/`** (same pattern as `bridge/`
+Mounted here as a **git submodule at `bridge/`** (same pattern as `bridge/`
 / `marketplace/`). To change the WebCLI daemon or skill: edit inside
-`webcli-bridge/`, commit + push to the public repo, then bump the submodule
+`bridge/`, commit + push to the public repo, then bump the submodule
 pointer here. For local dev you can run the daemon straight from the submodule:
-`node webcli-bridge/server.mjs`.
+`node bridge/server.mjs`.
 
 ## 10. Tab lifecycle in WebCLI — nobody reaps for you
 
@@ -658,7 +658,7 @@ verdict are buffered, not raced; a failed storage read fails CLOSED. Pinned by
 `tests/web-origins.test.ts`; the full shell's manifest-derived sync path is
 byte-identical to before (pinned by `tests/external-mcp.test.ts`).
 
-**Page protocol** (documented for integrators in the web-tools-skills README):
+**Page protocol** (documented for integrators in this repo's README):
 
 ```
 detect     : document.documentElement.dataset.webcliRelay === <ext id>   (sync, race-free)

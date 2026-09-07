@@ -103,7 +103,7 @@ ask; if yes, the file is not optional.
 | always                                                                 | `manifest.webcli.json` → `description` if touched — **≤132 chars**, and `name` ≤45                                                                                                                                                                                             | the dashboard REJECTS the upload; a 0.2.0 attempt died on 134 chars. Now pinned by `tests/webcli-tool-surface.test.ts` |
 | always                                                                 | §4 below — a new entry, marked **PUBLISHED** only after §5 step 10                                                                                                                                                                                                             | 0.1.0 sat here labelled as shipped while the store served 0.0.1 (§4)                                                   |
 | tool added / removed / renamed                                         | `tests/webcli-tool-surface.test.ts` (count + membership), `store/webcli/store-listing.md` (the enumerated toolbelt), `store/webcli/render.mjs` (screenshot 3 chips) → re-render + re-raster                                                                                    | the store screenshots are IMAGES; nothing type-checks them                                                             |
-| tool surface or guidance                                               | `webcli-bridge/` submodule (SKILL.md + README) → **push first** (§5 step 9)                                                                                                                                                                                                    | the skill reaches users instantly, the extension waits on review                                                       |
+| tool surface or guidance                                               | `bridge/` submodule (SKILL.md + README) → **push first** (§5 step 9)                                                                                                                                                                                                    | the skill reaches users instantly, the extension waits on review                                                       |
 | a tool's args                                                          | that tool's description string, and `WEBCLI_INSTRUCTIONS` if it changes the recommended loop                                                                                                                                                                                   | descriptions ARE the interface in an agent-free shell (§11)                                                            |
 | manifest `permissions` / `host_permissions` / `externally_connectable` | prepare the dashboard justification text; expect a slower review                                                                                                                                                                                                               | a silent permission delta is the #1 review stall                                                                       |
 | `name`                                                                 | `controlled-tabs.ts` `LEGACY_TITLES` if the part BEFORE the dash changed                                                                                                                                                                                                       | the name is the tab-group title; changing it orphans existing groups (§13 of webcli.md)                                |
@@ -170,8 +170,8 @@ ask; if yes, the file is not optional.
 7. **Upload** in the dashboard → Package → Upload new package. Then update, in the
    same draft, anything §3 changed: description, screenshots, promo tiles.
 8. **Submit for review.** Publishing is manual — the draft sits until submitted.
-9. **Ship the skills side.** The daemon + skills live in the `webcli-bridge/`
-   submodule (public repo `whitefoxx/web-tools-skills`) and users install them
+9. **Ship the skills side.** The daemon + skills live in the `bridge/`
+   submodule (public repo `whitefoxx/web-tools`) and users install them
    separately with `npx`. If the release changes the tool surface or the guidance
    the skill teaches, **push that submodule first** — the skill text reaches users
    the moment it is pushed, whereas the extension waits on review, and a skill that
@@ -198,7 +198,7 @@ m=json.loads(zipfile.ZipFile(io.BytesIO(b[12+hs:])).read('manifest.json'))
 print(m['version'], m['name'])"
 ```
 
-### 0.3.0 — 2026-08-06 · **SUBMITTED 2026-08-07**, awaiting review
+### 0.3.0 — 2026-08-06 · submitted 2026-08-07 · **PUBLISHED** (confirmed live by the maintainer 2026-09-07; the §1 CRX check was not re-run at that point — do it before 0.4.0 is uploaded)
 
 **Web-app access REMOVED** — the whole 0.2.0 headline reversed, deliberately.
 The "call the tools from your own web app" use case moved wholesale to the new
@@ -265,7 +265,7 @@ Done already (2026-08-06, pushed on `product`):
 - [x] `store/webcli/store-listing.md` swept (no "web app" mentions remain)
 - [x] `docs/webcli.md` §15 marked SUPERSEDED; `docs/localmd-connect.md` §8 is
       now the protocol's home
-- [x] `webcli-bridge/` submodule pushed (`d4627fd`) — **but its wording was
+- [x] `bridge/` submodule pushed (`d4627fd`) — **but its wording was
       written from the false premise; re-push the correction before release**
 - [x] `name` unchanged ⇒ no `LEGACY_TITLES` entry needed
 
@@ -273,13 +273,13 @@ Remaining:
 
 - [ ] **Publish localmd Connect first** (see the ordering point above). Until it
       is installable, 0.3.0 must not ship.
-- [x] `webcli-bridge/` re-pushed with the corrected wording (`5b50802`) —
+- [x] `bridge/` re-pushed with the corrected wording (`5b50802`) —
       it had told the public the relay "never reached a published build".
       Submodule pointer bumped here.
 - [x] `store/webcli/render.mjs` rewritten, re-rendered and re-rastered
       (2026-08-07). It turned out to be worse than "drop the web-app chip":
       **after this release WebCLI has no MCP surface at all**, so every "MCP"
-      claim in the copy was false. The daemon (`webcli-bridge/server.mjs`)
+      claim in the copy was false. The daemon (`bridge/server.mjs`)
       speaks plain HTTP — no `jsonrpc`, no MCP server — and the skill says so
       outright ("Talk to it over plain HTTP (curl) — no MCP setup"). The only
       MCP WebCLI ever had was the Port-MCP relay this release deletes. So
@@ -364,7 +364,7 @@ not a capability cliff.
 
 **Popup rebuilt** as the extension's only UI: the pitch and use cases moved up
 beside the title, setup collapsed to ONE command (`npx skills add
-whitefoxx/web-tools-skills -g`), and two controls added (tool profile, web-app
+whitefoxx/web-tools -g`), and two controls added (tool profile, web-app
 origins) — counts come from the SW's live registry rather than constants.
 
 **Fixed, all found on the real machine:** `list_webmcp_tools` computed `source` and

@@ -20,13 +20,15 @@
     "format:check": "prettier --check .",
     "check": "pnpm run typecheck && pnpm run lint && pnpm run format:check && pnpm run test",
     "pack:webcli": "node scripts/pack-store.mjs webcli",
-    "pack:localmd": "node scripts/pack-store.mjs localmd"
+    "pack:localmd": "node scripts/pack-store.mjs localmd",
+    "bridge": "node bridge/server.mjs"
   },
   "dependencies": {
     "dompurify": "3.4.7",
     "marked": "18.0.4",
     "preact": "10.29.2",
-    "turndown": "7.2.4"
+    "turndown": "7.2.4",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "2.4.0",
@@ -52,5 +54,8 @@
       "postcss": "8.5.15",
       "lightningcss": "1.32.0"
     }
+  },
+  "bin": {
+    "web-tools-bridge": "bridge/server.mjs"
   }
 }

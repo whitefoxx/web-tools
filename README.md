@@ -29,8 +29,7 @@ see `docs/webcli.md` and `docs/localmd-connect.md`.
   scripts, the in-page highlighter's stores, region capture.
 - `src/background/` — the two service workers + the shared keep-alive.
 - `src/webcli/`, `src/localmd-connect/` — each shell's popup / options / relay.
-- `webcli-bridge/` — git submodule: the WS daemon + agent skills for WebCLI
-  (`whitefoxx/web-tools-skills`, installed by users with `npx skills add`).
+- `bridge/`, `skills/` — the WS daemon and the agent skills (see below).
 - `store/<shell>/` — Web Store listing copy; `docs/*-releases.md` — the
   per-shell release checklists and history.
 
@@ -48,3 +47,24 @@ pnpm run pack:webcli | pack:localmd   # zip the CONTENTS of a dist for upload
 
 The manifests carry the store's **public** keys, so an unpacked build takes the
 published id. The private `.pem` halves (dev ids) are gitignored and stay local.
+
+## Skills + bridge daemon
+
+The daemon a CLI agent talks to, and the skills that teach it how, live here
+too (they used to be the separate `web-tools-skills` repo):
+
+- `bridge/server.mjs` — the WS bridge daemon (`web-tools-bridge` bin). Default
+  port 9376 (WebCLI); `BRIDGE_PORT=9378` drives a localmd Connect dev build,
+  `BRIDGE_PORT=8787` the full Web Agent. Transport only — it knows nothing
+  about any shell.
+- `skills/webcli/SKILL.md` — how a CLI agent drives WebCLI.
+- `skills/adapters/README.md` — the method for reaching a site with the base
+  primitives (the robustness ladder). No per-site recipes are maintained here;
+  the agent builds them live and the user keeps their own.
+- `skills/web-agent/SKILL.md` — what the full Web Agent adds on top (`web_task`).
+
+```sh
+npx skills add whitefoxx/web-tools -g       # install the skills (auto-detects Claude Code / Cursor / Codex)
+npx -y github:whitefoxx/web-tools           # run the daemon — a git install pulls only the runtime deps
+BRIDGE_PORT=9378 npx -y github:whitefoxx/web-tools
+```

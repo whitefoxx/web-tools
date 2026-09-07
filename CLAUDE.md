@@ -28,9 +28,9 @@ registration file (registry `cli()` is last-write-wins on (site, name)).
 ## Two shells, own identities, own daemons
 
 - WebCLI: store id `jnhfdhpafndcbppkphhfpecflhogngge`; dev id via
-  `--mode webcli-dev` (port 9377 vs 9376). Daemon + skills live in the
-  `webcli-bridge/` submodule (`whitefoxx/web-tools-skills`): edit there, push,
-  then bump the submodule pointer here.
+  `--mode webcli-dev` (port 9377 vs 9376). Daemon + skills live in this repo
+  (`bridge/server.mjs`, `skills/`) — a push here reaches users on their next
+  `npx`; there is no submodule pointer to bump.
 - localmd Connect: store id `bgennbocoapjiiolmmlcbfingimhmchh`; dev id via
   `--mode localmd-dev` (WS daemon on 9378 exists ONLY in the dev build — a dev
   build is not a valid smoke test of the upload artifact). The shipping build's
