@@ -179,6 +179,21 @@ ask; if yes, the file is not optional.
 10. **After it goes live**, re-download the CRX (§1) and confirm the version and
     the headline strings, then add the §6 entry below and flip it to **PUBLISHED**.
 
+## 4b. Known packaging smell — each shell bundles the other's icons
+
+`public/` is copied wholesale into every dist, so **WebCLI ships six files it
+never references**: `localmd-app.svg`, `localmd-connect.svg` and the four
+`localmd-connect-*.png`. localmd Connect ships WebCLI's `icon-*.png` the same
+way. About 7 KB, harmless, and 0.3.0 went out like this — but it means one
+product's package contains another product's branding, and it makes a diff of
+"is my zip current?" noisy: a rebuild after an icon change to the OTHER shell
+shows five files differing in this one, which looks alarming and is not.
+
+Not fixed here on purpose. Narrowing `publicDir` per shell is a vite change, and
+making it right before a submission would invalidate the end-to-end smoke test
+the artifact already passed. Do it at the start of a release cycle, not the end,
+and re-verify both shells' packages afterwards.
+
 ## 5. Version history
 
 Each entry is marked **PUBLISHED** (confirmed live via the §1 CRX download) or
