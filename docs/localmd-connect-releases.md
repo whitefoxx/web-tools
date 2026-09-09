@@ -236,7 +236,27 @@ Post-publication follow-ups, done 2026-08-18 (six days late — the log said
    catalogue row is already gone; only the relay's `webcli:` envelope tag
    remains, which is a wire-format constant and not a product reference.
 
-### 0.2.0 — 2026-09-07 · **PREPARED** (not yet uploaded)
+### 0.2.0 — submitted 2026-09-09 · **PUBLISHED 2026-09-09**
+
+Confirmed the same day by downloading the live CRX (§6), not from the dashboard.
+What the store is actually serving:
+
+- `version: 0.2.0`, no `key`, `update_url` present — a real store build.
+- Permissions exactly as intended: `debugger, tabs, tabGroups, scripting,
+  storage, cookies, downloads, userScripts, contextMenus`, with `bookmarks,
+  history, readingList, sessions` optional. **`offscreen` and `alarms` are
+  absent**, which is the permission reduction this release was for.
+- `sandbox.html`, `offscreen.html`, `offscreen.js` and `userscript-runner.js`
+  are all absent from the shipped package; `web-relay.js` and `page-tools.js`
+  are present.
+- The service worker contains zero occurrences of `createWsBridge`,
+  `localhost:8123`, `REDIAL` and `bridgePort` — the dev-only WS transport did
+  not ship.
+- `icons/localmd-connect-128.png` hashes identical to `public/icons/` in this
+  repo, so the cursor icon that shipped is the one that was reviewed here.
+
+Accepted on the first submission, unlike 0.1.0.
+
 
 Supersedes the 0.1.1 plan below, which was never submitted — its tab-lifecycle
 fix ships inside this release. The first release cut from **`web-tools`** rather
