@@ -1913,3 +1913,98 @@ this — the dead artifacts are emitted by a Vite plugin, outside the SW's impor
 graph — so a shell's shipped `dist/` is worth an eyeball after any capability
 removal. This also cleared the last build-level edge from the lean localmd shell
 into `sidepanel/` (P4, architecture.md §A.4).
+
+## 16. Post-0.2.0 fixes, reported from the shipped build (2026-09-09)
+
+Both found by the user on the published 0.2.0, not by any test here. Fixed on
+2026-09-09, unverified on a real machine at the time of committing — the release
+gate for 0.2.1 is that verification, not this section.
+
+### 16.1 The dev-only "CLI agents" nav entry shipped visible
+
+**Symptom.** In the published build, Settings shows a **CLI agents** item in the
+left nav. Clicking it appears to do nothing.
+
+**Root cause.** Two separate things, and only the second is the bug.
+
+`options.html` marks that section `hidden`, and `options.ts` turns any initially
+hidden section into a non-destination at load: `for (const s of sections) if
+(s.hidden) setSectionAvailable(s.id, false)`. `setSectionAvailable` sets
+`section.dataset.unavailable` — which `visibleSections()` filters on — and
+`button.hidden = true` for its nav entry. The mechanism is right, and a dev
+build reveals the section later through the same call.
+
+The nav button kept rendering anyway. `[hidden] { display: none }` lives in the
+**UA stylesheet**, and any author rule that sets `display` beats it regardless of
+specificity — author styles always win over UA styles. `.nav-item { display:
+flex }` therefore overrode the attribute, so `button.hidden = true` had no
+visible effect at all.
+
+The "nothing happens" half follows from that: the click sets
+`location.hash = '#cliSetup'`, `show()` finds it absent from `visibleSections()`
+and falls back to `list[0]` — the section the reader was already on.
+
+**Fix.** One rule: `.nav-item[hidden] { display: none }`. The page already
+carried exactly this guard for `section`, `.modal`, `.combo-menu` and `.editor`;
+the fifth case was missed. Only `cliSetup` starts hidden, so the change reaches
+nothing else.
+
+**Swept for others, none found.** Every `x.hidden = …` in `options.ts` and
+`popup.ts` was resolved back to the element it binds (`const x = $('id')`), its
+classes looked up, and each class checked for a `display` declaration without a
+matching `[hidden]` guard. Both files come back clean after this fix. WebCLI's
+popup sets `.hidden` on two elements (`scriptsWarn`, `scriptsEmpty`) and has no
+`[hidden]` rule at all, but neither `.warn` nor `.empty` declares `display`, so
+the UA rule is not shadowed there and nothing needs changing.
+
+**Lesson.** **Setting `.hidden` on an element whose class sets `display` does
+nothing.** Any component with its own `display` needs its own `[hidden]` rule,
+and a codebase that has written that guard four times has admitted it will need
+it a fifth. This is invisible in a dev build, where the section is available and
+the button is supposed to show — the bug only exists in the shipped
+configuration, which is the configuration nobody clicks through.
+
+### 16.2 Clipping a page filled the knowledge base with image files
+
+**Symptom.** Clipping an image-heavy page wrote a pile of image files into the
+KB beside the note, and the note's Markdown pointed at those local copies rather
+than at the images' own URLs.
+
+**Root cause.** There are **two routes into the folder, and they are not the
+same code**:
+
+- **Route B** — the agent calls `clip_page` and writes the note itself. Governed
+  by localmd's system prompt.
+- **Route A** — the user clicks Clip in this extension. It never becomes a
+  `clip_page` call: it lands in the capture inbox and localmd's `writeClip`
+  drains it, with no agent and no prompt anywhere in the path.
+
+`clip_page`'s `images` parameter defaults to `list` (absolute URLs, nothing
+fetched), but `capture-actions.ts` hardcoded `images: 'inline'` for Route A, so
+every clip from the button fetched every image as base64. localmd's `writeClip`
+then saved each one beside the note and rewrote the Markdown to match — which
+was documented, intended, local-first behaviour, not a bug in itself.
+
+**The first diagnosis was wrong, and worth recording as such.** Reading the tool
+and the prompt gave a coherent story — the prompt offered `images:"inline"`
+without ever saying the default was a list — and that story was true but it was
+about the route the user had not taken. The report even contained the
+disambiguator ("can't the clipped .md just reference the images by link?"
+describes rewritten link targets, and only `writeClip` rewrites them); it was
+read past because a plausible cause had already been found.
+
+**Fix.** Route A now asks for `images: 'list'`. `clip_page` keeps `inline` for an
+agent explicitly told to make a note work offline. localmd separately changed
+`writeClip` to write links on both routes and tightened the prompt.
+
+Safe in both directions: the old `writeClip` began its loop with
+`if (!img.dataUrl) continue` and never issued a request of its own, so a new
+extension against an older app writes zero image files and leaves the remote
+URLs standing — which is the wanted behaviour anyway.
+
+**Lesson.** **When a user reports a behaviour, find which code path they were
+on before explaining why that path does it.** A capture that reaches the same
+destination through a UI button and through a tool call is two implementations,
+and the one with a prompt in front of it is the one that is easy to read and
+easy to blame. The corollary: a plausible cause found early is the most
+expensive kind, because it stops the search.

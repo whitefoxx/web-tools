@@ -131,7 +131,12 @@ export async function captureToInbox(
   if (action === 'clip_page' || action === 'clip_selection') {
     const clip: ClipPayload | PdfClipPayload = await clipTab(tabId, {
       mode: action === 'clip_selection' ? 'selection' : 'article',
-      images: 'inline',
+      // URLs, not bytes. This path used to inline every image so the app could
+      // save local copies beside the note; localmd now writes links instead, so
+      // the bytes were crossing the bridge and sitting in the inbox unread —
+      // tens of megabytes of base64 for an image-heavy page. `clip_page` still
+      // offers images:"inline" for an agent told to make a note work offline.
+      images: 'list',
     });
     const item = makeInboxItem('clip', {
       url: clip.url || url,

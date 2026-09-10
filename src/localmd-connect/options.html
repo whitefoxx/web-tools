@@ -120,6 +120,13 @@
         flex-direction: column;
         gap: 2px;
       }
+      /* An author `display` beats the UA stylesheet's `[hidden] {display:none}`,
+         so a nav button hidden by setSectionAvailable() kept rendering — that
+         is how the dev-only "CLI agents" entry reached the published build.
+         The same guard already exists for section/.modal/.combo-menu/.editor. */
+      .nav-item[hidden] {
+        display: none;
+      }
       .nav-item {
         display: flex;
         align-items: center;
