@@ -39,6 +39,23 @@ describe('wrapForEval', () => {
     );
   });
 
+  it('wraps a return that follows a block on the SAME line', () => {
+    // A one-line snippet — what an agent writes when it does not pretty-print —
+    // puts `}` immediately before `return`. That used to fall through to the
+    // as-is branch and come back as "SyntaxError: Illegal return statement".
+    const one = 'const o=[];for (const e of document.all){o.push(e)}return o.slice(0,5);';
+    expect(wrapForEval(one)).toBe(`(async () => {\n${one}\n})()`);
+  });
+
+  it('still leaves a bare expression alone', () => {
+    // The guard that makes the `}` above safe: no top-level `return`, no wrap,
+    // so the completion value is still the expression's own.
+    expect(wrapForEval('({a: 1, b: [2, 3]})')).toBe('({a: 1, b: [2, 3]})');
+    expect(wrapForEval('document.querySelectorAll("a").length')).toBe(
+      'document.querySelectorAll("a").length',
+    );
+  });
+
   it('wraps a comment-led statement body with return', () => {
     const out = wrapForEval('// find it\nreturn document.title;');
     expect(out.startsWith('(async () => {')).toBe(true);

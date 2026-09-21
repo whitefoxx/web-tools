@@ -72,7 +72,13 @@ export function wrapForEval(js: string): string {
   // fails with "Illegal return statement". Wrap in an async IIFE so it's valid
   // and may use top-level await. (Bare expressions have no `return`, so this
   // never swallows their value — they fall through to the as-is branch.)
-  else if (/(?:^|[\n;{])\s*return[\s;(]/.test(code)) out = `(async () => {\n${code}\n})()`;
+  //
+  // `}` is in the class because a `return` that follows a block on the SAME
+  // line — `for (…) { … }return rows;`, which is what a one-line snippet looks
+  // like — is otherwise invisible to this test, and the call fails with the
+  // very error the branch exists to prevent. Found driving the shipped tool
+  // (docs/webcli.md §19).
+  else if (/(?:^|[\n;{}])\s*return[\s;(]/.test(code)) out = `(async () => {\n${code}\n})()`;
   // Bare expression — `new Promise(...)`, an object literal, etc. — leave as-is.
   else out = code;
   // Inject the __loc robust-locator helper ONLY when the code references it, so
