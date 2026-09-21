@@ -15,10 +15,11 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
+    "check:listings": "node scripts/check-store-listing.mjs store/webcli/store-listing.md store/localmd-connect/store-listing.md",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "pnpm run typecheck && pnpm run lint && pnpm run format:check && pnpm run test",
+    "check": "pnpm run typecheck && pnpm run lint && pnpm run format:check && pnpm run check:listings && pnpm run test",
     "pack:webcli": "node scripts/pack-store.mjs webcli",
     "pack:localmd": "node scripts/pack-store.mjs localmd",
     "bridge": "node bridge/server.mjs"

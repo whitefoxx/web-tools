@@ -3,14 +3,16 @@
 ## Store name (shipping since 0.2.0 — the 0.1.0 draft was never published, see docs/webcli-releases.md §4)
 WebCLI - Browser Control for Agents
 
-> This IS `manifest.webcli.json`'s `name` — the store displays the manifest name,
-> so the recommendation above was adopted rather than left as listing-only copy.
-> 35 chars, within the 45-char safe limit. An ASCII hyphen, not an en-dash.
->
-> The name doubles as the **tab-group title**, which is why the separator matters:
-> `controlled-tabs.ts` cuts the label at the first dash, so the tab strip reads
-> "WebCLI" while the store reads the full line. Keep "WebCLI" as the leading token
-> — changing it would orphan every existing tab group (see docs/webcli.md §13).
+<!-- NOTE (not pasted)
+This IS `manifest.webcli.json`'s `name` — the store displays the manifest name,
+so the recommendation above was adopted rather than left as listing-only copy.
+35 chars, within the 45-char safe limit. An ASCII hyphen, not an en-dash.
+
+The name doubles as the **tab-group title**, which is why the separator matters:
+`controlled-tabs.ts` cuts the label at the first dash, so the tab strip reads
+"WebCLI" while the store reads the full line. Keep "WebCLI" as the leading token
+— changing it would orphan every existing tab group (see docs/webcli.md §13).
+-->
 
 ## Summary (single line, ≤132 chars)
 Let CLI AI agents like Claude Code & Codex drive your real, logged-in Chrome — a headless bridge with 35+ tools, no in-page agent.
@@ -23,9 +25,9 @@ It's a headless browser-control bridge: a lightweight extension that exposes 35+
 
 Because it drives YOUR real, logged-in Chrome session, your agent works pages exactly as you do — already signed in, human-like, and sailing past the bot walls that block headless scrapers.
 
-**Reach a site nobody wrote support for.** On top of the primitives there are reconnaissance tools that answer "where does this value actually come from" — the page's structured data, its accessibility tree, and the requests it makes — plus eval_js to run your own JavaScript in the page's own origin. That is how an agent works out how to read an unfamiliar site in one session, instead of you writing and maintaining a scraper.
+🔎 Reach a site nobody wrote support for. On top of the primitives there are reconnaissance tools that answer "where does this value actually come from" — the page's structured data, its accessibility tree, and the requests it makes — plus eval_js to run your own JavaScript in the page's own origin. That is how an agent works out how to read an unfamiliar site in one session, instead of you writing and maintaining a scraper.
 
-**And page rules that stick.** Site scripts let your agent apply a change you approved — hide the clutter, restyle a page, run a small script — on every visit to a matching site, until you remove it. Every one is listed on the settings page with its matching sites and its full source, where you can pause or delete it.
+🧹 And page rules that stick. Site scripts let your agent apply a change you approved — hide the clutter, restyle a page, run a small script — on every visit to a matching site, until you remove it. Every one is listed on the settings page with its matching sites and its full source, where you can pause or delete it.
 
 ━━━ WHAT YOU CAN DO ━━━
 
@@ -68,7 +70,7 @@ Because it drives YOUR real, logged-in Chrome session, your agent works pages ex
 
 ━━━ GET STARTED ━━━
 
-1. Install WebCLI from the Chrome Web Store (it runs headless — only a small status popup).
+1. Install WebCLI from the Chrome Web Store (it runs headless — a small status popup and a settings page).
 2. Ask your agent to run:  npx skills add whitefoxx/web-tools -g
 3. Then ask your agent to use the browser. The skill knows the rest — including starting the local daemon on port 9376, which WebCLI connects to automatically.
 
@@ -78,115 +80,137 @@ WebCLI is the "pure provider" sibling of the Web Agent extension: the same battl
 
 ## Dashboard fields — the Privacy form, ready to paste
 
-**Category:** Developer Tools (secondary: Productivity)
+Category: Developer Tools (secondary: Productivity)
 
-Two things differ from localmd Connect's form: this shell requests `alarms`
-(it re-dials the daemon) and does **not** request `offscreen` or `contextMenus`,
-and **remote code is answered NO** where that shell used to answer yes.
+<!-- NOTE (not pasted)
+Two things differ from localmd Connect's form: this shell requests `alarms` (it
+re-dials the daemon) and does NOT request `offscreen` or `contextMenus`, and
+remote code is answered NO where that shell used to answer yes.
+-->
 
 ### Single purpose description
 
-> WebCLI is a headless browser-control bridge. It exposes a fixed set of browser
-> actions — open a URL, read and extract page content, click, type, scroll, take
-> screenshots, manage tabs, and apply page rules the user has approved — to an AI
-> agent the user runs on their own machine, over a local daemon on 127.0.0.1 that
-> the extension dials out to. It has no AI of its own, no interface beyond a
-> status popup and a settings page, and no web page can reach it.
+<!-- NOTE (not pasted)
+WebCLI is a headless browser-control bridge. It exposes a fixed set of browser
+actions — open a URL, read and extract page content, click, type, scroll, take
+screenshots, manage tabs, and apply page rules the user has approved — to an AI
+agent the user runs on their own machine, over a local daemon on 127.0.0.1 that
+the extension dials out to. It has no AI of its own, no interface beyond a
+status popup and a settings page, and no web page can reach it.
+-->
 
 ### Permission justifications
 
-**debugger**
+#### debugger
 
-> This is the core automation engine. The extension uses the Chrome DevTools
-> Protocol (chrome.debugger) to reliably drive the tabs the agent targets —
-> navigating, reading the DOM and accessibility tree, dispatching clicks and
-> keystrokes, capturing screenshots, and observing the requests a page makes when
-> the agent needs to find where a value came from. It attaches only to tabs
-> involved in a command from the local daemon.
+<!-- NOTE (not pasted)
+This is the core automation engine. The extension uses the Chrome DevTools
+Protocol (chrome.debugger) to reliably drive the tabs the agent targets —
+navigating, reading the DOM and accessibility tree, dispatching clicks and
+keystrokes, capturing screenshots, and observing the requests a page makes when
+the agent needs to find where a value came from. It attaches only to tabs
+involved in a command from the local daemon.
+-->
 
-**tabs**
+#### tabs
 
-> Used to open, query, switch, and close tabs while carrying out browser actions
-> (open a URL, list open tabs, close a tab it opened). Used only to perform the
-> actions the agent requests.
+<!-- NOTE (not pasted)
+Used to open, query, switch, and close tabs while carrying out browser actions
+(open a URL, list open tabs, close a tab it opened). Used only to perform the
+actions the agent requests.
+-->
 
-**tabGroups**
+#### tabGroups
 
-> When the agent opens several tabs for a task, the extension groups them under
-> "WebCLI" to keep them organized and visually separated from the user's own tabs.
-> Used only for tabs the extension itself creates.
+<!-- NOTE (not pasted)
+When the agent opens several tabs for a task, the extension groups them under
+"WebCLI" to keep them organized and visually separated from the user's own tabs.
+Used only for tabs the extension itself creates.
+-->
 
-**scripting**
+#### scripting
 
-> Used to read and act on pages. The extension injects its own bundled scripts to
-> read page structure (links, buttons, inputs, text) and perform the requested
-> interactions (click, type, select, scroll). Injection happens only into tabs
-> involved in a command from the agent.
+<!-- NOTE (not pasted)
+Used to read and act on pages. The extension injects its own bundled scripts to
+read page structure (links, buttons, inputs, text) and perform the requested
+interactions (click, type, select, scroll). Injection happens only into tabs
+involved in a command from the agent.
+-->
 
-**userScripts** — NEW in 0.4.0, expect the review to focus here
+#### userScripts
 
-> Site scripts are page rules the user has explicitly approved — hide these
-> elements, apply this CSS, run this small script on this site. They are not
-> bundled with the extension (the user's own agent writes them and the user
-> approves them), so they run in Chrome's isolated USER_SCRIPT world rather than
-> the extension's own context. Chrome additionally gates this API behind a switch
-> the user turns on themselves, so nothing runs until they do, and every script is
-> listed on the extension's settings page, in full, where the user can read, pause
-> or delete it.
+<!-- NOTE (not pasted)
+NEW in 0.4.0 — expect the review to focus here.
+-->
 
-**storage**
+<!-- NOTE (not pasted)
+Site scripts are page rules the user has explicitly approved — hide these
+elements, apply this CSS, run this small script on this site. They are not
+bundled with the extension (the user's own agent writes them and the user
+approves them), so they run in Chrome's isolated USER_SCRIPT world rather than
+the extension's own context. Chrome additionally gates this API behind a switch
+the user turns on themselves, so nothing runs until they do, and every script is
+listed on the extension's settings page, in full, where the user can read, pause
+or delete it.
+-->
 
-> Stores only the extension's own data in chrome.storage.local and IndexedDB: the
-> site-script rules the user approved, the daemon port, and the user's
-> tool-catalog preference. No browsing data or personal information is stored.
+#### storage
 
-**cookies**
+<!-- NOTE (not pasted)
+Stores only the extension's own data in chrome.storage.local and IndexedDB: the
+site-script rules the user approved, the daemon port, and the user's
+tool-catalog preference. No browsing data or personal information is stored.
+-->
 
-> The extension automates the user's own logged-in session. The cookies permission
-> lets the browser-automation layer read the active tab's cookies so requests it
-> makes on the user's behalf stay within that existing session. Cookies are never
-> collected or sent to the developer or any third party.
+#### cookies
 
-**downloads**
+<!-- NOTE (not pasted)
+The extension automates the user's own logged-in session. The cookies permission
+lets the browser-automation layer read the active tab's cookies so requests it
+makes on the user's behalf stay within that existing session. Cookies are never
+collected or sent to the developer or any third party.
+-->
 
-> Automated navigation can trigger a file download. The downloads permission lets
-> the extension manage download behavior during automation so a download prompt
-> doesn't stall a task the agent is running. The extension does not initiate
-> downloads on its own and sends nothing to the developer.
+#### downloads
 
-**alarms**
+<!-- NOTE (not pasted)
+Automated navigation can trigger a file download. The downloads permission lets
+the extension manage download behavior during automation so a download prompt
+doesn't stall a task the agent is running. The extension does not initiate
+downloads on its own and sends nothing to the developer.
+-->
 
-> A one-minute alarm re-dials the local daemon, so the extension reconnects on its
-> own within a minute of the user starting it instead of needing a reload.
+#### alarms
 
-**Host permission (`<all_urls>`)**
+<!-- NOTE (not pasted)
+A one-minute alarm re-dials the local daemon, so the extension reconnects on its
+own within a minute of the user starting it instead of needing a reload.
+-->
 
-> The user decides which website to work with, so the target can be any site.
-> Broad host access is required to open, read, and interact with whatever page the
-> user directs their agent to, and to apply the page rules the user approved. The
-> extension touches a site only when the agent issues a command for it; it does
-> not run in the background across sites.
+#### Host permission (all_urls)
 
-### Remote code — **NO**
+<!-- NOTE (not pasted)
+The user decides which website to work with, so the target can be any site.
+Broad host access is required to open, read, and interact with whatever page the
+user directs their agent to, and to apply the page rules the user approved. The
+extension touches a site only when the agent issues a command for it; it does
+not run in the background across sites.
+-->
 
-> The extension executes no remote code: everything it runs is bundled in the
-> package. Site scripts are written by the user's own agent, approved by the user,
-> and stored locally — never fetched from a server. `eval_js` runs JavaScript the
-> user's own agent supplies over the local daemon on 127.0.0.1: the user
-> instructing their own browser, not code fetched from the internet.
+### Remote code — NO
+
+<!-- NOTE (not pasted)
+The extension executes no remote code: everything it runs is bundled in the
+package. Site scripts are written by the user's own agent, approved by the user,
+and stored locally — never fetched from a server. `eval_js` runs JavaScript the
+user's own agent supplies over the local daemon on 127.0.0.1: the user
+instructing their own browser, not code fetched from the internet.
+-->
 
 ### Data usage
 
-Tick **Website content** — and nothing else. The extension reads page text,
-structure and screenshots in order to hand them back to the agent running on the
-user's own machine. Nothing is transmitted off the user's device by the
-extension: there is no server on our side to send it to. What the user's agent
-then does with it (e.g. sending it to the model provider they configured) is
-governed by that agent, not by this extension.
+Tick Website content — and nothing else. The extension reads page text, structure and screenshots in order to hand them back to the agent running on the user's own machine. Nothing is transmitted off the user's device by the extension: there is no server on our side to send it to. What the user's agent then does with it (e.g. sending it to the model provider they configured) is governed by that agent, not by this extension.
 
-Do not tick the others: the extension does not read or collect credentials,
-personal communications, location, financial or health data, and it does not log
-user activity — it performs actions, it does not record the user's.
+Do not tick the others: the extension does not read or collect credentials, personal communications, location, financial or health data, and it does not log user activity — it performs actions, it does not record the user's.
 
-All three certifications apply: no selling or transferring user data, no use
-unrelated to the single purpose, no creditworthiness or lending use.
+All three certifications apply: no selling or transferring user data, no use unrelated to the single purpose, no creditworthiness or lending use.
