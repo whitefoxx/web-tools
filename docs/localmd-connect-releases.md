@@ -239,6 +239,52 @@ Post-publication follow-ups, done 2026-08-18 (six days late — the log said
    catalogue row is already gone; only the relay's `webcli:` envelope tag
    remains, which is a wire-format constant and not a product reference.
 
+### 0.2.1 — 2026-09-21 · **PREPARED** (not yet uploaded)
+
+Two bugs found in the published 0.2.0, then the site-script section rebuilt
+around what the WebCLI settings page learned (docs/webcli.md §18).
+
+**The two fixes** (post-mortems in [localmd-connect.md](./localmd-connect.md)
+§16.1 / §16.2):
+
+- **The dev-only "CLI agents" entry shipped visible.** `setSectionAvailable()`
+  hid it with `el.hidden`, and an author `display` on `.nav-item` beats the UA
+  stylesheet's `[hidden] {display:none}` — so the nav button rendered and took
+  users to a section that was not there. `.nav-item[hidden] { display: none }`.
+- **Clip dumped every image into the knowledge base.** `capture-actions.ts`
+  hardcoded `images: 'inline'`, so the in-page Clip button inlined the bytes of
+  every picture on the page. It passes `images: 'list'` now — URLs, not bytes.
+  `clip_page` still offers `inline` for an agent told to make a note work
+  offline.
+
+**Site scripts — explained, gated, and readable.** Ported from WebCLI, where the
+same section was rebuilt first:
+
+- The guidance is **not an empty state**. What a site script is, that localmd
+  writes it and the user approves it, and how to ask — said whether or not any
+  exist, with only the heading tracking the count. The example prompt is
+  labelled as an example above its Copy button, because it carries a placeholder
+  host and a line with Copy beside it reads as something to paste verbatim.
+- **The "Allow user scripts" notice says WHY**, gives the steps, and sits inside
+  the site-script section instead of above every section — it used to warn about
+  site scripts while the user was reading Highlights. It still clears itself:
+  the 2-second `LOCALMD_STATUS` poll already re-reads the switch, so flipping it
+  on another tab is picked up here without the user reloading.
+- **A way to go and ask**: "Open localmd" sends `LOCALMD_OPEN_APP`, the same
+  message the popup's own button uses — the SW decides which tab, because it is
+  the side that knows this build's origins.
+
+**The repository is on the page.** An extension that works in a logged-in
+browser and writes into the user's own folder has "you can read exactly what it
+does" available to it, and that was nowhere in the UI. A card at the foot of the
+settings nav (beside the localmd.app link, not replacing it) and one icon in the
+popup footer.
+
+No permission, manifest-surface or tool changes — `options_ui`, the permission
+list and the tool set are 0.2.0's. A patch bump.
+
+Before uploading: sweep `store/localmd-connect/` against §3, then §6's runbook.
+
 ### 0.2.0 — submitted 2026-09-09 · **PUBLISHED 2026-09-09**
 
 Confirmed the same day by downloading the live CRX (§6), not from the dashboard.

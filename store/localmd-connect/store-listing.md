@@ -120,7 +120,7 @@ buttons by hand does not get around it
 • Anything that injects code into your pages asks the same way
 • Writes to your folder arrive as a diff you approve or discard, with git
 underneath, so nothing is a one-way door
-• Every site script is listed in the popup, where you can pause or delete it
+• Every site script is listed on the settings page with its matching sites and its full source, where you can pause or delete it
 • Your bookmarks, history and reading list stay unreadable until you switch each
 one on yourself
 • There is no server of ours anywhere in this. Be clear about what that does
@@ -149,9 +149,11 @@ are betting on it; you should know it is a bet and not a finished spec.
 same API that lets your knowledge base be a real folder on your disk instead of
 a database we hold.
 • Site scripts need Chrome's **"Allow user scripts"** switch on this extension's
-details page. One click, and everything else works without it.
-• It runs headless: no window, no sidebar, just a small toolbar popup showing
-status, what you captured, and your site scripts.
+details page. One click, the settings page explains why and walks you through
+it, and everything else works without it.
+• It runs headless: no window, no sidebar — a small toolbar popup for the page
+you are on, and a settings page for your highlights, prompts, site scripts and
+browser-data switches.
 
 ━━━ GET STARTED ━━━
 
@@ -229,7 +231,8 @@ by the user's own agent and approved by the user rather than bundled with the
 extension, so they run in Chrome's isolated USER_SCRIPT world rather than the
 extension's own context. Chrome additionally gates this API behind a switch the
 user turns on themselves, so nothing runs until they do, and every script is
-listed in the popup where the user can pause or delete it.
+listed on the extension's settings page, in full, where the user can read, pause
+or delete it.
 
 **contextMenus**
 

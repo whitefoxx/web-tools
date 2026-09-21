@@ -16,6 +16,7 @@ import {
   ICON_CLIP,
   ICON_FOLDER,
   ICON_FULLPAGE,
+  ICON_GITHUB,
   ICON_IN_KB,
   ICON_MARK,
   ICON_OPEN_APP,
@@ -35,6 +36,8 @@ $('icoCaret').innerHTML = ICON_CARET;
 $('icoMarks').innerHTML = ICON_MARK;
 $('openApp').innerHTML = ICON_OPEN_APP;
 $('openOptions').innerHTML = ICON_SETTINGS;
+$('ghIco').innerHTML = ICON_GITHUB(13);
+$<HTMLAnchorElement>('ghLink').href = 'https://github.com/whitefoxx/web-tools';
 
 $('openOptions').addEventListener('click', () => {
   chrome.runtime.openOptionsPage();

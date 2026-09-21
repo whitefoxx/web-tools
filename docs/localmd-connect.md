@@ -2009,3 +2009,51 @@ destination through a UI button and through a tool call is two implementations,
 and the one with a prompt in front of it is the one that is easy to read and
 easy to blame. The corollary: a plausible cause found early is the most
 expensive kind, because it stops the search.
+
+## 17. The site-script section, rebuilt (2026-09-21)
+
+Ported from WebCLI, where the same section was rebuilt first and the reasoning
+is written out in full: **[webcli.md](./webcli.md) §18.1–18.3**. What changed
+here, and the two things that are this shell's own:
+
+- **The guidance is not an empty state.** "No site scripts yet." told the user
+  nothing: not what a site script is, not that localmd writes it and they
+  approve it, not how to get the first. All three are said now, with an example
+  prompt — labelled as an example ABOVE its Copy button, because it carries a
+  placeholder host and a line with Copy beside it reads as something to paste
+  verbatim. It stays once scripts exist; only the heading tracks the count.
+- **The "Allow user scripts" notice says why, and moved.** It used to sit above
+  `main`, so it warned about site scripts while the user was reading Highlights.
+  It is inside the section it is about now, and it explains the reason rather
+  than naming the switch: these rules are written by the user's agent, NOT
+  shipped inside the extension, so Chrome runs them in an isolated world behind
+  a switch only the user can flip, and until they do a rule is saved but inert.
+- **Unlike WebCLI, this page needed no extra re-check.** WebCLI reads
+  `siteScriptsRunnable()` when it renders the list, so it had to re-check on
+  `visibilitychange`/`focus` — the switch is flipped on a different tab and
+  nothing tells the page. Here the 2-second `LOCALMD_STATUS` poll already
+  carries `siteScriptsRunnable`, so the notice clears itself. Worth naming: the
+  same bug class, already absent for a reason that predates it.
+- **"Open localmd"** sends `LOCALMD_OPEN_APP`, the same message the popup's own
+  button uses. The SW picks the tab, because it is the side that knows this
+  build's origins.
+
+### 17.1 The repository was nowhere in the UI
+
+This extension works in a logged-in browser and writes into the user's own
+folder. "You can read exactly what it does" is the most persuasive sentence it
+has, and it appeared in neither surface. A card at the foot of the settings nav
+(beside the localmd.app link, not replacing it) and one icon in the popup
+footer.
+
+### 17.2 The store listing described a UI that never existed
+
+Three lines said "every site script is listed **in the popup**" — including the
+`userScripts` justification a Chrome reviewer reads. Site scripts have been on
+the SETTINGS page for this shell since they shipped; the sentence was copied
+from WebCLI's listing, where it was true until 2026-09-21. Corrected, along with
+the "what you'll see" line, which described the popup as the only surface.
+
+**Lesson.** Listing copy shared between two products drifts silently in the
+direction of whichever product it was written for. Nothing type-checks a store
+listing, and the half of it a reviewer reads is the half worth auditing first.

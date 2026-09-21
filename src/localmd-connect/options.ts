@@ -33,6 +33,7 @@ import {
   ICON_CARET,
   ICON_CODE,
   ICON_DATA,
+  ICON_GITHUB,
   ICON_MARK,
   ICON_PENCIL,
   ICON_PLUG,
@@ -43,6 +44,7 @@ import {
 } from '../ui/icons';
 
 const DOC_URL = 'https://localmd.app';
+const REPO_URL = 'https://github.com/whitefoxx/web-tools';
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 
 const verEl = $('ver');
@@ -151,6 +153,8 @@ const daemonHint = $('daemonHint');
 
 verEl.textContent = 'v' + chrome.runtime.getManifest().version;
 docLink.href = DOC_URL;
+$<HTMLAnchorElement>('ghLink').href = REPO_URL;
+$('ghIco').innerHTML = ICON_GITHUB(20);
 
 openSettings.addEventListener('click', () => {
   void chrome.tabs.create({ url: `chrome://extensions/?id=${chrome.runtime.id}` });
@@ -901,7 +905,21 @@ void refreshPerms();
 // ── Site scripts — the user's fallback control over agent-created rules ──
 const scriptList = $('scriptList');
 const scriptsCount = $('scriptsCount');
-const scriptsEmpty = $('scriptsEmpty');
+const scriptsGuide = $('scriptsGuide');
+const scriptsGuideTitle = $('scriptsGuideTitle');
+
+// "Ask localmd" needs somewhere to ask. The service worker decides which tab —
+// it is the side that knows the origins this build talks to — exactly as the
+// popup's own "take me to localmd" button does.
+$('openAppForScript').addEventListener('click', () => {
+  try {
+    chrome.runtime.sendMessage({ type: 'LOCALMD_OPEN_APP' }, () => {
+      void chrome.runtime.lastError;
+    });
+  } catch {
+    /* SW asleep — the localmd.app link in the sidebar still works */
+  }
+});
 
 function scriptKind(s: SiteScript): string {
   const parts: string[] = [];
@@ -928,7 +946,10 @@ function codeBlock(label: string, content: string): HTMLDivElement {
 function renderScripts(scripts: SiteScript[]): void {
   scriptList.textContent = '';
   scriptsCount.textContent = scripts.length ? `(${scripts.length})` : '';
-  scriptsEmpty.style.display = scripts.length ? 'none' : '';
+  // The guidance does NOT disappear once a script exists — only its heading
+  // tracks the count, and below a non-empty list it reads as a footnote.
+  scriptsGuideTitle.textContent = scripts.length ? 'Want another one?' : 'No site scripts yet';
+  scriptsGuide.classList.toggle('after-list', scripts.length > 0);
   for (const s of scripts) {
     const entry = document.createElement('div');
     entry.className = 'script-entry';

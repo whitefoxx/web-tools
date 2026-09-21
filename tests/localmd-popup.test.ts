@@ -106,6 +106,11 @@ const btn = (id: string): HTMLButtonElement => $(id) as HTMLButtonElement;
 const captureMsgs = (): Sent[] => sent.filter((s) => s.msg.type === 'LOCALMD_CAPTURE');
 
 describe('the popup wires up at all', () => {
+  it('carries the repository in its footer', () => {
+    expect($('ghLink').getAttribute('href')).toBe('https://github.com/whitefoxx/web-tools');
+    expect($('ghIco').innerHTML).toContain('<svg');
+  });
+
   it('finds every element the script reaches for', () => {
     // A missing id is a null deref that kills the module, and every listener
     // after it — the whole popup goes dead without a visible error.

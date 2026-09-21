@@ -19,6 +19,22 @@ const created: string[] = [];
 const messaged: Array<{ tabId: number; type: string; id?: string }> = [];
 const openTabs: Array<{ id: number; url: string; windowId: number }> = [];
 
+/** What LIST_SITE_SCRIPTS answers. Mutable, so one test can be "the list has
+ *  something in it" and the next can be "the user deleted the last one". */
+let siteScripts: Array<Record<string, unknown>> = [
+  {
+    id: 'ss_1',
+    label: 'example — hide the banner',
+    matches: ['https://example.test/*'],
+    hideSelectors: ['.cookie-banner'],
+    runAt: 'document_end',
+    enabled: true,
+    origin: { type: 'agent' },
+    createdAt: Date.UTC(2026, 0, 15),
+    updatedAt: Date.UTC(2026, 0, 15),
+  },
+];
+
 /** Two pages of highlights, one of them with a note. */
 const store: Record<string, unknown> = {
   'selHl:https://ex.test/a': [
@@ -53,7 +69,7 @@ beforeAll(async () => {
         setTimeout(() => {
           if (msg.type === 'GET_PAGE_TOOLS')
             cb({ settings: { enabled: true, blacklist: ['x.test'], defaultColor: 'yellow' } });
-          else if (msg.type === 'LIST_SITE_SCRIPTS') cb({ scripts: [], runnable: true });
+          else if (msg.type === 'LIST_SITE_SCRIPTS') cb({ scripts: siteScripts, runnable: true });
           else if (msg.type === 'LOCALMD_STATUS') cb({ siteScriptsRunnable: false, dev: false });
           else cb(undefined);
         }, 0);
@@ -108,7 +124,55 @@ const markRow = (quote: string): HTMLButtonElement =>
     (b.textContent ?? '').includes(quote),
   )!;
 
+describe('site scripts — explained whether or not any exist', () => {
+  it('keeps the guidance after the first script, with only the heading changing', () => {
+    expect(document.querySelectorAll('#scriptList .script-entry')).toHaveLength(1);
+    const guide = $('scriptsGuide');
+    expect($('scriptsGuideTitle').textContent).toBe('Want another one?');
+    expect(guide.classList.contains('after-list')).toBe(true);
+    // The three things it has to say, none of which depend on the list.
+    const said = guide.textContent ?? '';
+    expect(said).toContain('localmd does, and you approve');
+    expect(said).toContain('pause or delete');
+    expect(said).toContain('For example');
+    expect($('cmdExample').textContent).toContain('Hide the cookie banner');
+  });
+
+  it('falls back to the empty heading when the last script goes', async () => {
+    siteScripts = [];
+    // The pause toggle re-lists after it writes — the same path a delete takes.
+    $('scriptList').querySelector<HTMLInputElement>('input[type="checkbox"]')!.click();
+    // Two hops, each a setTimeout(0) in the chrome stub: the write's callback
+    // is what re-lists, and the re-list has a callback of its own.
+    for (let i = 0; i < 3; i++) await new Promise((r) => setTimeout(r, 0));
+    expect($('scriptsGuideTitle').textContent).toBe('No site scripts yet');
+    expect($('scriptsGuide').classList.contains('after-list')).toBe(false);
+    expect($('scriptsGuide').textContent).toContain('localmd does, and you approve');
+  });
+
+  it('explains WHY the Chrome switch is needed, and the steps', () => {
+    // The status stub answers siteScriptsRunnable:false.
+    const warn = $('userScriptsWarn');
+    expect(warn.classList.contains('show')).toBe(true);
+    const said = warn.textContent ?? '';
+    expect(said).toContain('written by your agent, not shipped inside this extension');
+    expect(said).toContain('saved but inert');
+    expect(said).toContain('Allow user scripts');
+  });
+
+  it('offers a way to go and ask', () => {
+    $('openAppForScript').click();
+    expect(sent.map((m) => m.type)).toContain('LOCALMD_OPEN_APP');
+  });
+});
+
 describe('the settings page', () => {
+  it('names the repository in the sidebar, beside the app link', () => {
+    expect($('ghLink').getAttribute('href')).toBe('https://github.com/whitefoxx/web-tools');
+    expect($('ghIco').innerHTML).toContain('<svg');
+    expect($('docLink').getAttribute('href')).toBe('https://localmd.app');
+  });
+
   it('finds every element its script reaches for', () => {
     for (const id of [
       'ver',
@@ -124,7 +188,13 @@ describe('the settings page', () => {
       'permCount',
       'scriptList',
       'scriptsCount',
-      'scriptsEmpty',
+      'scriptsGuide',
+      'scriptsGuideTitle',
+      'cmdExample',
+      'openAppForScript',
+      'ghLink',
+      'ghIco',
+      'footMark',
       'cliSetup',
       'daemonHint',
       'cmdDaemon',

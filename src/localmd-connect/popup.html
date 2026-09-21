@@ -509,6 +509,14 @@
       .dot.on {
         background: var(--green);
       }
+      .foot .gh {
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+      }
+      .foot .gh:hover {
+        color: var(--fg);
+      }
       .foot .link {
         margin-left: auto;
         display: inline-flex;
@@ -606,6 +614,19 @@
       <button class="link" id="openMarks" title="Every passage you have highlighted">
         <span class="ico" id="icoMarks"></span><span>Annotations</span>
       </button>
+      <!-- Small, but present: this extension works in a logged-in browser and
+           writes into the user's own folder, and "you can read exactly what it
+           does" is worth one icon. The settings page says it in full. -->
+      <a
+        class="gh"
+        id="ghLink"
+        href="#"
+        target="_blank"
+        rel="noreferrer"
+        title="Open source — whitefoxx/web-tools"
+        aria-label="Open source on GitHub"
+        ><span id="ghIco"></span
+      ></a>
       <span class="ver" id="ver"></span>
     </footer>
     <script type="module" src="./popup.ts"></script>

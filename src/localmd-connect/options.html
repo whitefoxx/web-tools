@@ -170,6 +170,47 @@
       }
       .side-foot {
         margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .gh {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 10px;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        background: var(--bg);
+        color: var(--fg-2);
+        text-decoration: none;
+      }
+      .gh:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .gh-ico {
+        display: grid;
+        place-items: center;
+        flex: none;
+      }
+      .gh-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.3;
+        min-width: 0;
+      }
+      .gh-title {
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+      .gh-sub {
+        font-size: 11.5px;
+        color: var(--muted);
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .app-link {
         padding: 0 10px;
         display: flex;
         align-items: center;
@@ -185,10 +226,10 @@
         flex: 0 0 auto;
         opacity: 0.85;
       }
-      .side-foot:hover .foot-mark {
+      .app-link:hover .foot-mark {
         opacity: 1;
       }
-      .side-foot:hover {
+      .app-link:hover {
         color: var(--accent);
       }
 
@@ -875,9 +916,9 @@
       }
       .warn {
         display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 11px 14px;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 14px;
         border-radius: 10px;
         background: color-mix(in srgb, var(--amber) 12%, transparent);
         color: var(--amber);
@@ -886,6 +927,64 @@
       }
       .warn:not(.show) {
         display: none;
+      }
+      .warn-body p {
+        margin: 5px 0 0;
+        font-size: 12.5px;
+        line-height: 1.55;
+        max-width: 62ch;
+        opacity: 0.95;
+      }
+      .warn-body .steps {
+        font-weight: 600;
+      }
+      .warn .btn {
+        flex: none;
+        margin-left: auto;
+        border-color: currentColor;
+        background: transparent;
+        color: inherit;
+        font-size: 12.5px;
+      }
+
+      /* The site-script guidance card — the same shape as WebCLI's settings
+         page, because they are one codebase's idea of how a feature that an
+         AGENT operates is explained to the person who approves it. */
+      .onboard {
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        padding: 18px 20px;
+        max-width: 62ch;
+      }
+      .onboard.after-list {
+        margin-top: 18px;
+        background: var(--card);
+        border-style: solid;
+      }
+      .onboard h3 {
+        margin: 0 0 6px;
+        font-size: 15px;
+      }
+      .onboard p {
+        margin: 0;
+        color: var(--fg-2);
+        font-size: 13.5px;
+      }
+      .onboard .fine {
+        margin-top: 12px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .onboard .btn {
+        margin-top: 14px;
+      }
+      .ex-label {
+        margin-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .ex-label code {
+        font-size: 11.5px;
       }
       .warn button,
       .cmd button {
@@ -954,17 +1053,25 @@
           </span>
         </div>
         <nav class="nav" id="nav" aria-label="Settings sections"></nav>
-        <a class="side-foot" id="docLink" href="#" target="_blank" rel="noreferrer">
-          <img class="foot-mark" id="footMark" alt="" />localmd.app
-        </a>
+        <div class="side-foot">
+          <!-- The repository, not a footnote. This extension asks to work in a
+               logged-in browser and write into the user's own folder; "you can
+               read exactly what it does" is the most persuasive sentence it
+               has, and it was not on the page at all. -->
+          <a class="gh" id="ghLink" href="#" target="_blank" rel="noreferrer">
+            <span class="gh-ico" id="ghIco"></span>
+            <span class="gh-text">
+              <span class="gh-title">Open source</span>
+              <span class="gh-sub">whitefoxx/web-tools</span>
+            </span>
+          </a>
+          <a class="app-link" id="docLink" href="#" target="_blank" rel="noreferrer">
+            <img class="foot-mark" id="footMark" alt="" />localmd.app
+          </a>
+        </div>
       </aside>
 
       <main class="main" id="main">
-        <div class="warn" id="userScriptsWarn">
-          <span>Turn on <b>Allow user scripts</b> for this extension so site scripts can run.</span>
-          <button id="openSettings">Open Chrome settings</button>
-        </div>
-
         <section id="annotations" data-nav="Highlights" data-icon="mark">
           <h2>Highlights <span class="count" id="markCount"></span></h2>
           <p class="about">
@@ -1090,8 +1197,58 @@
             creates them with your confirmation — this list is your override: pause or delete any of
             them here.
           </p>
+          <!-- Chrome gates the userScripts API behind a switch the user flips
+               themselves, and until they do, every rule here is installed and
+               inert. This used to sit ABOVE every section, so it warned you
+               about site scripts while you were reading Highlights; and it said
+               only the switch's name. A permission notice that does not say WHY
+               reads as an extension asking for more than it needs, and this one
+               has a real answer. -->
+          <div class="warn" id="userScriptsWarn">
+            <div class="warn-body">
+              <b>Site scripts are switched off in Chrome.</b>
+              <p>
+                They are written by your agent, not shipped inside this extension — so Chrome runs
+                them in an isolated world it keeps behind a switch only you can flip. Until you do,
+                a rule here is saved but inert. Everything else in localmd Connect works without it.
+              </p>
+              <p class="steps">
+                Open this extension's details page → turn on <b>Allow user scripts</b> → come back
+                here.
+              </p>
+            </div>
+            <button class="btn" id="openSettings">Open Chrome settings</button>
+          </div>
           <div id="scriptList" class="list"></div>
-          <div class="empty" id="scriptsEmpty">No site scripts yet.</div>
+          <!-- Explained ALWAYS, not only while the list is empty: "how do I get
+               another one" has the same answer as "how do I get the first", and
+               a card that vanishes the moment it is first acted on is one most
+               people read once, in a hurry. Only the heading tracks the count.
+               Mirrors WebCLI's settings page (docs/webcli.md §18.1-18.3). -->
+          <div class="onboard" id="scriptsGuide">
+            <h3 id="scriptsGuideTitle">No site scripts yet</h3>
+            <p>
+              You do not write these — localmd does, and you approve it. Ask for a page fix in plain
+              words and it will build the rule, show it to you, and install it.
+            </p>
+            <!-- Labelled as an example ABOVE the copy button: a line with Copy
+                 beside it reads as something to paste verbatim, and this one has
+                 a placeholder host in it. -->
+            <div class="ex-label">
+              For example — swap <code>example.com</code> for the site you mean:
+            </div>
+            <div class="cmd">
+              <code id="cmdExample"
+                >Hide the cookie banner and the newsletter popup on example.com, every visit</code
+              >
+              <button data-copy="cmdExample">Copy</button>
+            </div>
+            <p class="fine">
+              Every rule it installs lands here, with its matching sites and its full source, where
+              you can pause or delete it.
+            </p>
+            <button class="btn" id="openAppForScript">Open localmd</button>
+          </div>
         </section>
 
         <section id="cliSetup" data-nav="CLI agents" data-icon="terminal" hidden>
