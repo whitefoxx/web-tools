@@ -27,11 +27,19 @@ describe('registry.unregister', () => {
   });
 
   it('a re-registered adapter (install→uninstall→install) ends up registered once', () => {
-    const def = { site: 'unreg3', name: 'z', access: 'read' as const, _installed: true, func: async () => [] };
+    const def = {
+      site: 'unreg3',
+      name: 'z',
+      access: 'read' as const,
+      _installed: true,
+      func: async () => [],
+    };
     cli(def);
     unregister('unreg3', 'z');
     cli(def);
-    const matches = getRegistry().filter((d: { site: string; name: string }) => d.site === 'unreg3' && d.name === 'z');
+    const matches = getRegistry().filter(
+      (d: { site: string; name: string }) => d.site === 'unreg3' && d.name === 'z',
+    );
     expect(matches).toHaveLength(1);
   });
 });

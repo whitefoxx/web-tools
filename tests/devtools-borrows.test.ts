@@ -99,7 +99,12 @@ describe('fill_form — field parsing', () => {
 
 describe('fill_form — frame grouping', () => {
   it('puts plain refs and selectors in the main frame', () => {
-    const g = groupByFrame(parseFields([{ ref: 'r1', value: 'a' }, { selector: '#b', value: 'b' }]));
+    const g = groupByFrame(
+      parseFields([
+        { ref: 'r1', value: 'a' },
+        { selector: '#b', value: 'b' },
+      ]),
+    );
     expect([...g.keys()]).toEqual([0]);
     expect(g.get(0)).toHaveLength(2);
   });
@@ -124,7 +129,11 @@ describe('fill_form — frame grouping', () => {
       { selector: '#b', value: '2' },
       { selector: '#c', value: '3' },
     ]);
-    expect(groupByFrame(fields).get(0)?.map((f) => f.selector)).toEqual(['#a', '#b', '#c']);
+    expect(
+      groupByFrame(fields)
+        .get(0)
+        ?.map((f) => f.selector),
+    ).toEqual(['#a', '#b', '#c']);
   });
 });
 

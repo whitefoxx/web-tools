@@ -66,9 +66,12 @@ export function cli(def) {
   // warn when ALL three execution paths are absent — then it genuinely
   // can't run.
   const hasPipeline = Array.isArray(def.pipeline) && def.pipeline.length > 0;
-  const hasUserScriptSource = typeof def._userScriptSource === 'string' && def._userScriptSource.length > 0;
+  const hasUserScriptSource =
+    typeof def._userScriptSource === 'string' && def._userScriptSource.length > 0;
   if (typeof def.func !== 'function' && !hasPipeline && !hasUserScriptSource) {
-    console.warn(`[registry] ${def.site}/${def.name} registered with neither func nor pipeline — it cannot execute.`);
+    console.warn(
+      `[registry] ${def.site}/${def.name} registered with neither func nor pipeline — it cannot execute.`,
+    );
   }
   // De-dupe on (site, name) so re-importing an adapter (HMR / double _all)
   // doesn't double-register. Last write wins, matching opencli's Map.put.

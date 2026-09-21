@@ -462,7 +462,12 @@
         border-radius: 7px;
         background: var(--bg);
         color: var(--fg-2);
-        font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font:
+          12px/1.55 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          Consolas,
+          monospace;
         white-space: pre-wrap;
         word-break: break-word;
         overflow: auto;
@@ -956,10 +961,7 @@
 
       <main class="main" id="main">
         <div class="warn" id="userScriptsWarn">
-          <span
-            >Turn on <b>Allow user scripts</b> for this extension so site scripts can
-            run.</span
-          >
+          <span>Turn on <b>Allow user scripts</b> for this extension so site scripts can run.</span>
           <button id="openSettings">Open Chrome settings</button>
         </div>
 
@@ -1075,7 +1077,14 @@
         </section>
 
         <section id="site-scripts" data-nav="Site scripts" data-icon="code">
-          <h2>Site scripts <span class="count" id="scriptsCount"></span> <span class="count" title="Experimental: may change shape or go away; nothing you rely on is persisted by it">experimental</span></h2>
+          <h2>
+            Site scripts <span class="count" id="scriptsCount"></span>
+            <span
+              class="count"
+              title="Experimental: may change shape or go away; nothing you rely on is persisted by it"
+              >experimental</span
+            >
+          </h2>
           <p class="about">
             Persistent rules that run on matching pages (hide ads, inject CSS/JS). Your agent
             creates them with your confirmation — this list is your override: pause or delete any of
@@ -1090,8 +1099,9 @@
           <p class="about">
             A <strong>development/testing affordance only</strong>, present in this dev build so a
             CLI agent can drive the extension while it is being worked on — it is absent from the
-            shipped build. Driving the browser from a CLI agent as a product is <strong>WebCLI</strong>'s
-            job, not this extension's; localmd Connect ships to talk to localmd.app alone.
+            shipped build. Driving the browser from a CLI agent as a product is
+            <strong>WebCLI</strong>'s job, not this extension's; localmd Connect ships to talk to
+            localmd.app alone.
           </p>
           <div class="cmd">
             <code id="cmdDaemon">BRIDGE_PORT=9378 npx -y github:whitefoxx/web-tools</code>

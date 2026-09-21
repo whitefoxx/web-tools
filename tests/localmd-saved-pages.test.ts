@@ -34,9 +34,8 @@ vi.stubGlobal('chrome', {
   },
 });
 
-const { listKbEntries, forgetManyInKb, rememberInKb } = await import(
-  '../src/localmd-connect/kb-index'
-);
+const { listKbEntries, forgetManyInKb, rememberInKb } =
+  await import('../src/localmd-connect/kb-index');
 const { parseUrlList, parseMoved } = await import('../src/tools/generic/saved-pages');
 
 describe('listKbEntries', () => {

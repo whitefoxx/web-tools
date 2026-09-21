@@ -211,10 +211,10 @@ const OPEN_KB_NOTIFICATION = 'notifications/localmd/open-kb';
 const LOCALMD_CONNECT_INSTRUCTIONS =
   "localmd Connect exposes the user's logged-in Chrome as browser tools " +
   'and persistent SITE SCRIPTS (no in-extension agent — you are the agent). Call tools/list for the exact surface. ' +
-  'REACH A MAINSTREAM SITE BY BUILDING THE EXTRACTION LIVE with eval_js {tab_id, code}: it runs async JS in the page\'s own origin (its ' +
-  'cookies, globals and JS APIs; returns JSON). Robustness ladder — stop at the first that works: (1) the site\'s ' +
+  "REACH A MAINSTREAM SITE BY BUILDING THE EXTRACTION LIVE with eval_js {tab_id, code}: it runs async JS in the page's own origin (its " +
+  "cookies, globals and JS APIs; returns JSON). Robustness ladder — stop at the first that works: (1) the site's " +
   "own JSON API — fetch(api, {credentials:'include'}) — zero selectors, most durable; (2) embedded page state " +
-  '(__NEXT_DATA__ / __NUXT__ / a <script type=json>); (3) the site\'s OWN UI as the data source when a private ' +
+  "(__NEXT_DATA__ / __NUXT__ / a <script type=json>); (3) the site's OWN UI as the data source when a private " +
   'API is locked behind a token/signature/pot — drive the panel or list a user clicks and read the DOM (a YouTube ' +
   "transcript comes from its 'Show transcript' panel, NOT the pot-locked caption API, which now fails); (4) last " +
   'resort, scrape the DOM with STABLE selectors (data-testid / aria / semantic tags / href) — never random ' +

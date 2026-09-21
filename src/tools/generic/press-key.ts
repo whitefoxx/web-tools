@@ -119,8 +119,7 @@ cli({
     // and let the shell turn the flag into a confirmation. Plain Enter, Escape,
     // arrows, Tab, etc. are navigation and pass untouched.
     const allowWrite = kwargs.allow_write === true;
-    const isSubmitCombo =
-      key === 'Enter' && modifiers.some((m) => m === 'Control' || m === 'Meta');
+    const isSubmitCombo = key === 'Enter' && modifiers.some((m) => m === 'Control' || m === 'Meta');
     if (isSubmitCombo && !allowWrite) {
       const combo = `${modifiers.join('+')}+Enter`;
       return {

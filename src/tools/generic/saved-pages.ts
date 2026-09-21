@@ -31,7 +31,7 @@ cli({
   access: 'write',
   local: true,
   description:
-    'Correct the browser\'s idea of what the knowledge base holds, after checking it against the real folder. `forget` = JSON array of page URLs whose notes are gone (the badge stops claiming them); `moved` = JSON array of {url, path} for notes that still exist somewhere else. Only these two — a page becomes saved in the first place through ack_inbox `written`. Idempotent; unknown URLs are ignored.',
+    "Correct the browser's idea of what the knowledge base holds, after checking it against the real folder. `forget` = JSON array of page URLs whose notes are gone (the badge stops claiming them); `moved` = JSON array of {url, path} for notes that still exist somewhere else. Only these two — a page becomes saved in the first place through ack_inbox `written`. Idempotent; unknown URLs are ignored.",
   args: [
     {
       name: 'forget',
@@ -57,18 +57,29 @@ cli({
 
 /** A JSON array of strings, or a comma/whitespace list. Pure. */
 export function parseUrlList(v: unknown): string[] {
-  if (Array.isArray(v)) return v.map(String).map((s) => s.trim()).filter(Boolean);
+  if (Array.isArray(v))
+    return v
+      .map(String)
+      .map((s) => s.trim())
+      .filter(Boolean);
   const s = String(v ?? '').trim();
   if (!s) return [];
   if (s.startsWith('[')) {
     try {
       const arr = JSON.parse(s);
-      if (Array.isArray(arr)) return arr.map(String).map((x) => x.trim()).filter(Boolean);
+      if (Array.isArray(arr))
+        return arr
+          .map(String)
+          .map((x) => x.trim())
+          .filter(Boolean);
     } catch {
       /* fall through to the list form */
     }
   }
-  return s.split(/[,\s]+/).map((x) => x.trim()).filter(Boolean);
+  return s
+    .split(/[,\s]+/)
+    .map((x) => x.trim())
+    .filter(Boolean);
 }
 
 /** `moved` argument → {url, path} pairs; malformed entries are dropped rather

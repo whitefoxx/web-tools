@@ -77,7 +77,10 @@ function installGlobalListeners(): void {
       if (cap) {
         cap.detached = true;
         chrome.debugger.onEvent.removeListener(cap.handler);
-        log('capture_network', `debugger detached under us tab=${cap.tabId}; entries kept for read`);
+        log(
+          'capture_network',
+          `debugger detached under us tab=${cap.tabId}; entries kept for read`,
+        );
       }
     });
   } catch {
@@ -115,7 +118,11 @@ function isTextMime(mime: string): boolean {
   );
 }
 
-async function startCapture(tabId: number, patternSource: string, allTypes: boolean): Promise<Capture> {
+async function startCapture(
+  tabId: number,
+  patternSource: string,
+  allTypes: boolean,
+): Promise<Capture> {
   installGlobalListeners();
   const existing = captures.get(tabId);
   if (existing) await stopCapture(existing, 'restarted');
@@ -170,7 +177,9 @@ async function startCapture(tabId: number, patternSource: string, allTypes: bool
           let body: string | null = null;
           let note: string | undefined;
           try {
-            const raw = (await cap.page.cdp('Network.getResponseBody', { requestId: p.requestId })) as {
+            const raw = (await cap.page.cdp('Network.getResponseBody', {
+              requestId: p.requestId,
+            })) as {
               body: string;
               base64Encoded: boolean;
             };
@@ -194,7 +203,8 @@ async function startCapture(tabId: number, patternSource: string, allTypes: bool
             ...(note ? { note } : {}),
             finishedAt: Date.now(),
           });
-          if (cap.entries.length > MAX_ENTRIES) cap.entries.splice(0, cap.entries.length - MAX_ENTRIES);
+          if (cap.entries.length > MAX_ENTRIES)
+            cap.entries.splice(0, cap.entries.length - MAX_ENTRIES);
           touchIdle(cap);
         })();
       }
@@ -232,7 +242,10 @@ function summarize(cap: Capture, maxChars: number, sinceSeq: number) {
 
 function reduceExpression(reduce: string, entriesJson: string): string {
   const trimmed = reduce.trim();
-  if (/^(async\s+)?(\([^)]*\)|[A-Za-z_]\w*)\s*=>/.test(trimmed) || /^(async\s+)?function[\s(]/.test(trimmed)) {
+  if (
+    /^(async\s+)?(\([^)]*\)|[A-Za-z_]\w*)\s*=>/.test(trimmed) ||
+    /^(async\s+)?function[\s(]/.test(trimmed)
+  ) {
     return `(async () => { const __f = (${trimmed}); return await __f(${entriesJson}); })()`;
   }
   return `(async () => { const entries = ${entriesJson};\n${trimmed}\n})()`;
@@ -246,7 +259,12 @@ cli({
     'Observe the requests a tab makes, WITH their response bodies, through the debugger (so it also sees what the page world cannot: requests from workers, from the media pipeline, or with tokens the page attaches itself). Three actions on one tab. action:"start" — attach and arm a URL `pattern` (regular expression; XHR/Fetch only unless all_types:true), then trigger the requests you care about (eval_js, click, scroll, or just wait). action:"read" — return the matching responses captured so far (url, status, mimeType, body); pass wait_ms to wait for at least min_entries of them first. Bodies can be large: prefer passing `reduce`, a JS snippet run IN THE PAGE with `entries` (each {url, status, mimeType, body}) in scope — write `return …` — so only its result comes back (a 200 KB payload becomes rows). action:"stop" — release the debugger (a capture also stops after 10 idle minutes or when the tab closes). Chrome shows its "is being debugged" bar on the tab while a capture is armed. Each entry\'s `body` is the raw response STRING — JSON.parse it yourself inside `reduce`. To observe a request the page makes on its FIRST load, arm the capture on a fresh tab BEFORE navigating to the page: RELOADING a tab that already has a capture attached can leave a single-page app blank, losing the load you meant to watch. Once you have what you came for, stop the capture and work from the captured payload — re-arming and reloading in a loop is how a session gets spent.',
   args: [
     { name: 'tab_id', type: 'int', required: true, help: 'The tab to observe' },
-    { name: 'action', type: 'string', default: 'start', help: '"start" (default) | "read" | "stop"' },
+    {
+      name: 'action',
+      type: 'string',
+      default: 'start',
+      help: '"start" (default) | "read" | "stop"',
+    },
     {
       name: 'pattern',
       type: 'string',
@@ -263,7 +281,12 @@ cli({
       default: 0,
       help: 'read only: wait up to this long (ms, cap 120000) for min_entries matches before returning',
     },
-    { name: 'min_entries', type: 'int', default: 1, help: 'read only: how many matches wait_ms waits for (default 1)' },
+    {
+      name: 'min_entries',
+      type: 'int',
+      default: 1,
+      help: 'read only: how many matches wait_ms waits for (default 1)',
+    },
     {
       name: 'since_seq',
       type: 'int',
@@ -285,15 +308,24 @@ cli({
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
     await assertTabId(kwargs.tab_id);
     const tabId = Number(kwargs.tab_id);
-    const action = String(kwargs.action ?? 'start').trim().toLowerCase();
+    const action = String(kwargs.action ?? 'start')
+      .trim()
+      .toLowerCase();
 
     if (action === 'start') {
       const patternSource = typeof kwargs.pattern === 'string' ? kwargs.pattern.trim() : '';
-      if (!patternSource) return { ok: false, error: 'start needs a pattern (regular expression matched against the URL)' };
+      if (!patternSource)
+        return {
+          ok: false,
+          error: 'start needs a pattern (regular expression matched against the URL)',
+        };
       try {
         new RegExp(patternSource);
       } catch (e) {
-        return { ok: false, error: `invalid pattern: ${e instanceof Error ? e.message : String(e)}` };
+        return {
+          ok: false,
+          error: `invalid pattern: ${e instanceof Error ? e.message : String(e)}`,
+        };
       }
       const cap = await startCapture(tabId, patternSource, Boolean(kwargs.all_types));
       return {
@@ -306,7 +338,12 @@ cli({
     }
 
     const cap = captures.get(tabId);
-    if (!cap) return { ok: false, tabId, error: 'no capture on this tab — call action:"start" with a pattern first' };
+    if (!cap)
+      return {
+        ok: false,
+        tabId,
+        error: 'no capture on this tab — call action:"start" with a pattern first',
+      };
 
     if (action === 'stop') {
       const n = cap.entries.length;
@@ -314,7 +351,8 @@ cli({
       return { ok: true, tabId, stopped: true, entries: n };
     }
 
-    if (action !== 'read') return { ok: false, error: `unknown action "${action}" (start | read | stop)` };
+    if (action !== 'read')
+      return { ok: false, error: `unknown action "${action}" (start | read | stop)` };
 
     touchIdle(cap);
     const maxChars = Math.max(200, Math.min(Number(kwargs.max_chars ?? 8000) || 8000, 200_000));
@@ -339,14 +377,33 @@ cli({
 
     const writeSignal = detectWriteIntent(reduce);
     if (writeSignal) {
-      return { ...base, ok: false, error: `Blocked: the reduce snippet looks like it initiates a write request (${writeSignal}); reduce is for shaping captured data only` };
+      return {
+        ...base,
+        ok: false,
+        error: `Blocked: the reduce snippet looks like it initiates a write request (${writeSignal}); reduce is for shaping captured data only`,
+      };
     }
-    if (cap.detached) return { ...base, ok: false, error: 'the debugger was detached from this tab; read without reduce, or start again' };
+    if (cap.detached)
+      return {
+        ...base,
+        ok: false,
+        error: 'the debugger was detached from this tab; read without reduce, or start again',
+      };
     const full = cap.entries
       .filter((e) => e.seq > sinceSeq)
-      .map((e) => ({ seq: e.seq, url: e.url, method: e.method, type: e.type, status: e.status, mimeType: e.mimeType, body: e.body }));
+      .map((e) => ({
+        seq: e.seq,
+        url: e.url,
+        method: e.method,
+        type: e.type,
+        status: e.status,
+        mimeType: e.mimeType,
+        body: e.body,
+      }));
     try {
-      const result = await cap.page.evaluate<unknown>(reduceExpression(reduce, JSON.stringify(full)));
+      const result = await cap.page.evaluate<unknown>(
+        reduceExpression(reduce, JSON.stringify(full)),
+      );
       let serialized: string;
       if (result === undefined) serialized = 'undefined';
       else if (typeof result === 'string') serialized = result;
@@ -366,7 +423,11 @@ cli({
         result: truncated ? serialized.slice(0, maxChars) + '\n…[truncated]' : serialized,
       };
     } catch (e) {
-      return { ...base, ok: false, error: `reduce failed: ${e instanceof Error ? e.message : String(e)}` };
+      return {
+        ...base,
+        ok: false,
+        error: `reduce failed: ${e instanceof Error ? e.message : String(e)}`,
+      };
     }
   },
 });

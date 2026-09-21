@@ -75,14 +75,17 @@ cli({
         ok: false,
         error:
           `Blocked: this code looks like it initiates a write request (${writeSignal}). ` +
-          'eval_js runs with your user\'s login and nothing confirms a write it makes. If the user has explicitly asked for and confirmed this write, call again with allow_write:true; otherwise observe the request\'s shape (endpoint, method, where the token comes from) and report it instead of sending it.',
+          "eval_js runs with your user's login and nothing confirms a write it makes. If the user has explicitly asked for and confirmed this write, call again with allow_write:true; otherwise observe the request's shape (endpoint, method, where the token comes from) and report it instead of sending it.",
       };
     }
 
     const maxChars = Math.max(200, Math.min(Number(kwargs.max_chars ?? 8000) || 8000, 200_000));
     const timeoutMs = Math.max(
       1000,
-      Math.min(Number(kwargs.timeout_ms ?? DEFAULT_TIMEOUT_MS) || DEFAULT_TIMEOUT_MS, MAX_TIMEOUT_MS),
+      Math.min(
+        Number(kwargs.timeout_ms ?? DEFAULT_TIMEOUT_MS) || DEFAULT_TIMEOUT_MS,
+        MAX_TIMEOUT_MS,
+      ),
     );
 
     const page = await createPageShim(tabId);

@@ -15,7 +15,7 @@ cli({
   name: 'get_dom_outline',
   access: 'read',
   description:
-    'Return a condensed structural outline of the page DOM (tag + id + first few classes + a little text, with runs of identical siblings folded into ×N; includes open shadow DOM, shadow content marked `#shadow-root` and indented) — far cheaper than raw HTML, used to quickly grasp the layout and find the container/selector holding the data (for body text use get_page_text, for one element\'s full HTML use get_html). Targeting: (1) url — open that page, read, then close; (2) tab_id — read an already-open tab (leave it open); (3) neither given: only valid while an Explore session is running (it uses that session tab). Use selector to specify the subtree root.',
+    "Return a condensed structural outline of the page DOM (tag + id + first few classes + a little text, with runs of identical siblings folded into ×N; includes open shadow DOM, shadow content marked `#shadow-root` and indented) — far cheaper than raw HTML, used to quickly grasp the layout and find the container/selector holding the data (for body text use get_page_text, for one element's full HTML use get_html). Targeting: (1) url — open that page, read, then close; (2) tab_id — read an already-open tab (leave it open); (3) neither given: only valid while an Explore session is running (it uses that session tab). Use selector to specify the subtree root.",
   args: [
     {
       name: 'url',
@@ -27,9 +27,18 @@ cli({
       type: 'int',
       help: 'Target tab id — from open_url, or from get_page_text {url, keep_open:true}. Required unless an Explore session is running (only then may it be omitted, defaulting to that session tab)',
     },
-    { name: 'selector', type: 'string', help: 'Output only the subtree of the first element matching this selector (default body)' },
+    {
+      name: 'selector',
+      type: 'string',
+      help: 'Output only the subtree of the first element matching this selector (default body)',
+    },
     { name: 'max_depth', type: 'int', default: 14, help: 'Max depth (default 14)' },
-    { name: 'max_nodes', type: 'int', default: 400, help: 'Max nodes to output (default 400, cap 1500)' },
+    {
+      name: 'max_nodes',
+      type: 'int',
+      default: 400,
+      help: 'Max nodes to output (default 400, cap 1500)',
+    },
   ],
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
     const session = getActiveExploreSession();

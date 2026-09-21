@@ -35,8 +35,7 @@ cli({
     {
       name: 'tab_id',
       type: 'int',
-      help:
-        'Target tab id — from open_url, or from get_page_text {url, keep_open:true}. Required unless an Explore session is running (only then may it be omitted, defaulting to that session tab)',
+      help: 'Target tab id — from open_url, or from get_page_text {url, keep_open:true}. Required unless an Explore session is running (only then may it be omitted, defaulting to that session tab)',
     },
     {
       name: 'selector',
@@ -168,7 +167,13 @@ export function extractLinks(
     try {
       roots = Array.from(document.querySelectorAll(scopeSelector));
     } catch (e) {
-      return { links: [], total: 0, truncated: false, ...base, error: `bad selector: ${String(e)}` };
+      return {
+        links: [],
+        total: 0,
+        truncated: false,
+        ...base,
+        error: `bad selector: ${String(e)}`,
+      };
     }
     if (!roots.length) return { links: [], total: 0, truncated: false, ...base };
   } else {
@@ -212,7 +217,9 @@ export function extractLinks(
     total++;
     if (links.length < limit) {
       const text =
-        clean(a.textContent) || clean(a.getAttribute('aria-label')) || clean(a.getAttribute('title'));
+        clean(a.textContent) ||
+        clean(a.getAttribute('aria-label')) ||
+        clean(a.getAttribute('title'));
       links.push({ url, text: text.slice(0, 150) });
     }
   }

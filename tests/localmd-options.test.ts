@@ -175,10 +175,12 @@ describe('the annotations list', () => {
   it('colours each row by the highlighter that made it', () => {
     // green from the shared palette for the one that names a colour, and the
     // first swatch for the one that does not — an older entry is not broken.
-    expect((markRow('the passage itself').querySelector('.swatch') as HTMLElement).style.background)
-      .toBe('rgb(126, 214, 126)');
-    expect((markRow('another quote').querySelector('.swatch') as HTMLElement).style.background)
-      .toBe('rgb(255, 214, 51)');
+    expect(
+      (markRow('the passage itself').querySelector('.swatch') as HTMLElement).style.background,
+    ).toBe('rgb(126, 214, 126)');
+    expect(
+      (markRow('another quote').querySelector('.swatch') as HTMLElement).style.background,
+    ).toBe('rgb(255, 214, 51)');
   });
 
   it('opens the page when a passage is clicked, and asks to be taken to it', async () => {
@@ -249,7 +251,9 @@ describe('the two panes', () => {
     location.hash = '#site-scripts';
     window.dispatchEvent(new HashChangeEvent('hashchange'));
     expect(shown()).toEqual(['site-scripts']);
-    expect(navItems().find((b) => b.classList.contains('on'))?.dataset.section).toBe('site-scripts');
+    expect(navItems().find((b) => b.classList.contains('on'))?.dataset.section).toBe(
+      'site-scripts',
+    );
     location.hash = '#annotations';
     window.dispatchEvent(new HashChangeEvent('hashchange'));
     expect(shown()).toEqual(['annotations']);

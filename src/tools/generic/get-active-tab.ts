@@ -23,7 +23,10 @@ cli({
     let tab = pick(await chrome.tabs.query({ active: true, lastFocusedWindow: true }));
     if (!tab) tab = pick(await chrome.tabs.query({ active: true }));
     if (!tab || typeof tab.id !== 'number') {
-      return { error: 'No active user tab found (the current active tab may be one this extension controls)' };
+      return {
+        error:
+          'No active user tab found (the current active tab may be one this extension controls)',
+      };
     }
     return { tabId: tab.id, title: tab.title ?? '', url: tab.url ?? '' };
   },

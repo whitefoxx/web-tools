@@ -28,7 +28,12 @@ cli({
       type: 'int',
       help: 'Target tab id — from open_url, or from get_page_text {url, keep_open:true}. Required unless an Explore session is running (only then may it be omitted, defaulting to that session tab)',
     },
-    { name: 'limit', type: 'int', default: 5, help: 'Max match samples to return (default 5, cap 30)' },
+    {
+      name: 'limit',
+      type: 'int',
+      default: 5,
+      help: 'Max match samples to return (default 5, cap 30)',
+    },
   ],
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
     const session = getActiveExploreSession();

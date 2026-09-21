@@ -50,7 +50,14 @@ export function findTextMatches(
   const ctx = Math.max(0, Math.min(opts.contextChars ?? 80, 400));
   const limit = Math.max(1, Math.min(opts.limit ?? 5, 30));
   if (!query)
-    return { query, regex, count: 0, matches: [], truncated: false, error: 'query must not be empty' };
+    return {
+      query,
+      regex,
+      count: 0,
+      matches: [],
+      truncated: false,
+      error: 'query must not be empty',
+    };
 
   const spans: Array<[number, number]> = [];
   if (regex) {
@@ -120,10 +127,13 @@ cli({
       name: 'tab_id',
       type: 'int',
       required: true,
-      help:
-        'Target tab id (from open_url / get_page_text {keep_open:true} / list_tabs / get_active_tab)',
+      help: 'Target tab id (from open_url / get_page_text {keep_open:true} / list_tabs / get_active_tab)',
     },
-    { name: 'regex', type: 'bool', help: 'Treat query as a regex (default false = plain-text substring)' },
+    {
+      name: 'regex',
+      type: 'bool',
+      help: 'Treat query as a regex (default false = plain-text substring)',
+    },
     { name: 'case_sensitive', type: 'bool', help: 'Case-sensitive (default false)' },
     {
       name: 'context_chars',
@@ -135,7 +145,11 @@ cli({
       type: 'int',
       help: 'Max number of hit details to return (default 5, max 30; count is still the total hit count)',
     },
-    { name: 'scroll_to', type: 'bool', help: 'Scroll the first hit into the viewport and natively highlight it (default false)' },
+    {
+      name: 'scroll_to',
+      type: 'bool',
+      help: 'Scroll the first hit into the viewport and natively highlight it (default false)',
+    },
   ],
   columns: ['count', 'truncated'],
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
@@ -162,7 +176,10 @@ cli({
       };
     }
     const out = res[0]?.result;
-    if (!out) return { error: 'Query failed (page is loading / reloading, or the page is not script-injectable)' };
+    if (!out)
+      return {
+        error: 'Query failed (page is loading / reloading, or the page is not script-injectable)',
+      };
     return out;
   },
 });

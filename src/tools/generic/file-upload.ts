@@ -37,7 +37,11 @@ export function setInputFiles(
     ? document.querySelector(selector)
     : document.querySelector('input[type="file"]');
   if (!el || !(el instanceof HTMLInputElement) || el.type !== 'file') {
-    return { error: selector ? `selector matched no <input type=file>: ${selector}` : 'page has no <input type=file> (pass selector to specify one)' };
+    return {
+      error: selector
+        ? `selector matched no <input type=file>: ${selector}`
+        : 'page has no <input type=file> (pass selector to specify one)',
+    };
   }
   let bytes: Uint8Array;
   if (b64 != null) {
@@ -69,14 +73,27 @@ cli({
   name: 'file_upload',
   access: 'read',
   description:
-    'Push a file into the page\'s `<input type=file>`, with content **you provide** (not a user disk path — the extension has no disk access): either content (text, e.g. a generated CSV/JSON) or content_base64 (binary, e.g. an image), filename required, mime_type optional. selector picks which file input (omit to take the first on the page). Builds a File → DataTransfer → assigns to input.files and fires input/change. Returns {ok,filename,size}. After uploading you usually still need to click the submit button.',
+    "Push a file into the page's `<input type=file>`, with content **you provide** (not a user disk path — the extension has no disk access): either content (text, e.g. a generated CSV/JSON) or content_base64 (binary, e.g. an image), filename required, mime_type optional. selector picks which file input (omit to take the first on the page). Builds a File → DataTransfer → assigns to input.files and fires input/change. Returns {ok,filename,size}. After uploading you usually still need to click the submit button.",
   args: [
     { name: 'tab_id', type: 'int', required: true, help: 'Target tab id' },
-    { name: 'filename', type: 'string', required: true, help: 'File name (with extension, e.g. data.csv / avatar.png)' },
+    {
+      name: 'filename',
+      type: 'string',
+      required: true,
+      help: 'File name (with extension, e.g. data.csv / avatar.png)',
+    },
     { name: 'content', type: 'string', help: 'Text content (one of content / content_base64)' },
-    { name: 'content_base64', type: 'string', help: 'base64 of binary content (one of content / content_base64)' },
+    {
+      name: 'content_base64',
+      type: 'string',
+      help: 'base64 of binary content (one of content / content_base64)',
+    },
     { name: 'mime_type', type: 'string', help: 'Optional MIME type (e.g. text/csv, image/png)' },
-    { name: 'selector', type: 'string', help: 'Optional CSS selector for the <input type=file>; omit to take the first' },
+    {
+      name: 'selector',
+      type: 'string',
+      help: 'Optional CSS selector for the <input type=file>; omit to take the first',
+    },
   ],
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
     const tab = await assertTabId(kwargs.tab_id);
@@ -85,7 +102,8 @@ cli({
     if (!filename) throw new Error('filename is required');
     const hasB64 = typeof kwargs.content_base64 === 'string' && kwargs.content_base64.length > 0;
     const hasText = typeof kwargs.content === 'string';
-    if (!hasB64 && !hasText) throw new Error('need either content (text) or content_base64 (binary)');
+    if (!hasB64 && !hasText)
+      throw new Error('need either content (text) or content_base64 (binary)');
     const mime = typeof kwargs.mime_type === 'string' ? kwargs.mime_type.trim() : '';
     const selector =
       typeof kwargs.selector === 'string' && kwargs.selector.trim() ? kwargs.selector.trim() : null;
@@ -94,7 +112,13 @@ cli({
       target: { tabId },
       world: 'MAIN',
       func: setInputFiles,
-      args: [selector, filename, mime, hasB64 ? String(kwargs.content_base64) : null, hasText ? String(kwargs.content) : null],
+      args: [
+        selector,
+        filename,
+        mime,
+        hasB64 ? String(kwargs.content_base64) : null,
+        hasText ? String(kwargs.content) : null,
+      ],
     });
     const r = res[0]?.result;
     if (!r) throw new Error('executeScript returned no result (tab not scriptable?)');

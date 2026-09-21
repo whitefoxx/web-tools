@@ -1,0 +1,10 @@
+# Generated — rewritten wholesale by a script, never hand-edited.
+pnpm-lock.yaml
+store/*/promo.html
+store/*/svg/
+store/*/images/
+
+# Hand-tuned store copy. These files are paste targets for the Chrome Web Store
+# dashboard: the exact spacing inside a line is the deliverable, and Prettier
+# collapses it (e.g. the aligned double space in WebCLI's install step).
+store/*/store-listing.md

@@ -83,7 +83,7 @@ cli({
   // write by definition, and gets the same confirmation gate as any other.
   access: 'write',
   description:
-    'Call one of the tools a page declares via WebMCP (discover them with list_webmcp_tools first). Pass the tool name and its input as a JSON object string matching that tool\'s inputSchema. Returns the tool\'s own result. This performs a real action on the site — treat it exactly as seriously as clicking the button it replaces.',
+    "Call one of the tools a page declares via WebMCP (discover them with list_webmcp_tools first). Pass the tool name and its input as a JSON object string matching that tool's inputSchema. Returns the tool's own result. This performs a real action on the site — treat it exactly as seriously as clicking the button it replaces.",
   args: [
     { name: 'tab_id', type: 'int', required: true, help: 'Target tab id' },
     {
@@ -101,7 +101,8 @@ cli({
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
     const tab = await assertTabId(kwargs.tab_id);
     const name = String(kwargs.name ?? '').trim();
-    if (!name) throw new Error('name is required — run list_webmcp_tools to see what this page offers');
+    if (!name)
+      throw new Error('name is required — run list_webmcp_tools to see what this page offers');
     const rawInput = kwargs.input == null || kwargs.input === '' ? '{}' : String(kwargs.input);
     try {
       const parsed = JSON.parse(rawInput);
@@ -109,7 +110,9 @@ cli({
         throw new Error('not an object');
       }
     } catch {
-      throw new Error(`input must be a JSON object string, e.g. {"query":"laptop"} — got: ${rawInput.slice(0, 120)}`);
+      throw new Error(
+        `input must be a JSON object string, e.g. {"query":"laptop"} — got: ${rawInput.slice(0, 120)}`,
+      );
     }
     const injected = await chrome.scripting.executeScript({
       target: { tabId: tab.id! },
@@ -146,7 +149,10 @@ async function webmcpInPage(
     try {
       const v = holder[key];
       if (v == null) return;
-      candidates.push({ source, value: typeof v === 'function' ? (v as () => unknown).call(holder) : v });
+      candidates.push({
+        source,
+        value: typeof v === 'function' ? (v as () => unknown).call(holder) : v,
+      });
     } catch {
       /* a throwing accessor is not a registry */
     }
@@ -156,7 +162,15 @@ async function webmcpInPage(
   const apiPresent = !!mc && typeof mc === 'object';
   if (apiPresent) {
     // Documented-ish accessors first, polyfill internals last.
-    for (const k of ['listTools', 'getTools', 'tools', 'availableTools', '_tools', '__tools', 'registeredTools']) {
+    for (const k of [
+      'listTools',
+      'getTools',
+      'tools',
+      'availableTools',
+      '_tools',
+      '__tools',
+      'registeredTools',
+    ]) {
       push(`navigator.modelContext.${k}`, mc as Record<string, unknown>, k);
     }
   } else {
@@ -193,7 +207,11 @@ async function webmcpInPage(
       }
     }
     const list = toList(v);
-    if (list && list.length && list.some((t) => t && typeof t === 'object' && 'name' in (t as object))) {
+    if (
+      list &&
+      list.length &&
+      list.some((t) => t && typeof t === 'object' && 'name' in (t as object))
+    ) {
       found = { source: c.source, list };
       break;
     }
@@ -249,12 +267,17 @@ async function webmcpInPage(
     const names = found.list
       .map((t) => (t as Record<string, unknown>)?.name)
       .filter((n) => typeof n === 'string');
-    return { error: `no tool named "${toolName}" on this page. Available: ${names.join(', ') || '(none)'}` };
+    return {
+      error: `no tool named "${toolName}" on this page. Available: ${names.join(', ') || '(none)'}`,
+    };
   }
   const fnKey = ['execute', 'call', 'run', 'handler', 'invoke'].find(
     (k) => typeof desc[k] === 'function',
   );
-  if (!fnKey) return { error: `tool "${toolName}" exposes no callable (looked for execute/call/run/handler/invoke)` };
+  if (!fnKey)
+    return {
+      error: `tool "${toolName}" exposes no callable (looked for execute/call/run/handler/invoke)`,
+    };
 
   let input: unknown;
   try {
@@ -267,10 +290,19 @@ async function webmcpInPage(
     const raw = await (desc[fnKey] as (a: unknown) => unknown).call(desc, input);
     // The shape agreed on by the current tooling is {status, output, errorText};
     // anything else is passed through under `output` rather than being dropped.
-    if (raw && typeof raw === 'object' && ('status' in raw || 'output' in raw || 'errorText' in raw)) {
+    if (
+      raw &&
+      typeof raw === 'object' &&
+      ('status' in raw || 'output' in raw || 'errorText' in raw)
+    ) {
       const o = raw as Record<string, unknown>;
       return JSON.parse(
-        JSON.stringify({ called: fnKey, status: o.status, output: o.output, errorText: o.errorText }),
+        JSON.stringify({
+          called: fnKey,
+          status: o.status,
+          output: o.output,
+          errorText: o.errorText,
+        }),
       );
     }
     return JSON.parse(JSON.stringify({ called: fnKey, output: raw ?? null }));

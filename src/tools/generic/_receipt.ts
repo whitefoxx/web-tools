@@ -131,7 +131,8 @@ export function diffSig(
   const receipt: Record<string, unknown> = {};
   if (urlChanged) {
     receipt.url_changed = urlChanged;
-    receipt.hint = 'The page navigated; all previous refs are now stale — re-scan with get_interactives before continuing';
+    receipt.hint =
+      'The page navigated; all previous refs are now stale — re-scan with get_interactives before continuing';
     return receipt;
   }
   if (!before || !after) return receipt;

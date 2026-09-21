@@ -290,7 +290,12 @@ function hostOf(url: string): string {
   }
 }
 
-function chip(cls: string, icon: string, text: string, tag: 'span' | 'button' = 'span'): HTMLElement {
+function chip(
+  cls: string,
+  icon: string,
+  text: string,
+  tag: 'span' | 'button' = 'span',
+): HTMLElement {
   const el = document.createElement(tag);
   el.className = `chip ${cls}`;
   if (icon) {

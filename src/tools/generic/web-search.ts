@@ -80,9 +80,15 @@ export function buildEngine(
   switch (engine) {
     case 'duckduckgo':
       // lite is the no-JS, table-rendered variant — the most scrape-stable SERP.
-      return { url: `https://lite.duckduckgo.com/lite/?q=${q}`, ready: 'a.result-link, a.result__a' };
+      return {
+        url: `https://lite.duckduckgo.com/lite/?q=${q}`,
+        ready: 'a.result-link, a.result__a',
+      };
     case 'google':
-      return { url: `https://www.google.com/search?q=${q}&num=${count}`, ready: '#search a h3, #rso a h3' };
+      return {
+        url: `https://www.google.com/search?q=${q}&num=${count}`,
+        ready: '#search a h3, #rso a h3',
+      };
     case 'bing':
     default:
       return { url: `https://www.bing.com/search?q=${q}&count=${count}`, ready: 'li.b_algo h2 a' };
@@ -112,7 +118,8 @@ async function grabSerpText(tabId: number, maxChars = 8000): Promise<string> {
   try {
     const res = await chrome.scripting.executeScript({
       target: { tabId },
-      func: (max: number) => (document.body?.innerText ?? '').replace(/\n{3,}/g, '\n\n').slice(0, max),
+      func: (max: number) =>
+        (document.body?.innerText ?? '').replace(/\n{3,}/g, '\n\n').slice(0, max),
       args: [maxChars],
     });
     return (res[0]?.result as string) ?? '';
@@ -217,7 +224,10 @@ cli({
       );
     }
     const count = Math.max(1, Math.min(20, Number(kwargs.count ?? 10) || 10));
-    const maxWaitMs = Math.max(1000, Math.min(60_000, Number(kwargs.max_wait_ms ?? 12_000) || 12_000));
+    const maxWaitMs = Math.max(
+      1000,
+      Math.min(60_000, Number(kwargs.max_wait_ms ?? 12_000) || 12_000),
+    );
 
     // "auto" → cascade google→bing→duckduckgo, stopping at the first engine that
     // yields structured results; a pinned engine → just that one.

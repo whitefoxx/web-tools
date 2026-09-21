@@ -93,12 +93,12 @@ explore, marketplace, and selection. It's now partitioned:
       retry-on-empty (see [findings F-40](./tests/findings.md) — cn.bing streamed
       the `li.b_algo` container before its anchors, so waiting on the container
       extracted 0; fixed by waiting on `li.b_algo h2 a`).
-    `extractSerp` is exported + jsdom-unit-tested (per-engine selectors with
-    fallbacks, DDG `uddg=` / Google `/url?q=` redirect decoding, engine-host
-    filtering, zero-results bot-check → `blocked:true`; a real cn.bing SERP
-    regression fixture). Since SERP DOM drifts, the extractor + ready selectors
-    are where maintenance lands — treat selector rot as the expected failure mode
-    (the text fallback is the safety net that keeps it useful meanwhile).
+      `extractSerp` is exported + jsdom-unit-tested (per-engine selectors with
+      fallbacks, DDG `uddg=` / Google `/url?q=` redirect decoding, engine-host
+      filtering, zero-results bot-check → `blocked:true`; a real cn.bing SERP
+      regression fixture). Since SERP DOM drifts, the extractor + ready selectors
+      are where maintenance lands — treat selector rot as the expected failure mode
+      (the text fallback is the safety net that keeps it useful meanwhile).
   - **`list_links`** (added 2026-07-16) — extract every `<a href>` on a page as
     absolute, deduped URLs (+ anchor text), with optional `selector` scope,
     `same_origin`, and `pattern` (regex) filters; pierces open shadow DOM; returns
@@ -139,8 +139,8 @@ explore, marketplace, and selection. It's now partitioned:
       double-click; the default left single-click keeps native `el.click()`.
     - **`manage_tabs` +`back`/`forward`** — history nav (drill into a detail page,
       then go back) instead of re-open_url.
-    Explicitly NOT added (would need new permissions — deferred): `get_cookies`
-    (`cookies`), downloads (`downloads`). crawl/research/etc. stay agent-orchestrated.
+      Explicitly NOT added (would need new permissions — deferred): `get_cookies`
+      (`cookies`), downloads (`downloads`). crawl/research/etc. stay agent-orchestrated.
 - **Explore-only (8)** — moved to `src/tools/explore/` (+ `_all.ts`). They REQUIRE
   a live session (`session.newPage()` on the explore tab, or the trace store):
   `eval_js`, `find_structured_data`, `get_a11y_tree`, `list_network`,
@@ -315,7 +315,7 @@ Consequences, all of them intentional but easy to trip over:
   in `url` mode. Those results carry `tab_closed: true` and **no tab id** (see
   `docs/adapter-hot-plug.md` §10.47: returning the id of a tab you just closed
   invites `scroll_page` on a dead tab). Pass `keep_open: true` to `get_page_text`
-  when you want the text *and* a live tab back — the one-call replacement for
+  when you want the text _and_ a live tab back — the one-call replacement for
   `open_url` → `get_page_text`.
 - **The agent window / tab group is per-shell.** The group title is the
   extension's own manifest name (`Web Agent` vs `WebCLI`) because tab groups are
@@ -329,13 +329,13 @@ After the `open_url` / `get_page_text` findings (§10) the whole 26-tool set was
 swept for the same two failure classes. What the sweep is looking for, and what it
 found:
 
-| Class | What it looks like | Found |
-| --- | --- | --- |
-| **Dead handle** | a tool returns an id for a resource it destroyed | `get_page_text{url}`, `screenshot{url}` (fixed, §10) — `get_html` / `get_dom_outline` / `list_links` / `web_search` also close their tab but never reported an id, so they were already correct |
-| **False promise** | a description asserts full-shell behavior | `close_tab` ("at task end the system auto-reaps … so no explicit cleanup is needed" — exactly backwards here), `open_url`'s `active` arg ("auto-reaped at task end … kept until the next task starts") |
-| **Unreachable mode** | a documented fallback that cannot happen | `get_html` / `query_dom` / `get_dom_outline` / `wait_for_selector` / `list_links` all said "omit `tab_id` to use the Explore session tab" — the explore gate is null in WebCLI, so omitting it can only error. Reworded to "required unless an Explore session is running", true in both shells |
-| **Dead tool** | listed but cannot succeed | `read_more` pages through the oversize stash, which only `agent/engine-history.ts` writes. No agent loop ⇒ no stash ⇒ every call fails; the Port-MCP transport truncates without a stash id anyway. Moved to `_all.ts` (full only) — WebCLI is now **25 tools** |
-| **Stale provenance** | "the tabId from `open_url`" | `scroll_page` / `get_interactives` / `find_in_page` / `get_html` / `list_links` now also name `get_page_text {url, keep_open:true}`, so the one-call path is discoverable from wherever the agent happens to be reading |
+| Class                | What it looks like                               | Found                                                                                                                                                                                                                                                                                           |
+| -------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Dead handle**      | a tool returns an id for a resource it destroyed | `get_page_text{url}`, `screenshot{url}` (fixed, §10) — `get_html` / `get_dom_outline` / `list_links` / `web_search` also close their tab but never reported an id, so they were already correct                                                                                                 |
+| **False promise**    | a description asserts full-shell behavior        | `close_tab` ("at task end the system auto-reaps … so no explicit cleanup is needed" — exactly backwards here), `open_url`'s `active` arg ("auto-reaped at task end … kept until the next task starts")                                                                                          |
+| **Unreachable mode** | a documented fallback that cannot happen         | `get_html` / `query_dom` / `get_dom_outline` / `wait_for_selector` / `list_links` all said "omit `tab_id` to use the Explore session tab" — the explore gate is null in WebCLI, so omitting it can only error. Reworded to "required unless an Explore session is running", true in both shells |
+| **Dead tool**        | listed but cannot succeed                        | `read_more` pages through the oversize stash, which only `agent/engine-history.ts` writes. No agent loop ⇒ no stash ⇒ every call fails; the Port-MCP transport truncates without a stash id anyway. Moved to `_all.ts` (full only) — WebCLI is now **25 tools**                                 |
+| **Stale provenance** | "the tabId from `open_url`"                      | `scroll_page` / `get_interactives` / `find_in_page` / `get_html` / `list_links` now also name `get_page_text {url, keep_open:true}`, so the one-call path is discoverable from wherever the agent happens to be reading                                                                         |
 
 The first three classes are invisible to `tsc` and to every behavioral test — they
 are wording, and wording is this shell's entire interface. They are pinned by
@@ -349,26 +349,26 @@ five. Reword freely; if that test goes red, the wording is what's wrong.
 
 There are now three ways to read a page, in ascending cost:
 
-| | Tab? | Sees JS-built content? | Cost |
-| --- | --- | --- | --- |
-| `fetch_url {url, format:"markdown"}` | no | **no** — only what the server sent | one HTTP request |
-| `get_page_text {url}` | throwaway | yes | tab create + settle + close |
-| `open_url` → `get_page_text {tab_id}` | kept | yes | two calls, and you own the tab |
+|                                       | Tab?      | Sees JS-built content?             | Cost                           |
+| ------------------------------------- | --------- | ---------------------------------- | ------------------------------ |
+| `fetch_url {url, format:"markdown"}`  | no        | **no** — only what the server sent | one HTTP request               |
+| `get_page_text {url}`                 | throwaway | yes                                | tab create + settle + close    |
+| `open_url` → `get_page_text {tab_id}` | kept      | yes                                | two calls, and you own the tab |
 
 `fetch_url` already existed as the raw-bytes half of "web fetch". What it lacked
-was the thing that makes a fetch *readable*: HTML → Markdown. Guidance everywhere
+was the thing that makes a fetch _readable_: HTML → Markdown. Guidance everywhere
 now says: **server-rendered content (articles, docs, blogs, READMEs, news) →
 `fetch_url` markdown first; fall back to `get_page_text` when the result comes
 back empty or is missing the JS-built parts.**
 
 **Why it is not a second converter.** MV3 service workers have no DOM and no
 `DOMParser` — that is exactly why the Markdown walker (`extractPageMarkdown`)
-runs *inside the page* via `executeScript`. The obvious move, writing a
+runs _inside the page_ via `executeScript`. The obvious move, writing a
 string-based converter for the SW, would have produced two Markdown dialects that
 drift apart forever. Instead:
 
 - `extractPageMarkdown` gained ONE parameter — `doc`, defaulting to the live
-  `document`. In a tab the default is evaluated *in the page*, after
+  `document`. In a tab the default is evaluated _in the page_, after
   serialization, so the in-page path is byte-for-byte unchanged.
 - `_mini-dom.ts` parses fetched bytes into the **smallest tree that satisfies the
   DOM surface that walker touches** (`nodeType` / `tagName` / `childNodes` /
@@ -411,10 +411,10 @@ the collision is at load time, not at enable time.
 
 Two ways out, and the tradeoff is which fidelity you give up:
 
-| | Same profile? | Artifact tested is the one shipped? |
-| --- | --- | --- |
-| Second Chrome profile | no — one build per profile | **yes**, byte-identical |
-| `--mode webcli-dev` | **yes**, side by side | no — key/name/port differ |
+|                       | Same profile?              | Artifact tested is the one shipped? |
+| --------------------- | -------------------------- | ----------------------------------- |
+| Second Chrome profile | no — one build per profile | **yes**, byte-identical             |
+| `--mode webcli-dev`   | **yes**, side by side      | no — key/name/port differ           |
 
 `npm run build:webcli:dev` → `dist-webcli-dev/`, differing from the shipped build
 in exactly three places, each one there to stop a collision:
@@ -474,12 +474,12 @@ worse for a dense page. Now:
 - **The default did not move**, and the instinct behind that turned out to be
   the important part. Real-machine measurement ([findings F-44](./tests/findings.md)):
 
-  | page | png | jpeg q80 | webp q80 | jpeg + `max_width` |
-  | --- | --- | --- | --- | --- |
-  | flat-colour app UI (a fixture form) | 141 KB | **157 KB — bigger** | 63 KB | — |
-  | photo-heavy (a Wikipedia article) | 985 KB | 574 KB | 357 KB | 134 KB @ 1024 |
+  | page                                | png    | jpeg q80            | webp q80 | jpeg + `max_width` |
+  | ----------------------------------- | ------ | ------------------- | -------- | ------------------ |
+  | flat-colour app UI (a fixture form) | 141 KB | **157 KB — bigger** | 63 KB    | —                  |
+  | photo-heavy (a Wikipedia article)   | 985 KB | 574 KB              | 357 KB   | 134 KB @ 1024      |
 
-  JPEG's worst case is large flat areas plus sharp text edges, which is *exactly*
+  JPEG's worst case is large flat areas plus sharp text edges, which is _exactly_
   what an app-UI screenshot is — and app UI, not photography, is the dominant
   agent workload. So the guidance everywhere now reads **`max_width` first, and
   `webp` when you want a lossy codec; do not reach for jpeg by reflex.** The
@@ -487,6 +487,7 @@ worse for a dense page. Now:
   The first version of this section recommended jpeg, extrapolated from their
   `--screenshotFormat` flag; it was wrong in the common case, and wrong guidance
   read by every agent is more expensive than none.
+
 - An unsupported `format` is an **error naming the legal values** — the same rule
   as `web_search`'s `engine` (§2), for the same reason: a pin that is silently
   ignored teaches the caller a lie about what it captured.
@@ -550,7 +551,7 @@ popup that would quietly go stale.
 
 Two calls worth keeping:
 
-- **Hidden ≠ disabled.** A profile filters what is *advertised*; every registered
+- **Hidden ≠ disabled.** A profile filters what is _advertised_; every registered
   tool stays callable. An agent on a cached catalog, a skill that names a tool, or a
   user following the docs must not hit "tool not found" because of a display
   setting — that would turn a token optimization into a capability cliff, and it is
@@ -585,7 +586,7 @@ it is an option, not a feature with a proven counterparty.
   Chrome tested on has **no native `navigator.modelContext` at all**, so the pass
   is against the fixture's shim (`webmcp.html` reports `impl=shim` on purpose, so
   a run can never quietly claim it tested the real API).
-- Known follow-up if the ecosystem lands: tools registered *after* our probe are
+- Known follow-up if the ecosystem lands: tools registered _after_ our probe are
   invisible. Catching those needs a `document_start` MAIN-world recorder wrapping
   `registerTool` — deliberately NOT shipped, because an always-on `<all_urls>`
   injection is a real cost to pay for a feature with no users yet.
@@ -648,8 +649,8 @@ The replacement path (`core/web-origins.ts`, popup "Web app access"):
 
 **Two-layer gate, on purpose.** Match patterns cannot carry a port (invalid in
 the scripting API — `externally_connectable` was the one place they ever
-worked), so the *injection* is host-scoped (`http://localhost/*`) and the
-*service* check is the exact origin, port included: `allowedOrigins` on the
+worked), so the _injection_ is host-scoped (`http://localhost/*`) and the
+_service_ check is the exact origin, port included: `allowedOrigins` on the
 handler reads the stored list per connect. A page on the right host but the
 wrong port gets a relay that connects to a wall. The handler-side check also
 had to become **async** (a relay connect is often the event that wakes a cold
@@ -685,7 +686,7 @@ What the switch bought and cost:
   gone); default is **empty = nobody**, where the old manifest granted localmd
   standing access to every install on earth.
 - **Cost**: localmd.app loses its built-in path — it must adopt the postMessage
-  protocol (its `chrome.runtime.connect(id)` no longer reaches WebCLI) *and*
+  protocol (its `chrome.runtime.connect(id)` no longer reaches WebCLI) _and_
   the user must add it. That is the intended trade: the trust decision moved
   from our manifest to the user's list.
 - **Unchanged**: the WS daemon transport, which never involved a web page.
@@ -708,7 +709,7 @@ survived the trip intact:
 - **`Mcp-Session-Id`** — the whole session lives in this response header.
 - **`WWW-Authenticate`** — the head of the OAuth discovery chain (401 →
   protected-resource metadata → AS metadata → token endpoint). Note that a page
-  fetching *directly* usually cannot read it: without
+  fetching _directly_ usually cannot read it: without
   `Access-Control-Expose-Headers` the browser hides it, and of the 103 servers
   that require auth only 15 expose it. Through the SW there is no CORS layer to
   hide anything, so all 103 are readable. That is not a side benefit of this
@@ -724,21 +725,21 @@ sitting in the buffer; nothing could get at it.
 
 The split is exactly "does the body end?", not "is it SSE":
 
-| server | content-type | ends? | buffered read |
-| --- | --- | --- | --- |
-| `mcp.platform.opentargets.org/mcp` | `text/event-stream` | no (`x-accel-buffering: no`, no length) | ❌ timeout |
-| `mcp.mermaid.ai/mcp` | `text/event-stream` | yes (`content-length: 245`) | ✅ |
-| `knowledge-mcp.global.api.aws` | `application/json` | yes | ✅ |
+| server                             | content-type        | ends?                                   | buffered read |
+| ---------------------------------- | ------------------- | --------------------------------------- | ------------- |
+| `mcp.platform.opentargets.org/mcp` | `text/event-stream` | no (`x-accel-buffering: no`, no length) | ❌ timeout    |
+| `mcp.mermaid.ai/mcp`               | `text/event-stream` | yes (`content-length: 245`)             | ✅            |
+| `knowledge-mcp.global.api.aws`     | `application/json`  | yes                                     | ✅            |
 
 ### The fix — an opt-in early stop
 
 `stream_stop` selects a reader loop that may end before the body does:
 
-| value | ends the read when | bounded by |
-| --- | --- | --- |
-| `"none"` (default) | the server closes the body | `timeout_ms` |
-| `"first_event"` | the first complete SSE event carrying a `data:` field has arrived | `timeout_ms` |
-| `"idle"` | nothing has arrived for `idle_timeout_ms` (default 5000) | `timeout_ms` |
+| value              | ends the read when                                                | bounded by   |
+| ------------------ | ----------------------------------------------------------------- | ------------ |
+| `"none"` (default) | the server closes the body                                        | `timeout_ms` |
+| `"first_event"`    | the first complete SSE event carrying a `data:` field has arrived | `timeout_ms` |
+| `"idle"`           | nothing has arrived for `idle_timeout_ms` (default 5000)          | `timeout_ms` |
 
 `first_message` and `first` are accepted as aliases of `first_event` (MCP says
 message, SSE says event); an unrecognized value **throws** rather than falling
@@ -749,11 +750,11 @@ event is normal, and an idle watchdog would cut it off holding nothing.
 
 Three properties keep it honest:
 
-- **`stream_open: true`** says *we stopped before the body ended*, so treat the
+- **`stream_open: true`** says _we stopped before the body ended_, so treat the
   body as a prefix. It does NOT claim the server had more to send — we cancelled
   without reading to `done`, so that is unknowable (real-machine: `mcp.mermaid.ai`
   under `first_event` returns `stream_open:true` with all 245 bytes, because its
-  one event *is* the whole body). `stream_stop` is echoed next to it (the
+  one event _is_ the whole body). `stream_stop` is echoed next to it (the
   `with_cookies` precedent), and `note` says which rule fired.
 - **`first_event` loses whatever the server sends next, and the event it keeps
   is not guaranteed to be the one you wanted.** Two separate spec sentences bite
@@ -771,7 +772,8 @@ Three properties keep it honest:
   the caller choose: `first_event` when the server sends one message,
   **`"idle"`** when notifications may interleave (it returns every event up to
   the quiet point, and the client picks its own message out).
-- **`bytes` changes meaning** in stream mode: it counts what was *read*, because
+
+- **`bytes` changes meaning** in stream mode: it counts what was _read_, because
   what the server still had to send is unknowable by construction.
 
 Two smaller decisions:
@@ -793,12 +795,12 @@ the max_bytes cap, and header survival.
 
 ### Real-machine verification (2026-07-31, dev build on 9377)
 
-| check | result |
-| --- | --- |
-| `opentargets` + `first_event` | **2.32s** (was: timeout), `stream_open:true`, body parses to `result.protocolVersion`. Its framing is CRLF (`\r\n\r\n`) — the reason `firstDataEventEnd` accepts all three line terminators rather than just `\n\n` |
-| `mermaid` / `aws`, no new args | 245 / 171 bytes — matching their `content-length` exactly, i.e. the old whole-body read, and neither `stream_stop` nor `stream_open` present in the result |
-| `notion` headers | `www-authenticate: Bearer realm="OAuth", resource_metadata=…` fully readable |
-| `mcp-session-id` on the **streaming** path | `aws` + `first_event` → `3b62ddcf-…` (mermaid turns out not to issue one; aws and scite do) |
+| check                                      | result                                                                                                                                                                                                              |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `opentargets` + `first_event`              | **2.32s** (was: timeout), `stream_open:true`, body parses to `result.protocolVersion`. Its framing is CRLF (`\r\n\r\n`) — the reason `firstDataEventEnd` accepts all three line terminators rather than just `\n\n` |
+| `mermaid` / `aws`, no new args             | 245 / 171 bytes — matching their `content-length` exactly, i.e. the old whole-body read, and neither `stream_stop` nor `stream_open` present in the result                                                          |
+| `notion` headers                           | `www-authenticate: Bearer realm="OAuth", resource_metadata=…` fully readable                                                                                                                                        |
+| `mcp-session-id` on the **streaming** path | `aws` + `first_event` → `3b62ddcf-…` (mermaid turns out not to issue one; aws and scite do)                                                                                                                         |
 
 ### Why not a streaming tool
 
@@ -819,13 +821,13 @@ completes in 1.3s), HTTP version, and the `Sec-Fetch-*` header set. It also
 sends `Access-Control-Allow-Origin: *`, so it is not a CORS-layer stall.
 
 The leading hypothesis was that the bytes arrive but the connection is never
-*terminated* (chunked response through Kong + CloudFront, `server: uvicorn`), so
+_terminated_ (chunked response through Kong + CloudFront, `server: uvicorn`), so
 only the close is missing — which `stream_stop:"idle"` would both diagnose and
 work around.
 
 **It did not reproduce.** Real-machine, 2026-07-31, dev build on 9377: 8/8
 successes, `default` 1.44 / 3.45 / 3.52 / 4.27s against `idle` 3.27 / 3.28 /
-3.16 / 3.57s, every one of them 3128 bytes. The buffered read is *not* slower
+3.16 / 3.57s, every one of them 3128 bytes. The buffered read is _not_ slower
 than the incremental one here, and `idle` reports `stream_open:false` every time
 — the watchdog never fires because the stream ends on its own. So the hypothesis
 above is disproved on this machine: nothing is holding the connection open.

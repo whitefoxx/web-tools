@@ -164,6 +164,8 @@ function validateArgs(adapter: AdapterDef, args: Record<string, unknown>): strin
   }
   lines.push(expectedDoc);
   lines.push('');
-  lines.push('Call again with the correct argument names. If unsure of an argument, run `describe_tool` first for the full spec.');
+  lines.push(
+    'Call again with the correct argument names. If unsure of an argument, run `describe_tool` first for the full spec.',
+  );
   return lines.join('\n');
 }

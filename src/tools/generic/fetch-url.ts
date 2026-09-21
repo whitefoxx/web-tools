@@ -191,7 +191,8 @@ async function readWithStop(
           // whole SSE events. Anything the server sends after this is lost.
           buf = buf.slice(0, end);
           streamOpen = true;
-          note = 'stopped after the first SSE data event — later messages on this stream were not read';
+          note =
+            'stopped after the first SSE data event — later messages on this stream were not read';
           break;
         }
       }
@@ -275,7 +276,9 @@ export async function runFetch(rawUrl: string, opts: RunFetchOpts = {}): Promise
     with_cookies: withCookies,
     bytes: rawBytes,
     truncated,
-    ...(stream ? { stream_stop: streamStop as Exclude<StreamStop, 'none'>, stream_open: stream.streamOpen } : {}),
+    ...(stream
+      ? { stream_stop: streamStop as Exclude<StreamStop, 'none'>, stream_open: stream.streamOpen }
+      : {}),
   };
   if (wantJson) {
     try {
@@ -326,7 +329,9 @@ export function parseStreamStop(v: unknown): StreamStop {
   if (!s || s === 'none' || s === 'false') return 'none';
   if (s === 'first_event' || s === 'first_message' || s === 'first') return 'first_event';
   if (s === 'idle') return 'idle';
-  throw new Error(`stream_stop must be "none", "first_event" or "idle" (got ${JSON.stringify(String(v))})`);
+  throw new Error(
+    `stream_stop must be "none", "first_event" or "idle" (got ${JSON.stringify(String(v))})`,
+  );
 }
 
 /** Accept a headers arg as a JSON object OR a JSON string; ignore junk. */
@@ -358,24 +363,73 @@ cli({
     'Fetch a URL **directly, without opening a tab** (no browser, no JS execution) — the cheapest way to read a page, and the fastest. Returns {status, headers, body | json | markdown}. **Complements** get_page_text: get_page_text renders in a tab (needed for SPAs / JS-built content); fetch_url uses the Service Worker fetch, **with the user\'s cookies and CORS-free**, and sees exactly the bytes the server sent. **format:"markdown" turns a server-rendered page into clean Markdown in one call** (same converter get_page_text uses; prefers the main/article region, drops nav/footer/script) — reach for it FIRST on articles, docs, blogs, READMEs, anything server-rendered, and only fall back to get_page_text when the result comes back empty or obviously missing the JS-built content. Also good for: JSON API / RSS / sitemap.xml / robots.txt / checking status codes and redirects / POSTing to an endpoint. method defaults to GET (GET/HEAD ignore body). If the endpoint answers with a stream that stays open (SSE, MCP Streamable HTTP), the default whole-body read can only end in a timeout — use `stream_stop` to return on the first event instead. **Non-GET (POST/PUT/DELETE) has real side effects — be careful.**',
   args: [
     { name: 'url', type: 'string', required: true, help: 'URL to fetch (http/https)' },
-    { name: 'method', type: 'string', default: 'GET', help: 'HTTP method (GET/POST/PUT/DELETE/HEAD…), default GET' },
-    { name: 'headers', type: 'string', help: 'Optional request headers, a JSON object or JSON string (e.g. {"Accept":"application/json"})' },
-    { name: 'body', type: 'string', help: 'Optional request body (non-GET/HEAD only; a string, pass a JSON string for JSON)' },
-    { name: 'format', type: 'string', default: 'auto', help: '"auto" (default, by content-type) | "markdown" (HTML → readable Markdown in the `markdown` field — use this to READ a page) | "json" (parse to object) | "text" (raw body). markdown on a non-HTML response degrades to text and says so in `note`' },
-    { name: 'selector', type: 'string', help: 'format:"markdown" only — convert just this element instead of the whole page. Supported subset: comma groups of tag/#id/.class/[attr] / [attr="v"] compounds with descendant (space) combinators; no child/sibling combinators or pseudo-classes. Matching nothing yields empty markdown + a note' },
-    { name: 'with_cookies', type: 'bool', default: true, help: 'Send the user\'s cookies for that site — **default true**, which is the point of fetching from their browser (paywalled / logged-in pages just work). Pass false to fetch as an anonymous visitor: to see the signed-out version of a page, or to keep the user\'s account out of the request entirely. The result echoes `with_cookies` so a login wall is self-explaining' },
-    { name: 'max_bytes', type: 'int', default: 200000, help: 'Max bytes to read from the response body (default 200000, max 1000000)' },
-    { name: 'timeout_ms', type: 'int', default: 20000, help: 'Timeout (ms, default 20000, range 1000–60000)' },
-    { name: 'stream_stop', type: 'string', default: 'none', help: 'Stop reading BEFORE the server closes the body — for endpoints that answer with a stream that stays open (MCP Streamable HTTP, SSE APIs), where the default read can only end in a timeout. "none" (default) = read the whole body. "first_event" = return as soon as the first complete SSE `data:` event arrives — **anything the server sends afterwards on that stream is lost**, so use it for request/response calls, not to consume a feed. Note it stops at the first event, which is not necessarily the one you want: a server that interleaves progress notifications ahead of its reply will hand you the notification. Use "idle" when that is possible, and pick your message out of the events it returns. "idle" = return once the stream has been quiet for idle_timeout_ms. Both set `stream_open:true` in the result to say the body is a PREFIX, and `bytes` then counts what was read, not what the server had left to send' },
-    { name: 'idle_timeout_ms', type: 'int', default: 5000, help: 'stream_stop:"idle" only — quiet period that ends the read (ms, default 5000, range 200–60000). "first_event" ignores it and is bounded by timeout_ms instead' },
+    {
+      name: 'method',
+      type: 'string',
+      default: 'GET',
+      help: 'HTTP method (GET/POST/PUT/DELETE/HEAD…), default GET',
+    },
+    {
+      name: 'headers',
+      type: 'string',
+      help: 'Optional request headers, a JSON object or JSON string (e.g. {"Accept":"application/json"})',
+    },
+    {
+      name: 'body',
+      type: 'string',
+      help: 'Optional request body (non-GET/HEAD only; a string, pass a JSON string for JSON)',
+    },
+    {
+      name: 'format',
+      type: 'string',
+      default: 'auto',
+      help: '"auto" (default, by content-type) | "markdown" (HTML → readable Markdown in the `markdown` field — use this to READ a page) | "json" (parse to object) | "text" (raw body). markdown on a non-HTML response degrades to text and says so in `note`',
+    },
+    {
+      name: 'selector',
+      type: 'string',
+      help: 'format:"markdown" only — convert just this element instead of the whole page. Supported subset: comma groups of tag/#id/.class/[attr] / [attr="v"] compounds with descendant (space) combinators; no child/sibling combinators or pseudo-classes. Matching nothing yields empty markdown + a note',
+    },
+    {
+      name: 'with_cookies',
+      type: 'bool',
+      default: true,
+      help: "Send the user's cookies for that site — **default true**, which is the point of fetching from their browser (paywalled / logged-in pages just work). Pass false to fetch as an anonymous visitor: to see the signed-out version of a page, or to keep the user's account out of the request entirely. The result echoes `with_cookies` so a login wall is self-explaining",
+    },
+    {
+      name: 'max_bytes',
+      type: 'int',
+      default: 200000,
+      help: 'Max bytes to read from the response body (default 200000, max 1000000)',
+    },
+    {
+      name: 'timeout_ms',
+      type: 'int',
+      default: 20000,
+      help: 'Timeout (ms, default 20000, range 1000–60000)',
+    },
+    {
+      name: 'stream_stop',
+      type: 'string',
+      default: 'none',
+      help: 'Stop reading BEFORE the server closes the body — for endpoints that answer with a stream that stays open (MCP Streamable HTTP, SSE APIs), where the default read can only end in a timeout. "none" (default) = read the whole body. "first_event" = return as soon as the first complete SSE `data:` event arrives — **anything the server sends afterwards on that stream is lost**, so use it for request/response calls, not to consume a feed. Note it stops at the first event, which is not necessarily the one you want: a server that interleaves progress notifications ahead of its reply will hand you the notification. Use "idle" when that is possible, and pick your message out of the events it returns. "idle" = return once the stream has been quiet for idle_timeout_ms. Both set `stream_open:true` in the result to say the body is a PREFIX, and `bytes` then counts what was read, not what the server had left to send',
+    },
+    {
+      name: 'idle_timeout_ms',
+      type: 'int',
+      default: 5000,
+      help: 'stream_stop:"idle" only — quiet period that ends the read (ms, default 5000, range 200–60000). "first_event" ignores it and is bounded by timeout_ms instead',
+    },
   ],
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
     const url = assertHttpUrl(kwargs.url);
-    const method = typeof kwargs.method === 'string' && kwargs.method.trim() ? kwargs.method.trim() : 'GET';
+    const method =
+      typeof kwargs.method === 'string' && kwargs.method.trim() ? kwargs.method.trim() : 'GET';
     const headers = parseHeaders(kwargs.headers);
     const body = typeof kwargs.body === 'string' ? kwargs.body : undefined;
     const format = typeof kwargs.format === 'string' ? kwargs.format : 'auto';
-    const selector = typeof kwargs.selector === 'string' && kwargs.selector.trim() ? kwargs.selector.trim() : null;
+    const selector =
+      typeof kwargs.selector === 'string' && kwargs.selector.trim() ? kwargs.selector.trim() : null;
     // Only an explicit false turns cookies off — an omitted / junk value keeps
     // the credentialed default rather than silently signing the user out.
     const withCookies = !(kwargs.with_cookies === false || kwargs.with_cookies === 'false');

@@ -28,7 +28,12 @@ export function locatorToSelector(ref: string | null, selector: string | null): 
 export function dragInPage(
   fromSelector: string,
   toSelector: string,
-): { ok?: boolean; error?: string; from?: { x: number; y: number }; to?: { x: number; y: number } } {
+): {
+  ok?: boolean;
+  error?: string;
+  from?: { x: number; y: number };
+  to?: { x: number; y: number };
+} {
   const from = document.querySelector(fromSelector) as HTMLElement | null;
   const to = document.querySelector(toSelector) as HTMLElement | null;
   if (!from) return { error: `from not found: ${fromSelector}` };
@@ -43,12 +48,20 @@ export function dragInPage(
 
   const dt = typeof DataTransfer === 'function' ? new DataTransfer() : null;
   const mouse = (el: Element, type: string, x: number, y: number): void => {
-    el.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y }));
+    el.dispatchEvent(
+      new MouseEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y }),
+    );
   };
   const pointer = (el: Element, type: string, x: number, y: number): void => {
     if (typeof PointerEvent !== 'function') return;
     el.dispatchEvent(
-      new PointerEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y, pointerType: 'mouse' }),
+      new PointerEvent(type, {
+        bubbles: true,
+        cancelable: true,
+        clientX: x,
+        clientY: y,
+        pointerType: 'mouse',
+      }),
     );
   };
   const drag = (el: Element, type: string, x: number, y: number): void => {
@@ -85,7 +98,11 @@ export function dragInPage(
   pointer(to, 'pointerup', tx, ty);
   mouse(to, 'mouseup', tx, ty);
 
-  return { ok: true, from: { x: Math.round(fx), y: Math.round(fy) }, to: { x: Math.round(tx), y: Math.round(ty) } };
+  return {
+    ok: true,
+    from: { x: Math.round(fx), y: Math.round(fy) },
+    to: { x: Math.round(tx), y: Math.round(ty) },
+  };
 }
 
 cli({
@@ -96,27 +113,47 @@ cli({
     'Drag one element onto another (list/kanban reordering, sliders, file drop zones, canvas). Locate the source and target each via ref (get_interactives, the most stable) or selector. Synthesizes a full pointer/mouse press-move-release + HTML5 drag-and-drop event chain (dragstart→dragover→drop→dragend, sharing a DataTransfer), covering both kinds of controls as much as possible. ⚠️ Synthetic dragging is **best-effort**: libraries requiring trusted events or a specific step cadence may not respond; when it fails, switch to click/keyboard.',
   args: [
     { name: 'tab_id', type: 'int', required: true, help: 'Target tab id' },
-    { name: 'from_ref', type: 'string', help: 'Source element ref (returned by get_interactives; one of from_ref / from_selector)' },
-    { name: 'from_selector', type: 'string', help: 'Source element CSS selector (one of from_ref / from_selector)' },
+    {
+      name: 'from_ref',
+      type: 'string',
+      help: 'Source element ref (returned by get_interactives; one of from_ref / from_selector)',
+    },
+    {
+      name: 'from_selector',
+      type: 'string',
+      help: 'Source element CSS selector (one of from_ref / from_selector)',
+    },
     { name: 'to_ref', type: 'string', help: 'Target element ref (one of to_ref / to_selector)' },
-    { name: 'to_selector', type: 'string', help: 'Target element CSS selector (one of to_ref / to_selector)' },
+    {
+      name: 'to_selector',
+      type: 'string',
+      help: 'Target element CSS selector (one of to_ref / to_selector)',
+    },
   ],
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
     const tab = await assertTabId(kwargs.tab_id);
     const tabId = tab.id!;
-    const fromRef = typeof kwargs.from_ref === 'string' && kwargs.from_ref.trim() ? kwargs.from_ref.trim() : null;
+    const fromRef =
+      typeof kwargs.from_ref === 'string' && kwargs.from_ref.trim() ? kwargs.from_ref.trim() : null;
     const fromSel =
-      typeof kwargs.from_selector === 'string' && kwargs.from_selector.trim() ? kwargs.from_selector.trim() : null;
-    const toRef = typeof kwargs.to_ref === 'string' && kwargs.to_ref.trim() ? kwargs.to_ref.trim() : null;
+      typeof kwargs.from_selector === 'string' && kwargs.from_selector.trim()
+        ? kwargs.from_selector.trim()
+        : null;
+    const toRef =
+      typeof kwargs.to_ref === 'string' && kwargs.to_ref.trim() ? kwargs.to_ref.trim() : null;
     const toSel =
-      typeof kwargs.to_selector === 'string' && kwargs.to_selector.trim() ? kwargs.to_selector.trim() : null;
+      typeof kwargs.to_selector === 'string' && kwargs.to_selector.trim()
+        ? kwargs.to_selector.trim()
+        : null;
     const fromSelector = locatorToSelector(fromRef, fromSel);
     const toSelector = locatorToSelector(toRef, toSel);
     if (!fromSelector) throw new Error('need from_ref or from_selector');
     if (!toSelector) throw new Error('need to_ref or to_selector');
     // A frame-scoped ref targets that iframe; both endpoints must live in one frame.
     const frameId = fromRef ? parseFrameRef(fromRef).frameId : 0;
-    const target: chrome.scripting.InjectionTarget = frameId ? { tabId, frameIds: [frameId] } : { tabId };
+    const target: chrome.scripting.InjectionTarget = frameId
+      ? { tabId, frameIds: [frameId] }
+      : { tabId };
 
     const res = await chrome.scripting.executeScript({
       target,

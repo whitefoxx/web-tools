@@ -37,7 +37,10 @@ export class TimeoutError extends CliError {
 }
 
 function looksLikeDomain(value) {
-  return /^[^\s]+\.[^\s]+$/.test(value) || (!value.includes(' ') && value.length < 30 && !value.includes('.'));
+  return (
+    /^[^\s]+\.[^\s]+$/.test(value) ||
+    (!value.includes(' ') && value.length < 30 && !value.includes('.'))
+  );
 }
 
 export class AuthRequiredError extends CliError {
@@ -50,7 +53,9 @@ export class AuthRequiredError extends CliError {
     let help;
     if (
       maybeHelp !== undefined ||
-      (helpOrMessage !== undefined && domainOrMessage !== undefined && looksLikeDomain(domainOrMessage))
+      (helpOrMessage !== undefined &&
+        domainOrMessage !== undefined &&
+        looksLikeDomain(domainOrMessage))
     ) {
       domain = domainOrMessage;
       message = helpOrMessage ?? `Authentication required for ${domain}`;
@@ -144,7 +149,12 @@ export class NeedsAttachmentsError extends CliError {
   constructor(opts = {}) {
     const min = opts.minImages ?? 1;
     const max = opts.maxImages ?? 9;
-    super('NEEDS_ATTACHMENTS', opts.message ?? `Needs ${min}-${max} image attachments`, opts.help, 11);
+    super(
+      'NEEDS_ATTACHMENTS',
+      opts.message ?? `Needs ${min}-${max} image attachments`,
+      opts.help,
+      11,
+    );
     this.name = 'NeedsAttachmentsError';
     this.minImages = min;
     this.maxImages = max;

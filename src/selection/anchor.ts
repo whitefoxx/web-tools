@@ -79,7 +79,13 @@ export function segmentsFromSpan(
 
 /** How well `text` around [start,end) agrees with the stored context. Counts
  * matching chars walking outward (prefix backwards, suffix forwards). */
-function contextScore(text: string, start: number, end: number, prefix: string, suffix: string): number {
+function contextScore(
+  text: string,
+  start: number,
+  end: number,
+  prefix: string,
+  suffix: string,
+): number {
   let score = 0;
   for (let i = 0; i < prefix.length; i++) {
     const c = text[start - 1 - i];
@@ -135,7 +141,10 @@ export function findQuote(
   near?: number,
 ): { start: number; end: number } | null {
   if (!exact) return null;
-  let candidates = findAllRaw(idx.text, exact).map((start) => ({ start, end: start + exact.length }));
+  let candidates = findAllRaw(idx.text, exact).map((start) => ({
+    start,
+    end: start + exact.length,
+  }));
   if (candidates.length === 0) {
     // Whitespace-insensitive fallback: page re-rendered with different spacing.
     const hay = collapseWs(idx.text);

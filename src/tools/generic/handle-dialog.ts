@@ -49,7 +49,11 @@ export function installDialogHandler(
       window.prompt = existing.prompt;
       delete w[KEY];
     }
-    return { armed: false, handled: existing ? existing.log.length : 0, dialogs: existing?.log ?? [] };
+    return {
+      armed: false,
+      handled: existing ? existing.log.length : 0,
+      dialogs: existing?.log ?? [],
+    };
   }
 
   const state: Saved = existing ?? {

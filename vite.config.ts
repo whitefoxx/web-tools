@@ -38,7 +38,12 @@ const relayScriptPlugin = (outDir: string, entry: string): Plugin =>
   contentScriptPlugin('web-relay-script', outDir, entry, 'web-relay.js');
 
 const pageToolsPlugin = (outDir: string): Plugin =>
-  contentScriptPlugin('localmd-page-tools', outDir, 'src/localmd-connect/page-tools.ts', 'page-tools.js');
+  contentScriptPlugin(
+    'localmd-page-tools',
+    outDir,
+    'src/localmd-connect/page-tools.ts',
+    'page-tools.js',
+  );
 
 const WEBCLI_DEV_KEY =
   'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvN+ExPtR3C9n3oqRZKGffHQW9++ycNhUnSxhU05VLOCXgbCkbl9Nrvq1fsCK4agN9ykkSDJGh6TyFi0PEfJcYrA+g4aRcaXwO3RrJqlva+4m1bIJiL2BPAIl2WqjtZ7wmQY9oF0F7Wk1ExOrSDzd/WzjWBzgRbVT55jALR8cYl+0XA9pwoI/ElO3ElRipUxnlLcRyCifYzWP9qh1Bao3ys7fKfOqnKIYBNAUhqTdf++/fcbNzvpUN2OE+fpah7OKGw+q5ljyI2+YGcyah68N1u96sPsi2ZkZNbJSUTZJe/sxpc25pdZvRp9mcmmM2M+Xxnf7pC+t9UNYJbgoA00bHQIDAQAB';
@@ -56,7 +61,9 @@ export default defineConfig(({ mode }) => {
   const localmdDev = mode === 'localmd-dev';
   const localmd = mode === 'localmd' || localmdDev;
   if (!webcli && !localmd) {
-    throw new Error(`web-tools builds only the lean shells; use --mode webcli|webcli-dev|localmd|localmd-dev (got "${mode}")`);
+    throw new Error(
+      `web-tools builds only the lean shells; use --mode webcli|webcli-dev|localmd|localmd-dev (got "${mode}")`,
+    );
   }
   const manifest = localmdDev
     ? {
@@ -68,7 +75,11 @@ export default defineConfig(({ mode }) => {
     : localmd
       ? localmdManifest
       : webcliDev
-        ? { ...webcliManifest, name: webcliManifest.name.replace(/^WebCLI/, 'WebCLI (dev)'), key: WEBCLI_DEV_KEY }
+        ? {
+            ...webcliManifest,
+            name: webcliManifest.name.replace(/^WebCLI/, 'WebCLI (dev)'),
+            key: WEBCLI_DEV_KEY,
+          }
         : webcliManifest;
   const outDir = localmdDev
     ? 'dist-localmd-dev'

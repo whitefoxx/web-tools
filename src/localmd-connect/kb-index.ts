@@ -93,7 +93,12 @@ export async function listKbEntries(): Promise<KbRow[]> {
       if (!key.startsWith(PREFIX)) continue;
       const v = value as KbEntry | undefined;
       if (!v || typeof v.path !== 'string') continue;
-      rows.push({ url: key.slice(PREFIX.length), path: v.path, at: v.at, ...(v.title ? { title: v.title } : {}) });
+      rows.push({
+        url: key.slice(PREFIX.length),
+        path: v.path,
+        at: v.at,
+        ...(v.title ? { title: v.title } : {}),
+      });
     }
     return rows.sort((a, b) => (b.at ?? 0) - (a.at ?? 0));
   } catch {

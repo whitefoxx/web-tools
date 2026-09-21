@@ -90,7 +90,10 @@ export function createBridge(cfg: CreateBridgeConfig): Bridge {
         if (!cfg.getAllowWrites()) return { ok: false, error: cfg.writeDisabledMsg };
         const site = tool.slice(0, tool.indexOf('__'));
         if (cfg.getDenySites().includes(site)) {
-          return { ok: false, error: `external writes to ${site} are blocked (manage this under "External control")` };
+          return {
+            ok: false,
+            error: `external writes to ${site} are blocked (manage this under "External control")`,
+          };
         }
       }
       try {

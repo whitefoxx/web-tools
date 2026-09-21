@@ -58,10 +58,14 @@ export function parseFields(raw: unknown): FormField[] {
     const selector =
       typeof f.selector === 'string' && f.selector.trim() ? f.selector.trim() : undefined;
     if (!ref && !selector) {
-      throw new Error(`fields[${i}] needs either "ref" (from get_interactives) or "selector" (CSS)`);
+      throw new Error(
+        `fields[${i}] needs either "ref" (from get_interactives) or "selector" (CSS)`,
+      );
     }
     if (f.value === undefined || f.value === null) {
-      throw new Error(`fields[${i}] needs a "value" (use "" to clear, "true"/"false" for a checkbox)`);
+      throw new Error(
+        `fields[${i}] needs a "value" (use "" to clear, "true"/"false" for a checkbox)`,
+      );
     }
     return {
       ...(ref ? { ref } : {}),
@@ -141,7 +145,8 @@ cli({
       });
       const r = injected[0]?.result;
       if (!r) {
-        for (const s of specs) results.push({ field: s.label, ok: false, error: 'executeScript returned no result' });
+        for (const s of specs)
+          results.push({ field: s.label, ok: false, error: 'executeScript returned no result' });
         continue;
       }
       results.push(...r);
@@ -204,7 +209,10 @@ function fillFormInPage(
    * writes; assigning `el.value` directly is swallowed. Go through the prototype
    * setter — same trick type_into uses, and the reason a naive fill "works" in
    * the DOM but the app never sees it. */
-  function setNativeValue(el: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement, v: string): void {
+  function setNativeValue(
+    el: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
+    v: string,
+  ): void {
     const proto =
       el.tagName === 'TEXTAREA'
         ? HTMLTextAreaElement.prototype

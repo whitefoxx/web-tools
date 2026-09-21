@@ -59,9 +59,23 @@ cli({
       type: 'int',
       help: 'Target tab (required outside an explore session, where it defaults to the explore tab)',
     },
-    { name: 'max_nodes', type: 'int', default: 500, help: 'Max nodes to output (default 500, cap 3000)' },
-    { name: 'include_ignored', type: 'bool', help: 'Whether to include ignored nodes; default false' },
-    { name: 'max_chars', type: 'int', default: 20000, help: 'Max characters to output (default 20000)' },
+    {
+      name: 'max_nodes',
+      type: 'int',
+      default: 500,
+      help: 'Max nodes to output (default 500, cap 3000)',
+    },
+    {
+      name: 'include_ignored',
+      type: 'bool',
+      help: 'Whether to include ignored nodes; default false',
+    },
+    {
+      name: 'max_chars',
+      type: 'int',
+      default: 20000,
+      help: 'Max characters to output (default 20000)',
+    },
   ],
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
     const session = getActiveExploreSession();
@@ -87,11 +101,14 @@ cli({
       resp = (await shim.cdp('Accessibility.getFullAXTree', {})) as { nodes?: AXNode[] };
     } catch (e) {
       await shim.detach().catch(() => {});
-      return { error: `accessibility tree unavailable: ${e instanceof Error ? e.message : String(e)}` };
+      return {
+        error: `accessibility tree unavailable: ${e instanceof Error ? e.message : String(e)}`,
+      };
     }
     await shim.detach().catch(() => {});
     const nodes = resp.nodes ?? [];
-    if (nodes.length === 0) return { error: 'accessibility tree is empty (the page may not have finished loading)' };
+    if (nodes.length === 0)
+      return { error: 'accessibility tree is empty (the page may not have finished loading)' };
 
     const byId = new Map<string, AXNode>();
     const isChild = new Set<string>();

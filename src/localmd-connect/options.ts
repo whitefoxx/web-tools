@@ -962,7 +962,8 @@ function renderScripts(scripts: SiteScript[]): void {
     code.className = 'script-code';
     code.hidden = true;
     code.append(codeBlock('Matches', s.matches.join('\n')));
-    if (s.hideSelectors?.length) code.append(codeBlock('Hidden selectors', s.hideSelectors.join('\n')));
+    if (s.hideSelectors?.length)
+      code.append(codeBlock('Hidden selectors', s.hideSelectors.join('\n')));
     if (s.css) code.append(codeBlock('CSS', s.css));
     if (s.js) code.append(codeBlock(s.llmAccess ? 'JS · can call the LLM' : 'JS', s.js));
 

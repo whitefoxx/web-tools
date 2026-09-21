@@ -56,7 +56,10 @@ cli({
       args: [text, limit],
     });
     const out = res[0]?.result;
-    if (!out) return { error: 'query failed (page is loading/refreshing, or scripts cannot be injected into it)' };
+    if (!out)
+      return {
+        error: 'query failed (page is loading/refreshing, or scripts cannot be injected into it)',
+      };
     return { text, ...out };
   },
 });

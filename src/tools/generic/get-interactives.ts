@@ -164,8 +164,7 @@ cli({
       name: 'tab_id',
       type: 'int',
       required: true,
-      help:
-        'Target tab id — from open_url, or from get_page_text {url, keep_open:true}',
+      help: 'Target tab id — from open_url, or from get_page_text {url, keep_open:true}',
     },
     {
       name: 'max_per_category',
@@ -180,7 +179,7 @@ cli({
     {
       name: 'highlight',
       type: 'bool',
-      help: 'Mark the detected interactive elements on the page with colored numbered boxes (Set-of-Mark — the number in the box is that element\'s ref). A watching user can see what you are looking at; a later screenshot call then gives an annotated screenshot (usable by a vision model). **On by default**; pass false explicitly to turn off. The boxes are pointer-events:none so they do not block operations, and clear automatically on page scroll / next scan / after 60 seconds',
+      help: "Mark the detected interactive elements on the page with colored numbered boxes (Set-of-Mark — the number in the box is that element's ref). A watching user can see what you are looking at; a later screenshot call then gives an annotated screenshot (usable by a vision model). **On by default**; pass false explicitly to turn off. The boxes are pointer-events:none so they do not block operations, and clear automatically on page scroll / next scan / after 60 seconds",
     },
     {
       name: 'format',
@@ -934,7 +933,10 @@ function collectInteractives(
       kids(el).forEach((c) => walk(c, depth, covered));
     };
     if (document.body) walk(document.body, 0, false);
-    if (dropped) lines.push(`… +${dropped} rows truncated (pass only_in_viewport:true or scroll and scan in batches)`);
+    if (dropped)
+      lines.push(
+        `… +${dropped} rows truncated (pass only_in_viewport:true or scroll and scan in batches)`,
+      );
     tree = lines.join('\n');
   }
 

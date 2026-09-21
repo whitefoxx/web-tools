@@ -30,20 +30,20 @@ schedules, secrets vault, page↔LLM bridge.
 
 ## 2. One core, three shells
 
-| axis               | Full ("Web Agent")                 | WebCLI                                | localmd Connect                                   |
-| ------------------ | ---------------------------------- | ------------------------------------- | ------------------------------------------------- |
-| vite mode          | (default)                          | `webcli` / `webcli-dev`               | `localmd` / `localmd-dev`                         |
-| manifest           | `manifest.json`                    | `manifest.webcli.json`                | `manifest.localmd.json`                           |
-| outDir             | `dist/`                            | `dist-webcli/` (+`-dev`)              | `dist-localmd/` (+`-dev`, §12)                    |
-| SW entry           | `background/service-worker.ts`     | `background/webcli-service-worker.ts` | `background/localmd-connect-service-worker.ts`    |
-| tool registration  | `tools/generic/_all.ts`            | `tools/generic/_generic.ts` (28)      | `tools/generic/_localmd.ts` (51)                  |
-| executor           | `tools/dispatcher.ts`              | `core/execute-generic.ts`             | `localmd-connect/execute-adapter.ts`              |
-| WS port / client   | 8787 / `web-agent`                 | 9376, dev 9377 / `webcli(-dev)`       | **dev build only** — 9378 / `localmd-connect-dev` |
-| web-page transport | `onConnectExternal` (legacy)       | none since 0.3.0 (0.2.0: relay)       | relay, marker **`data-localmd-connect`**          |
-| origin allowlist   | manifest-derived                   | none (removed 0.3.0)                  | **compiled in**, not editable (see §8)            |
+| axis               | Full ("Web Agent")                               | WebCLI                                | localmd Connect                                   |
+| ------------------ | ------------------------------------------------ | ------------------------------------- | ------------------------------------------------- |
+| vite mode          | (default)                                        | `webcli` / `webcli-dev`               | `localmd` / `localmd-dev`                         |
+| manifest           | `manifest.json`                                  | `manifest.webcli.json`                | `manifest.localmd.json`                           |
+| outDir             | `dist/`                                          | `dist-webcli/` (+`-dev`)              | `dist-localmd/` (+`-dev`, §12)                    |
+| SW entry           | `background/service-worker.ts`                   | `background/webcli-service-worker.ts` | `background/localmd-connect-service-worker.ts`    |
+| tool registration  | `tools/generic/_all.ts`                          | `tools/generic/_generic.ts` (28)      | `tools/generic/_localmd.ts` (51)                  |
+| executor           | `tools/dispatcher.ts`                            | `core/execute-generic.ts`             | `localmd-connect/execute-adapter.ts`              |
+| WS port / client   | 8787 / `web-agent`                               | 9376, dev 9377 / `webcli(-dev)`       | **dev build only** — 9378 / `localmd-connect-dev` |
+| web-page transport | `onConnectExternal` (legacy)                     | none since 0.3.0 (0.2.0: relay)       | relay, marker **`data-localmd-connect`**          |
+| origin allowlist   | manifest-derived                                 | none (removed 0.3.0)                  | **compiled in**, not editable (see §8)            |
 | extension id       | `gcbgpkldpnmenoejbnbkdcagjhgbemeb` (unpublished) | store `jnhfdh…`, dev `hjdccc…`        | store `bgennb…`, dev `enodec…`                    |
-| tab-group title    | `Web Agent`                        | `WebCLI`                              | `localmd Connect`                                 |
-| build-time plugins | `sandboxPagePlugin`                | none                                  | **both** (adapters need sandbox/offscreen/runner) |
+| tab-group title    | `Web Agent`                                      | `WebCLI`                              | `localmd Connect`                                 |
+| build-time plugins | `sandboxPagePlugin`                              | none                                  | **both** (adapters need sandbox/offscreen/runner) |
 
 Build: `npm run build:localmd` (also part of `build:all`). The localmd mode is
 the first to compose BOTH writeBundle plugins — they write disjoint files, and
@@ -73,19 +73,19 @@ browser-data tools of §14.4 (the later §14.4 phases added the rest; §14.4n
 keeps the running count), and since 2026-09-06 the page-context primitive of
 §15:
 
-| tool                      | access | why here                                                                                                          |
-| ------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------- |
-| `find_in_dom`             | read   | value→selector reverse lookup — the selector-discovery step of site-script authoring; works with explicit tab_id  |
+| tool                      | access | why here                                                                                                                                                                                 |
+| ------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `find_in_dom`             | read   | value→selector reverse lookup — the selector-discovery step of site-script authoring; works with explicit tab_id                                                                         |
 | `eval_js`                 | read   | tab-addressed page-context JavaScript (MAIN world over CDP, async, JSON back) — what an adapter's `page.evaluate` did, run by the agent itself; static write guard + `allow_write` (§15) |
-| `find_adapters`           | read   | marketplace search (CN↔EN aliases) — RE-REGISTERED (`find-adapters-localmd.ts`) with run_adapter-oriented wording |
-| `run_adapter`             | write  | the adapter meta-tool: load-if-needed (sha256) + execute in one call (see §5)                                     |
-| `create_site_script`      | write  | persistent hide/css/**js** rule — full surface, confirm delegated to localmd (see §7)                             |
-| `list_site_scripts`       | read   | inventory + the "Allow user scripts" runnable flag                                                                |
-| `set_site_script_enabled` | write  | pause/resume without deleting                                                                                     |
-| `delete_site_script`      | write  | remove entirely                                                                                                   |
-| `preview_site_script`     | read   | transient CSS preview (match counts, highlight mode) + one-shot `dry_run_js` in the real USER_SCRIPT world        |
+| `find_adapters`           | read   | marketplace search (CN↔EN aliases) — RE-REGISTERED (`find-adapters-localmd.ts`) with run_adapter-oriented wording                                                                        |
+| `run_adapter`             | write  | the adapter meta-tool: load-if-needed (sha256) + execute in one call (see §5)                                                                                                            |
+| `create_site_script`      | write  | persistent hide/css/**js** rule — full surface, confirm delegated to localmd (see §7)                                                                                                    |
+| `list_site_scripts`       | read   | inventory + the "Allow user scripts" runnable flag                                                                                                                                       |
+| `set_site_script_enabled` | write  | pause/resume without deleting                                                                                                                                                            |
+| `delete_site_script`      | write  | remove entirely                                                                                                                                                                          |
+| `preview_site_script`     | read   | transient CSS preview (match counts, highlight mode) + one-shot `dry_run_js` in the real USER_SCRIPT world                                                                               |
 
-Deliberately NOT registered: `load_adapter` (replaced by run*adapter — see §5),
+Deliberately NOT registered: `load_adapter` (replaced by run\*adapter — see §5),
 `read_more` (pages the agent-history oversize stash, which only the full
 shell's engine writes), the rest of the explore suite (session-bound recording,
 synthesis — `eval_js` alone crossed over on 2026-09-06 as a tab-addressed
@@ -136,13 +136,13 @@ recording, the cockpit mask, the run-tab janitor, adapter health recording,
 adapter hints, per-tab key locks. Consequences worth knowing:
 
 - **Pool tabs are reaped on an idle sweep, not at a run end** (`createPoolReaper`
-  + `createIdleSweep`, wired into the SW's `onCallStart`/`onCallEnd`): ten quiet
-  seconds after the last call, free pool-opened tabs close, and the agent window
-  goes with them when nothing but its placeholder is left. v1 shipped with **no
-  reaper at all**, and the note that stood here claimed the external agent would
-  close them — it cannot: a pool tab's id never leaves the executor. See §10.48.
-  The tabs the caller DOES hold (`open_url`, `get_page_text {keep_open}`) remain
-  its own to close — same contract as WebCLI (docs/webcli.md §10).
+  - `createIdleSweep`, wired into the SW's `onCallStart`/`onCallEnd`): ten quiet
+    seconds after the last call, free pool-opened tabs close, and the agent window
+    goes with them when nothing but its placeholder is left. v1 shipped with **no
+    reaper at all**, and the note that stood here claimed the external agent would
+    close them — it cannot: a pool tab's id never leaves the executor. See §10.48.
+    The tabs the caller DOES hold (`open_url`, `get_page_text {keep_open}`) remain
+    its own to close — same contract as WebCLI (docs/webcli.md §10).
 - **Double pacing**: a `run_adapter` call paces once on the `generic` bucket
   (the meta-tool itself) and once on the leased tab's bucket (the inner
   adapter) — ~3–5s overhead per call, accepted for v1.
@@ -373,7 +373,7 @@ Two other things this cost, worth keeping:
   not inject a content script into — so it is no evidence either way when a
   content script is the thing that is missing.
 - **`syncRelayScripts` logs only when something CHANGED** (`relay scripts synced
-  (+N −M)`). A boot where everything is already registered looks identical in the
+(+N −M)`). A boot where everything is already registered looks identical in the
   console to a boot where the function never ran, so the absence of that line is
   not evidence — read `getRegisteredContentScripts()` instead. (An unconditional
   log line would be an improvement; it is not made here, because the bug it would
@@ -856,6 +856,7 @@ A second round, from using it:
   carries `padding-inline: 4px` with a matching negative margin, which is the
   width of the ring (`outline: 2px` at `outline-offset: 2px`) and moves
   nothing.
+
 - **The adapter catalogue shows all of it**, grouped by site, with a real
   loading state — it is fetched over the network on first open, and a blank list
   reads as "no adapter covers any site", the opposite of the answer this section
@@ -1160,8 +1161,8 @@ is BOUND the request.
 #### What the first day of real use found (2026-09-05)
 
 Pressing Translate right after an extension reload, without touching the
-localmd tab first, failed every time with *"localmd opened but did not connect
-in time"* — against a tab that was open and whose relay was, when measured,
+localmd tab first, failed every time with _"localmd opened but did not connect
+in time"_ — against a tab that was open and whose relay was, when measured,
 answering pings. The transport heals itself after a reload (the service worker
 re-injects the relay into open tabs); the APP does not notice, because a client
 is what starts an MCP conversation and the only thing that re-probed a failed
@@ -1473,14 +1474,14 @@ contract doc):
    answer under the quote so the conversation starts where they already are.
    Ignoring them is a correct older implementation, not a bug.
 10. **Reconnect on the relay's `ready:true` frame** (landed 2026-09-05, F-65).
-   The extension's service worker re-injects the relay into open tabs after it
-   is reloaded or updated, so the TRANSPORT comes back on its own — but only a
-   client can start an MCP conversation, and a background tab never gets the
-   focus event that used to be the only thing re-probing a failed row. Listen
-   for the frame (`isRelayReadyFrame`) and reconnect rows whose status is
-   `error`; `connecting` is a handshake already in flight and must be left
-   alone. Without this, everything the extension wants to ASK — today the
-   in-page quick actions — fails against a tab that is open and healthy.
+    The extension's service worker re-injects the relay into open tabs after it
+    is reloaded or updated, so the TRANSPORT comes back on its own — but only a
+    client can start an MCP conversation, and a background tab never gets the
+    focus event that used to be the only thing re-probing a failed row. Listen
+    for the frame (`isRelayReadyFrame`) and reconnect rows whose status is
+    `error`; `connecting` is a handshake already in flight and must be left
+    alone. Without this, everything the extension wants to ASK — today the
+    in-page quick actions — fails against a tab that is open and healthy.
 
 ### 14.6 How the extractor is verified — a real-page corpus
 
@@ -1634,9 +1635,9 @@ not the shapes you think to write down.
 ### 15.1 Why — the doctrine already says it
 
 localmd's `AGENTS.md` states the principle this shell was built against and
-then quietly violated: *tool code provides capability, never a particular
-tool*; individual tools are **data** the user or the agent creates on top of
-the machinery, and *a curated list is a promise that rots*. A catalogue of 294
+then quietly violated: _tool code provides capability, never a particular
+tool_; individual tools are **data** the user or the agent creates on top of
+the machinery, and _a curated list is a promise that rots_. A catalogue of 294
 hand-maintained site adapters, each pinned by a sha256 that must be rotated on
 every edit and re-verified on a real browser (`docs/tests/adapters.md`: 175
 passed / 22 to re-check / 35 never run at the time of writing), is exactly that
@@ -1655,17 +1656,17 @@ in the first place (loads are ephemeral, per session).
 A survey of every source file in `marketplace/` (regex counts; a file can hit
 several rows):
 
-| technique                                                   | files |
-| ----------------------------------------------------------- | ----: |
-| `fetch(api, {credentials:'include'})` from inside the page  |   143 |
-| tab-less `fetch` pipeline step (public API)                 |    37 |
-| request header derived from page state (csrf / bearer)      |   ~65 |
-| `querySelector` DOM scraping                                |   111 |
-| framework state globals (`ytInitial*`, `__NEXT_DATA__`, …)  |    18 |
-| `performance.getEntries` network sniffing                   |    18 |
-| `AuthRequiredError` / hand-written login-wall text checks   | 138 / 105 |
-| a per-site `shared.js` inlined (id parsing, URL building)   |   136 |
-| `type: pipeline` / `type: func`                             | 77 / 217 |
+| technique                                                  |     files |
+| ---------------------------------------------------------- | --------: |
+| `fetch(api, {credentials:'include'})` from inside the page |       143 |
+| tab-less `fetch` pipeline step (public API)                |        37 |
+| request header derived from page state (csrf / bearer)     |       ~65 |
+| `querySelector` DOM scraping                               |       111 |
+| framework state globals (`ytInitial*`, `__NEXT_DATA__`, …) |        18 |
+| `performance.getEntries` network sniffing                  |        18 |
+| `AuthRequiredError` / hand-written login-wall text checks  | 138 / 105 |
+| a per-site `shared.js` inlined (id parsing, URL building)  |       136 |
+| `type: pipeline` / `type: func`                            |  77 / 217 |
 
 Three conclusions. **Most of the catalogue is "call the site's own JSON API
 with the user's cookies"** — no site-specific code is needed for that beyond
@@ -1691,24 +1692,24 @@ came from the user mid-round: well-known international sites first; of the
 Chinese ones Bilibili and Zhihu matter, WeRead (needs a key) and Xiaohongshu do
 not; YouTube matters most.
 
-| candidate                              | route that worked (or the blocker)                                                                                                    | verdict |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| Hacker News top / item / search        | `fetch_url` on the public Firebase + Algolia APIs                                                                                     | ✅ |
-| Reddit thread / search                 | `fetch_url` on the `.json` views, with cookies                                                                                        | ✅ |
-| Zhihu hot / search / answer / question | `fetch_url` on `api/v4` with cookies — no `x-zse-96` needed from the SW                                                               | ✅ |
-| Zhihu column article                   | `api/v4/articles` answers 403; the column page as `format:"markdown"` gives the full body (4.7 K chars)                              | ✅ |
-| Bilibili video / search / comments / subtitles | `fetch_url` with cookies; `x/player/wbi/v2` returned 12 subtitle tracks and the JSON body **unsigned**                         | ✅ |
-| Bilibili user videos (`space/wbi`)     | −403 without a `w_rid` signature → needs md5 in JS                                                                                    | ❌ |
-| ChatGPT history / read                 | `api/auth/session` → bearer → `backend-api` — works, but the token passes through the model's context                                | ✅ (with a caveat) |
-| Claude.ai history / read               | cookie-only `api/organizations/…/chat_conversations`                                                                                  | ✅ |
-| Gemini recents / read                  | DOM: `list_links` for the recents, `query_dom` on `user-query, model-response` (12 turns); `get_page_text` alone sees almost nothing | ✅ |
-| X single tweet                         | `cdn.syndication.twimg.com/tweet-result`, no cookies                                                                                  | ✅ |
-| X thread / bookmarks                   | page-origin synchronous XHR to GraphQL (`ct0` from `document.cookie` + the public bearer + queryIds from the twitter-openapi placeholder file): 30 tweets / 7 bookmarks | ✅ with a hint |
-| X bookmarks via DOM                    | readable, but a virtual list — needs a dedup-across-scrolls loop the agent cannot run in one call                                     | ⚠️ |
-| YouTube transcript                     | every route failed — see 15.4; the real adapter, run as a control on the same video, returned 137 rows in 56 s                        | ❌ |
-| WeRead                                 | not signed in on this browser; needs the key-based (`weread-official`) path                                                          | 🔒 out of scope |
-| Xiaohongshu note                       | `edith…/user/me` 406 (needs `x-s`); the note page is readable through a signed link from `list_links` + `get_page_text`              | ⚠️ deprioritised |
-| LinkedIn                               | not signed in on this browser                                                                                                          | 🔒 |
+| candidate                                      | route that worked (or the blocker)                                                                                                                                      | verdict            |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| Hacker News top / item / search                | `fetch_url` on the public Firebase + Algolia APIs                                                                                                                       | ✅                 |
+| Reddit thread / search                         | `fetch_url` on the `.json` views, with cookies                                                                                                                          | ✅                 |
+| Zhihu hot / search / answer / question         | `fetch_url` on `api/v4` with cookies — no `x-zse-96` needed from the SW                                                                                                 | ✅                 |
+| Zhihu column article                           | `api/v4/articles` answers 403; the column page as `format:"markdown"` gives the full body (4.7 K chars)                                                                 | ✅                 |
+| Bilibili video / search / comments / subtitles | `fetch_url` with cookies; `x/player/wbi/v2` returned 12 subtitle tracks and the JSON body **unsigned**                                                                  | ✅                 |
+| Bilibili user videos (`space/wbi`)             | −403 without a `w_rid` signature → needs md5 in JS                                                                                                                      | ❌                 |
+| ChatGPT history / read                         | `api/auth/session` → bearer → `backend-api` — works, but the token passes through the model's context                                                                   | ✅ (with a caveat) |
+| Claude.ai history / read                       | cookie-only `api/organizations/…/chat_conversations`                                                                                                                    | ✅                 |
+| Gemini recents / read                          | DOM: `list_links` for the recents, `query_dom` on `user-query, model-response` (12 turns); `get_page_text` alone sees almost nothing                                    | ✅                 |
+| X single tweet                                 | `cdn.syndication.twimg.com/tweet-result`, no cookies                                                                                                                    | ✅                 |
+| X thread / bookmarks                           | page-origin synchronous XHR to GraphQL (`ct0` from `document.cookie` + the public bearer + queryIds from the twitter-openapi placeholder file): 30 tweets / 7 bookmarks | ✅ with a hint     |
+| X bookmarks via DOM                            | readable, but a virtual list — needs a dedup-across-scrolls loop the agent cannot run in one call                                                                       | ⚠️                 |
+| YouTube transcript                             | every route failed — see 15.4; the real adapter, run as a control on the same video, returned 137 rows in 56 s                                                          | ❌                 |
+| WeRead                                         | not signed in on this browser; needs the key-based (`weread-official`) path                                                                                             | 🔒 out of scope    |
+| Xiaohongshu note                               | `edith…/user/me` 406 (needs `x-s`); the note page is readable through a signed link from `list_links` + `get_page_text`                                                 | ⚠️ deprioritised   |
+| LinkedIn                                       | not signed in on this browser                                                                                                                                           | 🔒                 |
 
 The "page-origin synchronous XHR" rows used `preview_site_script dry_run_js` —
 a site-script preview tool pressed into service as the only way this shell
@@ -1759,11 +1760,11 @@ rendered `ytd-transcript-segment-renderer` rows. One `eval_js` call:
 
 Measured (each a single `open_url` + one `eval_js`, ~13 s):
 
-| video                                   | rows | chars | span         |
-| --------------------------------------- | ---: | ----: | ------------ |
-| `kCc8FmEb1nY` "Let's build GPT"         | 1106 | 107 K | 0:00→1:56:15 |
-| `zjkBMFhNj_g` "[1hr] Intro to LLMs"     |  581 |  64 K | 0:00→59:45   |
-| `5MgBikgcWnY` (a talk, 27 caption langs)|  422 |  14 K | 0:09→19:25   |
+| video                                    | rows | chars | span         |
+| ---------------------------------------- | ---: | ----: | ------------ |
+| `kCc8FmEb1nY` "Let's build GPT"          | 1106 | 107 K | 0:00→1:56:15 |
+| `zjkBMFhNj_g` "[1hr] Intro to LLMs"      |  581 |  64 K | 0:00→59:45   |
+| `5MgBikgcWnY` (a talk, 27 caption langs) |  422 |  14 K | 0:09→19:25   |
 
 So the generic-primitive path is not just possible, it is **more robust than the
 adapter it replaces** — it depends on the UI a billion people use, not on an
@@ -1819,7 +1820,7 @@ know what a skill is. That fits localmd better than a new spec kind would:
   the part of an adapter that is **knowledge**: which endpoint, which header
   comes from which cookie, that the article API 403s but the page does not,
   that YouTube's pot-free path 400s.
-- A skill is *instructions*, though, and instructions cost model turns on
+- A skill is _instructions_, though, and instructions cost model turns on
   every run. So the executable core stays deterministic and one call:
   - pure-HTTP cases → a saved HTTP tool bundle (`manage_tools save_bundle`,
     `transport: extension`), which localmd runs without the model doing the
@@ -1885,7 +1886,7 @@ change shape or disappear, and nothing they rely on is persisted by them.
 permission is exactly the kind of thing a Web Store reviewer rejects a new item
 over.
 
-**Root cause.** P5-B removed the tool *registrations* and the SW code paths, but
+**Root cause.** P5-B removed the tool _registrations_ and the SW code paths, but
 `vite.config.ts` composed `sandboxPagePlugin(outDir)` into the localmd build
 unconditionally, and the manifest's permission/WAR list predated the retirement.
 The plugin is the adapter-eval emitter: nothing in this shell opens an offscreen

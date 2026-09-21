@@ -243,13 +243,13 @@ function clickInPage(
   // navigation ("Show transcript", "Next", "Expand") does not match, so reading
   // stays friction-free.
   if (!allowWrite) {
-    const host = (el.closest('button, [role="button"], input[type="submit"], input[type="button"], a[href]') ||
-      el) as HTMLElement;
+    const host = (el.closest(
+      'button, [role="button"], input[type="submit"], input[type="button"], a[href]',
+    ) || el) as HTMLElement;
     const attr = (name: string): string => host.getAttribute?.(name) ?? '';
     const typeAttr = attr('type').toLowerCase();
     const isSubmit =
-      typeAttr === 'submit' ||
-      (host.tagName === 'BUTTON' && !typeAttr && !!host.closest('form'));
+      typeAttr === 'submit' || (host.tagName === 'BUTTON' && !typeAttr && !!host.closest('form'));
     const label = [
       host.textContent ?? '',
       attr('aria-label'),
@@ -265,7 +265,11 @@ function clickInPage(
       /\b(post|tweet|reply|repost|retweet|send|publish|submit|delete|remove|discard|follow|unfollow|subscribe|unsubscribe|upvote|downvote|comment|buy|purchase|checkout|pay|order|book|save|create|upload)\b|tweetbutton|sendbutton|replybutton|postbutton|likebutton/;
     if (WRITE.test(label) || isSubmit) {
       const shown = (host.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 60);
-      return { found: true, write_blocked: true, control: shown || (isSubmit ? 'form submit' : host.tagName.toLowerCase()) };
+      return {
+        found: true,
+        write_blocked: true,
+        control: shown || (isSubmit ? 'form submit' : host.tagName.toLowerCase()),
+      };
     }
   }
 

@@ -56,7 +56,12 @@ describe('pickInboxBatch', () => {
     const items = [item('huge', 50_000, 1), item('next', 10, 2)];
     const batch = pickInboxBatch(items, 10, 6_000);
     expect(batch).toHaveLength(1);
-    const first = batch[0] as { id: string; oversized?: boolean; bytes?: number; payload?: unknown };
+    const first = batch[0] as {
+      id: string;
+      oversized?: boolean;
+      bytes?: number;
+      payload?: unknown;
+    };
     expect(first.id).toBe('huge');
     expect(first.oversized).toBe(true);
     expect(first.bytes).toBeGreaterThan(50_000);

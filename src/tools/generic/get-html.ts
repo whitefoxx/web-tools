@@ -19,7 +19,7 @@ cli({
   name: 'get_html',
   access: 'read',
   description:
-    'Get the page\'s raw HTML (outerHTML, truncatable; the selector path can pierce open shadow DOM). Use it to inspect DOM structure and decide on scraping selectors (for body text use get_page_text, for a condensed structural outline use get_dom_outline). Targeting: (1) url — open that page, read, then close (to read a URL\'s HTML, use this directly, no need to open_url first); (2) tab_id — read an already-open tab (leave it open); (3) neither given: only valid while an Explore session is running (it uses that session tab).',
+    "Get the page's raw HTML (outerHTML, truncatable; the selector path can pierce open shadow DOM). Use it to inspect DOM structure and decide on scraping selectors (for body text use get_page_text, for a condensed structural outline use get_dom_outline). Targeting: (1) url — open that page, read, then close (to read a URL's HTML, use this directly, no need to open_url first); (2) tab_id — read an already-open tab (leave it open); (3) neither given: only valid while an Explore session is running (it uses that session tab).",
   args: [
     {
       name: 'url',
@@ -29,10 +29,13 @@ cli({
     {
       name: 'tab_id',
       type: 'int',
-      help:
-        'Target tab id — from open_url, or from get_page_text {url, keep_open:true}. Required unless an Explore session is running (only then may it be omitted, defaulting to that session tab)',
+      help: 'Target tab id — from open_url, or from get_page_text {url, keep_open:true}. Required unless an Explore session is running (only then may it be omitted, defaulting to that session tab)',
     },
-    { name: 'selector', type: 'string', help: 'Take only the outerHTML of the first element matching this CSS selector' },
+    {
+      name: 'selector',
+      type: 'string',
+      help: 'Take only the outerHTML of the first element matching this CSS selector',
+    },
     {
       name: 'max_chars',
       type: 'int',

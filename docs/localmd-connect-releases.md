@@ -76,12 +76,14 @@ catches code drift; nothing catches the rest.
 3. **Sweep `store/localmd-connect/`**: `store-listing.md` (tool/adapter counts,
    the feature bullets, the setup steps) and `render.mjs` (the same facts, baked
    into images). Then:
+
    ```bash
    node store/localmd-connect/render.mjs        # svg/ + promo.html, pure Node
    # raster.mjs needs sharp, which is NOT a repo dep, and ESM ignores NODE_PATH:
    ln -sfn ~/code/ai-image/node_modules/sharp node_modules/sharp   # from the REPO ROOT
    node store/localmd-connect/raster.mjs && rm node_modules/sharp  # → images/*.jpg
    ```
+
    **Then look at every regenerated image.** Not ceremony: the first render put
    a chip flush against a brace and left a void under the panel, and WebCLI's
    set once shipped a label overflowing its card. Mono text in a card fits about
@@ -93,6 +95,7 @@ catches code drift; nothing catches the rest.
    (§5). Describe the catalogue by category and let the public repo hold the
    list. One site name inside a runnable API example is fine; a row of them is
    not.
+
 4. **Build.** `npm run build:localmd` (or `npm run build:all`).
 5. **Verify the artifact:**
 
@@ -191,7 +194,7 @@ FZSL). Nothing about the package, the permissions or the remote-code disclosure
 was questioned; the whole finding was one sentence of listing copy.
 
 - **Symptom.** Review quoted `Twitter/X, Zhihu, Reddit, YouTube, Bilibili,
-  Xiaohongshu, Weibo, LinkedIn,` out of the description and called it
+Xiaohongshu, Weibo, LinkedIn,` out of the description and called it
   "excessive and / or irrelevant keywords".
 - **Root cause.** The adapters paragraph sold the catalogue by listing the
   brands in it — fourteen names in one sentence. Truthful (every one of them
@@ -243,8 +246,8 @@ What the store is actually serving:
 
 - `version: 0.2.0`, no `key`, `update_url` present — a real store build.
 - Permissions exactly as intended: `debugger, tabs, tabGroups, scripting,
-  storage, cookies, downloads, userScripts, contextMenus`, with `bookmarks,
-  history, readingList, sessions` optional. **`offscreen` and `alarms` are
+storage, cookies, downloads, userScripts, contextMenus`, with `bookmarks,
+history, readingList, sessions` optional. **`offscreen` and `alarms` are
   absent**, which is the permission reduction this release was for.
 - `sandbox.html`, `offscreen.html`, `offscreen.js` and `userscript-runner.js`
   are all absent from the shipped package; `web-relay.js` and `page-tools.js`
@@ -256,7 +259,6 @@ What the store is actually serving:
   repo, so the cursor icon that shipped is the one that was reviewed here.
 
 Accepted on the first submission, unlike 0.1.0.
-
 
 Supersedes the 0.1.1 plan below, which was never submitted — its tab-lifecycle
 fix ships inside this release. The first release cut from **`web-tools`** rather
@@ -539,10 +541,10 @@ repeat it, because the item id never changes again.
 
 ### When it goes wrong
 
-| symptom | what it is |
-| --- | --- |
-| "key field is not allowed in manifest" | you hand-zipped instead of `npm run pack:localmd` |
-| "version already exists" | that number is burnt; bump again, there is no reuse |
-| Chrome refuses to load `dist-localmd/` unpacked | the store copy holds that id — step 6 |
-| func adapters die, generic tools fine | a missing sandbox/offscreen/runner artifact — step 5 |
-| review stalls for weeks | expected on `userScripts` + `debugger` + `<all_urls>`; a permission delta makes it worse |
+| symptom                                         | what it is                                                                               |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| "key field is not allowed in manifest"          | you hand-zipped instead of `npm run pack:localmd`                                        |
+| "version already exists"                        | that number is burnt; bump again, there is no reuse                                      |
+| Chrome refuses to load `dist-localmd/` unpacked | the store copy holds that id — step 6                                                    |
+| func adapters die, generic tools fine           | a missing sandbox/offscreen/runner artifact — step 5                                     |
+| review stalls for weeks                         | expected on `userScripts` + `debugger` + `<all_urls>`; a permission delta makes it worse |

@@ -8,7 +8,7 @@ cli({
   name: 'type_into',
   access: 'read',
   description:
-    'Type text into an input / textarea / rich-text editor. Prefer ref (from get_interactives, most stable), CSS selector also supported. Replaces the existing content by default; append=true to append. submit=true presses Enter after typing (good for a search box / single-line input; use with care on a multi-line textarea — may just insert a newline). Returns an **action receipt**: `popup_appeared:true` means the input triggered a suggestion / autocomplete list — **don\'t ignore it**, many sites require you to pick an item from the list for it to take effect; the receipt\'s `new_interactives` already carries these new elements\' ref+text, **click one directly** (suggestion lists are often fleeting, prefer these, don\'t re-scan first); `url_changed` means it navigated and all old refs are invalid',
+    "Type text into an input / textarea / rich-text editor. Prefer ref (from get_interactives, most stable), CSS selector also supported. Replaces the existing content by default; append=true to append. submit=true presses Enter after typing (good for a search box / single-line input; use with care on a multi-line textarea — may just insert a newline). Returns an **action receipt**: `popup_appeared:true` means the input triggered a suggestion / autocomplete list — **don't ignore it**, many sites require you to pick an item from the list for it to take effect; the receipt's `new_interactives` already carries these new elements' ref+text, **click one directly** (suggestion lists are often fleeting, prefer these, don't re-scan first); `url_changed` means it navigated and all old refs are invalid",
   args: [
     {
       name: 'tab_id',

@@ -98,9 +98,7 @@ export function buildInjectionCode(css: string, js?: string, preamble?: string):
     // Surface js failures in the page console (USER_SCRIPT world logs land in
     // the tab's devtools) instead of dying silently — F-37 made a broken rule
     // indistinguishable from a never-injected one.
-    parts.push(
-      `try{\n${js}\n}catch(_e){try{console.error('[web-site-script]',_e)}catch(_x){}}`,
-    );
+    parts.push(`try{\n${js}\n}catch(_e){try{console.error('[web-site-script]',_e)}catch(_x){}}`);
   }
   parts.push('})();');
   return parts.join('\n');
@@ -208,12 +206,16 @@ export function buildSiteScript(input: SiteScriptInput, id: string, now: number)
     ? input.matches.map((m) => (typeof m === 'string' ? m.trim() : '')).filter(Boolean)
     : [];
   if (!matches.length)
-    throw new Error('matches cannot be empty: give at least one match pattern, e.g. https://*.zhihu.com/*');
+    throw new Error(
+      'matches cannot be empty: give at least one match pattern, e.g. https://*.zhihu.com/*',
+    );
   for (const m of matches) {
     if (!isValidMatchPattern(m))
       throw new Error(`Invalid match pattern: ${m} (should look like https://*.example.com/*)`);
     if (isTooBroadPattern(m)) {
-      throw new Error(`Match pattern too broad: ${m} — a site script must target a specific site; <all_urls> / wildcard hosts are not allowed`);
+      throw new Error(
+        `Match pattern too broad: ${m} — a site script must target a specific site; <all_urls> / wildcard hosts are not allowed`,
+      );
     }
   }
   const hideSelectors = sanitizeSelectors(input.hideSelectors);

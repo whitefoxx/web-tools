@@ -16,7 +16,11 @@ if (__LOCALMD_DEV__) {
     args: [],
     func: async () => {
       setTimeout(() => chrome.runtime.reload(), 300);
-      return { ok: true, reloading: true, note: 'poll /status until the daemon reports connected again' };
+      return {
+        ok: true,
+        reloading: true,
+        note: 'poll /status until the daemon reports connected again',
+      };
     },
   });
 }

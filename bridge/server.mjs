@@ -56,7 +56,13 @@ const http = createServer(async (req, res) => {
   const connected = !!(extWs && extWs.readyState === extWs.OPEN);
   if (req.method === 'GET' && url === '/ping') return json(200, { ok: true });
   if (req.method === 'GET' && url === '/status')
-    return json(200, { ok: true, connected, port: PORT, client: extInfo?.client ?? null, tools: catalog.length });
+    return json(200, {
+      ok: true,
+      connected,
+      port: PORT,
+      client: extInfo?.client ?? null,
+      tools: catalog.length,
+    });
   if (req.method === 'GET' && url === '/tools') return json(200, { ok: true, tools: catalog });
   if (req.method === 'POST' && url === '/command') {
     let body = '';

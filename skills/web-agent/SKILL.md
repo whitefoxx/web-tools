@@ -33,10 +33,12 @@ flips one switch in the extension.
    #   && cd web-tools && pnpm install && BRIDGE_PORT=8787 pnpm run bridge
    ```
 3. **Wait, then verify** (poll — don't just `sleep`):
+
    ```bash
    until curl -s localhost:8787/status >/dev/null 2>&1; do sleep 2; done
    curl -s localhost:8787/status     # {"ok":true,"connected":true,"tools":N}
    ```
+
    - `connected:false` → the extension isn't enabled on this port (step 1).
    - `curl` exit code **7** = nothing listening yet → still starting; keep polling.
 

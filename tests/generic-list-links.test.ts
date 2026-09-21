@@ -122,6 +122,9 @@ describe('extractLinks — limit + shadow DOM', () => {
     const shadow = host.attachShadow({ mode: 'open' });
     shadow.innerHTML = '<a href="https://shadow.com/1">shadow</a>';
     const r = extractLinks(null, false, null, 200);
-    expect(r.links.map((l) => l.url).sort()).toEqual(['https://light.com/1', 'https://shadow.com/1']);
+    expect(r.links.map((l) => l.url).sort()).toEqual([
+      'https://light.com/1',
+      'https://shadow.com/1',
+    ]);
   });
 });

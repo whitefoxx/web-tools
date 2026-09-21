@@ -106,9 +106,8 @@ describe('runsOn', () => {
   });
 
   it('stays out of localmd by default — as a list entry, not a rule', async () => {
-    const { runsOn, DEFAULT_PAGE_TOOLS, DEFAULT_BLACKLIST } = await import(
-      '../src/localmd-connect/page-settings'
-    );
+    const { runsOn, DEFAULT_PAGE_TOOLS, DEFAULT_BLACKLIST } =
+      await import('../src/localmd-connect/page-settings');
     // The app is a text editor: a selection there is an edit, and a toolbar on
     // every selection is in the way of the thing this extension serves. Shipped
     // as data rather than as a hard-coded branch, so it is visible in the list

@@ -254,10 +254,9 @@ describe('request', () => {
    * would then send a dev build's question to production — the same mistake
    * `LOCALMD_APP_ORIGINS` was written twice to stop.
    */
-  it('asks the build\'s OWN app, not whoever connected last', async () => {
+  it("asks the build's OWN app, not whoever connected last", async () => {
     const h = handler({
-      allowedOrigins: async () =>
-        new Set(['https://localmd.app', 'http://localhost:5173']),
+      allowedOrigins: async () => new Set(['https://localmd.app', 'http://localhost:5173']),
     });
     const dev = await handshake(h, fakePort('http://localhost:5173'));
     const prod = await handshake(h, fakePort('https://localmd.app')); // more recent
@@ -269,8 +268,7 @@ describe('request', () => {
 
   it('treats "my app is not open" as the recoverable case, not as silence', async () => {
     const h = handler({
-      allowedOrigins: async () =>
-        new Set(['https://localmd.app', 'http://localhost:5173']),
+      allowedOrigins: async () => new Set(['https://localmd.app', 'http://localhost:5173']),
     });
     const prod = await handshake(h, fakePort('https://localmd.app'));
     await expect(

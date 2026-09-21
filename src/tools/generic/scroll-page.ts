@@ -12,8 +12,7 @@ cli({
       name: 'tab_id',
       type: 'int',
       required: true,
-      help:
-        'Target tab id — from open_url, or from get_page_text {url, keep_open:true} (which reads the page AND leaves it open). Never make one up, and never reuse an id from a result that said tab_closed:true',
+      help: 'Target tab id — from open_url, or from get_page_text {url, keep_open:true} (which reads the page AND leaves it open). Never make one up, and never reuse an id from a result that said tab_closed:true',
     },
     {
       name: 'times',
@@ -62,9 +61,7 @@ cli({
     // (mirrors click.ts / type-into.ts; else an iframe scrollable's documented ref
     // fails with "scroll target not found").
     const parsed = ref ? parseFrameRef(ref) : null;
-    const containerSelector = parsed
-      ? `[data-web-ref="${parsed.localRef}"]`
-      : selectorArg;
+    const containerSelector = parsed ? `[data-web-ref="${parsed.localRef}"]` : selectorArg;
     if (containerSelector) {
       let last:
         | {

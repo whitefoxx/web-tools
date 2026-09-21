@@ -37,7 +37,10 @@ function stubFetch(response: Response): { calls: { url: string; init: RequestIni
 describe('runFetch', () => {
   it('parses JSON when content-type is json (auto)', async () => {
     stubFetch(
-      new Response('{"a":1,"b":[2,3]}', { status: 200, headers: { 'content-type': 'application/json' } }),
+      new Response('{"a":1,"b":[2,3]}', {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
     );
     const r = await runFetch('https://api.test/x', {});
     expect(r.format).toBe('json');
@@ -48,7 +51,9 @@ describe('runFetch', () => {
   });
 
   it('format:"text" keeps body text even for json content-type', async () => {
-    stubFetch(new Response('{"a":1}', { status: 200, headers: { 'content-type': 'application/json' } }));
+    stubFetch(
+      new Response('{"a":1}', { status: 200, headers: { 'content-type': 'application/json' } }),
+    );
     const r = await runFetch('https://api.test/x', { format: 'text' });
     expect(r.format).toBe('text');
     expect(r.body).toBe('{"a":1}');
@@ -56,7 +61,9 @@ describe('runFetch', () => {
   });
 
   it('non-json content-type returns text body', async () => {
-    stubFetch(new Response('hello world', { status: 200, headers: { 'content-type': 'text/plain' } }));
+    stubFetch(
+      new Response('hello world', { status: 200, headers: { 'content-type': 'text/plain' } }),
+    );
     const r = await runFetch('https://x.test/', {});
     expect(r.format).toBe('text');
     expect(r.body).toBe('hello world');
@@ -64,7 +71,11 @@ describe('runFetch', () => {
 
   it('uppercases method, sends body for POST, includes credentials', async () => {
     const { calls } = stubFetch(new Response('ok', { status: 201 }));
-    await runFetch('https://x.test/p', { method: 'post', body: 'payload', headers: { 'X-A': '1' } });
+    await runFetch('https://x.test/p', {
+      method: 'post',
+      body: 'payload',
+      headers: { 'X-A': '1' },
+    });
     expect(calls[0].init.method).toBe('POST');
     expect(calls[0].init.body).toBe('payload');
     expect(calls[0].init.credentials).toBe('include');
@@ -78,7 +89,9 @@ describe('runFetch', () => {
   });
 
   it('truncates to maxBytes and flags truncated', async () => {
-    stubFetch(new Response('x'.repeat(500), { status: 200, headers: { 'content-type': 'text/plain' } }));
+    stubFetch(
+      new Response('x'.repeat(500), { status: 200, headers: { 'content-type': 'text/plain' } }),
+    );
     const r = await runFetch('https://x.test/', { maxBytes: 100 });
     expect(r.body?.length).toBe(100);
     expect(r.truncated).toBe(true);
@@ -93,14 +106,21 @@ describe('runFetch', () => {
   });
 
   it('json content-type but unparseable → falls back to text', async () => {
-    stubFetch(new Response('{ broken', { status: 200, headers: { 'content-type': 'application/json' } }));
+    stubFetch(
+      new Response('{ broken', { status: 200, headers: { 'content-type': 'application/json' } }),
+    );
     const r = await runFetch('https://x.test/', {});
     expect(r.format).toBe('text');
     expect(r.body).toBe('{ broken');
   });
 
   it('captures response headers', async () => {
-    stubFetch(new Response('x', { status: 200, headers: { 'content-type': 'text/plain', 'x-custom': 'yes' } }));
+    stubFetch(
+      new Response('x', {
+        status: 200,
+        headers: { 'content-type': 'text/plain', 'x-custom': 'yes' },
+      }),
+    );
     const r = await runFetch('https://x.test/', {});
     expect(r.headers['content-type']).toBe('text/plain');
     expect(r.headers['x-custom']).toBe('yes');
@@ -137,7 +157,9 @@ const HTML = `<html><head><title>Post</title></head><body>
 
 describe('runFetch — format:"markdown" (read a page without a tab)', () => {
   it('converts HTML to markdown, with the title, and no raw body', async () => {
-    stubFetch(new Response(HTML, { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' } }));
+    stubFetch(
+      new Response(HTML, { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' } }),
+    );
     const r = await runFetch('https://x.test/p', { format: 'markdown' });
     expect(r.format).toBe('markdown');
     expect(r.title).toBe('Post');
@@ -162,7 +184,12 @@ describe('runFetch — format:"markdown" (read a page without a tab)', () => {
   });
 
   it('a selector matching nothing says so instead of silently returning ""', async () => {
-    stubFetch(new Response('<body><p>x</p></body>', { status: 200, headers: { 'content-type': 'text/html' } }));
+    stubFetch(
+      new Response('<body><p>x</p></body>', {
+        status: 200,
+        headers: { 'content-type': 'text/html' },
+      }),
+    );
     const r = await runFetch('https://x.test/p', { format: 'markdown', selector: '#nope' });
     expect(r.markdown).toBe('');
     expect(r.note).toMatch(/matched nothing/);
@@ -277,23 +304,31 @@ describe('runFetch — stream_stop (bodies that never end)', () => {
     expect(JSON.parse(r.body!.split('data: ')[1]).result.protocolVersion).toBe('2025-03-26');
   });
 
-  it('cancels the reader, so the abandoned stream does not stay open', { timeout: 2000 }, async () => {
-    const s = streamingResponse({ status: 200, headers: SSE });
-    s.push(`data: ${RPC}\n\n`);
-    stubFetch(s.response);
-    await runFetch('https://mcp.test/mcp', { streamStop: 'first_event' });
-    expect(s.wasCancelled()).toBe(true);
-  });
+  it(
+    'cancels the reader, so the abandoned stream does not stay open',
+    { timeout: 2000 },
+    async () => {
+      const s = streamingResponse({ status: 200, headers: SSE });
+      s.push(`data: ${RPC}\n\n`);
+      stubFetch(s.response);
+      await runFetch('https://mcp.test/mcp', { streamStop: 'first_event' });
+      expect(s.wasCancelled()).toBe(true);
+    },
+  );
 
-  it('keeps a complete second event but drops a trailing partial one', { timeout: 2000 }, async () => {
-    const s = streamingResponse({ status: 200, headers: SSE });
-    s.push(`data: one\n\ndata: two\n\ndata: hal`);
-    stubFetch(s.response);
-    const r = await runFetch('https://mcp.test/mcp', { streamStop: 'first_event' });
-    // Everything up to the first event's boundary; the rest of that chunk is not
-    // ours to interpret.
-    expect(r.body).toBe('data: one\n\n');
-  });
+  it(
+    'keeps a complete second event but drops a trailing partial one',
+    { timeout: 2000 },
+    async () => {
+      const s = streamingResponse({ status: 200, headers: SSE });
+      s.push(`data: one\n\ndata: two\n\ndata: hal`);
+      stubFetch(s.response);
+      const r = await runFetch('https://mcp.test/mcp', { streamStop: 'first_event' });
+      // Everything up to the first event's boundary; the rest of that chunk is not
+      // ours to interpret.
+      expect(r.body).toBe('data: one\n\n');
+    },
+  );
 
   it('first_event on a NON-SSE response reads the body to the end', { timeout: 2000 }, async () => {
     const s = streamingResponse({ status: 200, headers: { 'content-type': 'application/json' } });
@@ -324,7 +359,11 @@ describe('runFetch — stream_stop (bodies that never end)', () => {
     const s = streamingResponse({ status: 200, headers: SSE });
     s.push('x'.repeat(500));
     stubFetch(s.response);
-    const r = await runFetch('https://mcp.test/', { streamStop: 'idle', idleTimeoutMs: 200, maxBytes: 100 });
+    const r = await runFetch('https://mcp.test/', {
+      streamStop: 'idle',
+      idleTimeoutMs: 200,
+      maxBytes: 100,
+    });
     expect(r.body?.length).toBe(100);
     expect(r.truncated).toBe(true);
     expect(r.stream_open).toBe(true);
@@ -356,32 +395,42 @@ describe('runFetch — stream_stop (bodies that never end)', () => {
     const s = streamingResponse({ status: 200, headers: SSE });
     s.fail(new Error('signal timed out'));
     stubFetch(s.response);
-    await expect(runFetch('https://mcp.test/', { streamStop: 'first_event' })).rejects.toThrow(/timed out/);
+    await expect(runFetch('https://mcp.test/', { streamStop: 'first_event' })).rejects.toThrow(
+      /timed out/,
+    );
   });
 
-  it('the default read is untouched — no stream fields, whole body', { timeout: 2000 }, async () => {
-    const s = streamingResponse({ status: 200, headers: SSE });
-    s.push(`data: ${RPC}\n\n`);
-    s.close(); // a server that DOES close, like mcp.mermaid.ai
-    stubFetch(s.response);
+  it(
+    'the default read is untouched — no stream fields, whole body',
+    { timeout: 2000 },
+    async () => {
+      const s = streamingResponse({ status: 200, headers: SSE });
+      s.push(`data: ${RPC}\n\n`);
+      s.close(); // a server that DOES close, like mcp.mermaid.ai
+      stubFetch(s.response);
 
-    const r = await runFetch('https://mcp.test/mcp', {});
+      const r = await runFetch('https://mcp.test/mcp', {});
 
-    expect(r.body).toBe(`data: ${RPC}\n\n`);
-    expect('stream_open' in r).toBe(false);
-    expect('stream_stop' in r).toBe(false);
-  });
+      expect(r.body).toBe(`data: ${RPC}\n\n`);
+      expect('stream_open' in r).toBe(false);
+      expect('stream_stop' in r).toBe(false);
+    },
+  );
 
-  it('response headers survive the streaming path (Mcp-Session-Id)', { timeout: 2000 }, async () => {
-    const s = streamingResponse({
-      status: 200,
-      headers: { ...SSE, 'mcp-session-id': 'abc-123' },
-    });
-    s.push(`data: ${RPC}\n\n`);
-    stubFetch(s.response);
-    const r = await runFetch('https://mcp.test/mcp', { streamStop: 'first_event' });
-    expect(r.headers['mcp-session-id']).toBe('abc-123');
-  });
+  it(
+    'response headers survive the streaming path (Mcp-Session-Id)',
+    { timeout: 2000 },
+    async () => {
+      const s = streamingResponse({
+        status: 200,
+        headers: { ...SSE, 'mcp-session-id': 'abc-123' },
+      });
+      s.push(`data: ${RPC}\n\n`);
+      stubFetch(s.response);
+      const r = await runFetch('https://mcp.test/mcp', { streamStop: 'first_event' });
+      expect(r.headers['mcp-session-id']).toBe('abc-123');
+    },
+  );
 });
 
 describe('parseStreamStop', () => {

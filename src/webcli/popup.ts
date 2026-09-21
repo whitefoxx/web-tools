@@ -230,7 +230,8 @@ function renderScripts(scripts: SiteScript[]): void {
     del.textContent = '🗑';
     del.title = `Delete "${s.label}"`;
     del.addEventListener('click', () => {
-      if (!window.confirm(`Delete "${s.label}"?\nIt will stop running on ${s.matches.join(', ')}.`)) return;
+      if (!window.confirm(`Delete "${s.label}"?\nIt will stop running on ${s.matches.join(', ')}.`))
+        return;
       void (async () => {
         try {
           await deleteSiteScript(s.id);

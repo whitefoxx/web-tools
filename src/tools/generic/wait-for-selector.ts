@@ -19,15 +19,24 @@ cli({
     {
       name: 'text',
       type: 'string',
-      help: 'Visible text to wait for (case-insensitive substring of the page\'s rendered text). One of selector / text',
+      help: "Visible text to wait for (case-insensitive substring of the page's rendered text). One of selector / text",
     },
     {
       name: 'tab_id',
       type: 'int',
       help: 'Target tab id — from open_url, or from get_page_text {url, keep_open:true}. Required unless an Explore session is running (only then may it be omitted, defaulting to that session tab)',
     },
-    { name: 'timeout_ms', type: 'int', default: 8000, help: 'Max wait in ms (default 8000, cap 30000)' },
-    { name: 'visible', type: 'bool', help: 'Require the element to be visible (has a layout box); default false = existence only' },
+    {
+      name: 'timeout_ms',
+      type: 'int',
+      default: 8000,
+      help: 'Max wait in ms (default 8000, cap 30000)',
+    },
+    {
+      name: 'visible',
+      type: 'bool',
+      help: 'Require the element to be visible (has a layout box); default false = existence only',
+    },
   ],
   func: async (_page: unknown, kwargs: Record<string, unknown>) => {
     const session = getActiveExploreSession();
@@ -42,7 +51,8 @@ cli({
     }
     const selector = typeof kwargs.selector === 'string' ? kwargs.selector.trim() : '';
     const text = typeof kwargs.text === 'string' ? kwargs.text.trim() : '';
-    if (!selector && !text) return { error: 'provide either selector (CSS) or text (visible text)' };
+    if (!selector && !text)
+      return { error: 'provide either selector (CSS) or text (visible text)' };
     if (selector && text) return { error: 'pass only one of selector and text' };
     const timeout = Math.max(500, Math.min(Number(kwargs.timeout_ms ?? 8000) || 8000, 30000));
     const visible = !!kwargs.visible;

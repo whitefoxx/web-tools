@@ -39,11 +39,15 @@ describe('normalizeOriginInput', () => {
   });
 
   it('refuses http for non-loopback, wildcards, junk, and other schemes', () => {
-    expect(() => normalizeOriginInput('http://example.com')).toThrow(/http is only allowed for localhost/);
+    expect(() => normalizeOriginInput('http://example.com')).toThrow(
+      /http is only allowed for localhost/,
+    );
     expect(() => normalizeOriginInput('*.example.com')).toThrow(/wildcards/);
     expect(() => normalizeOriginInput('')).toThrow(/enter a site/);
     expect(() => normalizeOriginInput('ftp://example.com')).toThrow(/only http\(s\)/);
-    expect(() => normalizeOriginInput('https://user:pw@example.com')).toThrow(/not a valid address/);
+    expect(() => normalizeOriginInput('https://user:pw@example.com')).toThrow(
+      /not a valid address/,
+    );
     expect(() => normalizeOriginInput('not a url at all')).toThrow();
   });
 });

@@ -15,15 +15,8 @@
     "userScripts",
     "contextMenus"
   ],
-  "optional_permissions": [
-    "bookmarks",
-    "history",
-    "readingList",
-    "sessions"
-  ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "optional_permissions": ["bookmarks", "history", "readingList", "sessions"],
+  "host_permissions": ["<all_urls>"],
   "icons": {
     "16": "icons/localmd-connect-16.png",
     "32": "icons/localmd-connect-32.png",

@@ -199,10 +199,7 @@ cards.push({
     s += lines(
       W / 2,
       404,
-      [
-        'Browser superpowers for localmd.app,',
-        'your AI knowledge base that lives in the browser.',
-      ],
+      ['Browser superpowers for localmd.app,', 'your AI knowledge base that lives in the browser.'],
       42,
       { size: 30, fill: C.sec, anchor: 'middle' },
     );
@@ -448,11 +445,16 @@ cards.push({
         anchor: 'middle',
       },
     );
-    s += text(W / 2, 682, 'No server of ours, no daemon. What you send your model still goes to your provider.', {
-      size: 22,
-      fill: C.muted,
-      anchor: 'middle',
-    });
+    s += text(
+      W / 2,
+      682,
+      'No server of ours, no daemon. What you send your model still goes to your provider.',
+      {
+        size: 22,
+        fill: C.muted,
+        anchor: 'middle',
+      },
+    );
     return svgDoc(W, H, s);
   },
 });
@@ -493,10 +495,15 @@ cards.push({
       s += lines(150, y + 48, wrap(d, 76), 32, { size: 22, fill: C.sec });
       y += 148;
     });
-    s += text(72, 730, 'Need the knowledge base itself? It lives at localmd.app, free and open source.', {
-      size: 22,
-      fill: C.muted,
-    });
+    s += text(
+      72,
+      730,
+      'Need the knowledge base itself? It lives at localmd.app, free and open source.',
+      {
+        size: 22,
+        fill: C.muted,
+      },
+    );
     return svgDoc(W, H, s);
   },
 });
@@ -519,15 +526,10 @@ cards.push({
     // The subline says what this IS and who it is for; the chips below already
     // enumerate the capabilities, so repeating "one-key capture" here spends the
     // one readable line in a marquee on something the reader is about to see.
-    s += text(
-      330,
-      312,
-      'Browser superpowers for localmd.app, your in-browser AI knowledge base.',
-      {
-        size: 28,
-        fill: C.sec,
-      },
-    );
+    s += text(330, 312, 'Browser superpowers for localmd.app, your in-browser AI knowledge base.', {
+      size: 28,
+      fill: C.sec,
+    });
     const chips = ['clips into your folder', '50+ browser tools', 'your real Chrome'];
     s += chipFlow(330, 358, w - 400, chips, { size: 21, h: 44 }).svg;
     return svgDoc(w, h, s);
