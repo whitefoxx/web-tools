@@ -51,7 +51,7 @@ describe('fetchLlmsTxt', () => {
 
   it('returns null on 404 and caches it (no re-fetch)', async () => {
     const fn = vi.fn(
-      (url: string) => ({ ok: false, status: 404 }) as ReturnType<Parameters<typeof mockFetch>[0]>,
+      (_url: string) => ({ ok: false, status: 404 }) as ReturnType<Parameters<typeof mockFetch>[0]>,
     );
     mockFetch(fn);
     expect(await fetchLlmsTxt('https://nollms.com/')).toBeNull();

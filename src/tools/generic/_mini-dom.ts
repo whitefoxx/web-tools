@@ -180,6 +180,9 @@ export class MiniNode {
 
   closest(sel: string): MiniNode | null {
     const groups = parseSelector(sel);
+    // The cursor walks up from this node, so `closest` can match self — not the
+    // closure-capture alias `no-this-alias` is aimed at.
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     for (let n: MiniNode | null = this; n; n = n.parentNode) {
       if (n.nodeType === 1 && groups.some((g) => matchesCompound(n as MiniNode, g[g.length - 1])))
         return n;

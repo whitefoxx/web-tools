@@ -174,7 +174,7 @@ describe('parseHtml — parser specifics', () => {
     for (const bad of [
       '<div><p>unclosed',
       '</div></p>stray closes',
-      '<a href="x">text', // eslint-disable-line
+      '<a href="x">text',
       '<<>><p>weird</p>',
       '<script>if (a<b) { }</script><p>after</p>',
       '',
