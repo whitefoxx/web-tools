@@ -474,12 +474,12 @@ cards.push({
       [
         '1',
         'Install it',
-        'Add it from the Chrome Web Store. There is no window to keep open, just a small toolbar popup.',
+        'Add it from the Chrome Web Store. No window to keep open — a popup and a settings page.',
       ],
       [
         '2',
         'Allow user scripts',
-        "Turn the switch on in the extension's details page. Site scripts need it; nothing else does.",
+        "Turn the switch on in the extension's details page. The settings page explains why.",
       ],
       [
         '3',
