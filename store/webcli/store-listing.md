@@ -25,7 +25,7 @@ Because it drives YOUR real, logged-in Chrome session, your agent works pages ex
 
 **Reach a site nobody wrote support for.** On top of the primitives there are reconnaissance tools that answer "where does this value actually come from" — the page's structured data, its accessibility tree, and the requests it makes — plus eval_js to run your own JavaScript in the page's own origin. That is how an agent works out how to read an unfamiliar site in one session, instead of you writing and maintaining a scraper.
 
-**And page rules that stick.** Site scripts let your agent apply a change you approved — hide the clutter, restyle a page, run a small script — on every visit to a matching site, until you remove it. Every one is listed in the popup, where you can pause or delete it.
+**And page rules that stick.** Site scripts let your agent apply a change you approved — hide the clutter, restyle a page, run a small script — on every visit to a matching site, until you remove it. Every one is listed on the settings page with its matching sites and its full source, where you can pause or delete it.
 
 ━━━ WHAT YOU CAN DO ━━━
 
@@ -59,12 +59,12 @@ Because it drives YOUR real, logged-in Chrome session, your agent works pages ex
 • Tiny & focused — well under a megabyte, generic tools only; runs side-by-side with the full Web Agent extension
 • Auto-reconnect — a 1-minute alarm redial connects within a minute of your daemon starting
 • Local & private — everything runs on your machine; WebCLI itself sends nothing to a third-party server (your agent, of course, sends what it reads to its own model provider) — and no web page can ever reach the tools
-• You hold the keys — the tool catalog can be trimmed to a core set in the popup to keep your agent's prompt small
+• You hold the keys — the settings page lists every tool your agent is offered, and trims the catalog to a core set to keep its prompt small
 
 ━━━ BEFORE YOU INSTALL ━━━
 
-• It runs headless: no window, no sidebar — just a small toolbar popup showing connection status, the tool catalog, and your site scripts.
-• Site scripts need Chrome's "Allow user scripts" switch on this extension's details page. It takes one click, the popup walks you through it, and every other tool works without it.
+• It runs headless: no window, no sidebar — a small toolbar popup for the connection, and a settings page for the tool catalog and your site scripts.
+• Site scripts need Chrome's "Allow user scripts" switch on this extension's details page. It takes one click, the settings page walks you through it, and every other tool works without it.
 
 ━━━ GET STARTED ━━━
 
@@ -91,7 +91,7 @@ and **remote code is answered NO** where that shell used to answer yes.
 > screenshots, manage tabs, and apply page rules the user has approved — to an AI
 > agent the user runs on their own machine, over a local daemon on 127.0.0.1 that
 > the extension dials out to. It has no AI of its own, no interface beyond a
-> status popup, and no web page can reach it.
+> status popup and a settings page, and no web page can reach it.
 
 ### Permission justifications
 
@@ -131,7 +131,8 @@ and **remote code is answered NO** where that shell used to answer yes.
 > approves them), so they run in Chrome's isolated USER_SCRIPT world rather than
 > the extension's own context. Chrome additionally gates this API behind a switch
 > the user turns on themselves, so nothing runs until they do, and every script is
-> listed in the extension popup where the user can pause or delete it.
+> listed on the extension's settings page, in full, where the user can read, pause
+> or delete it.
 
 **storage**
 

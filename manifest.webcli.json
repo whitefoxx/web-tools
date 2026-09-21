@@ -30,5 +30,9 @@
     "default_title": "WebCLI",
     "default_popup": "src/webcli/popup.html"
   },
+  "options_ui": {
+    "page": "src/webcli/options.html",
+    "open_in_tab": true
+  },
   "minimum_chrome_version": "138"
 }

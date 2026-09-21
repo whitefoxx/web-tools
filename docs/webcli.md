@@ -194,23 +194,31 @@ cuts it at the dash so the tab group stays "WebCLI", see §13):
   `action.default_popup` = the status page. **`externally_connectable` was
   DROPPED in 0.2.0** — web apps now come in through the user-configured relay
   (§15), so no origin is baked into the manifest.
-- **DROP**: `sidePanel`, `userScripts`, `offscreen`, `notifications`, and the
-  `side_panel` / `sandbox` / `web_accessible_resources` blocks.
+- **DROP**: `sidePanel`, `offscreen`, `notifications`, and the `side_panel` /
+  `sandbox` / `web_accessible_resources` blocks. (`userScripts` was on this list
+  until **0.4.0**, which added it for site scripts — §17.)
+- **`options_ui`** (`open_in_tab: true`) since 0.4.0 → `src/webcli/options.html`,
+  the settings page (§18).
 
 `src/background/webcli-service-worker.ts` wires ONLY: register `_generic` tools →
 `createBridge({execute: executeGenericTool, controlTools: {}})` → `createWsBridge`
 (ON by default, port from `storage.local.bridgePort`, client name `webcli`) → a
 1-minute `alarms` redial → `createExternalMcpHandler` (`onConnectExternal`,
-`webTask: undefined`) → a `WEBCLI_STATUS` message handler for the popup. Busy hooks
+`webTask: undefined`) → a `WEBCLI_STATUS` message handler for the popup and a
+`WEBCLI_TOOLS` one for the settings page (§18). Busy hooks
 reuse `runtime-state`'s keepalive (F-8). It does NOT wire sessions, adapters,
 marketplace, explore, site-scripts, page-llm, schedules, message-router, or
 `driveApiSession`.
 
 **Status popup** (`src/webcli/popup.html` + `popup.ts`): the toolbar icon opens a
 small page (no SidePanel) showing daemon connect state (polls `WEBCLI_STATUS`
-every 2s), the tool-set profile and the web-app origin list (§14.4, §15), a
-one-line intro, and a Documentation link. Plain HTML/TS — no Preact, so it adds
-~3 KB, not the UI framework.
+every 2s), a one-line intro, the setup command, a count for the tool catalog and
+for the site scripts — each a way into the settings page — and a Documentation
+link. Plain HTML/TS — no Preact, so it adds ~3 KB, not the UI framework.
+
+> Corrected 2026-09-21: this paragraph used to list "the tool-set profile and the
+> web-app origin list (§14.4, §15)". The origin list left in 0.3.0 with the relay,
+> and the profile knob moved to the settings page in 0.4.0 (§18).
 
 ## 6. Reconnect safety net (the `alarms` redial)
 
@@ -874,11 +882,13 @@ whole contract, an external CLI agent drives it. So the contract is:
   exactly as the agent is accountable for every other write here (the WS bridge's
   write gate is open by construction). This mirrors localmd delegating the
   confirm to its app; WebCLI delegates it to the CLI agent.
-- **The popup is the standing control** (the "user disposes" half). WebCLI's
-  toolbar popup lists every installed site script with a pause toggle and a
-  delete button, and warns when "Allow user scripts" is off. It reads and mutates
-  the store directly (the popup holds the `userScripts` permission) and
-  re-registers via `refreshSiteScript`, so a pause/delete takes effect at once.
+- **The settings page is the standing control** (the "user disposes" half). It
+  lists every installed site script with its match patterns, what wrote it, when,
+  its source in full, and pause / delete; it warns when "Allow user scripts" is
+  off. It reads and mutates the store directly (an extension page holds the
+  `userScripts` permission) and re-registers via `refreshSiteScript`, so a
+  pause/delete takes effect at once. This was the POPUP until 0.4.0 — see §18 for
+  why it moved.
   `src/background/webcli-service-worker.ts` calls `syncSiteScriptsOnBoot()` on
   boot, like the other shells, so enabled rules survive an SW recycle.
 - **The manifest** gains `userScripts`; until the user flips "Allow user scripts"
@@ -886,3 +896,184 @@ whole contract, an external CLI agent drives it. So the contract is:
 
 `npm run build:webcli:dev` → `dist-webcli-dev/` carries all of the above; verify
 the popup management + the toggle on a real load (docs/webcli.md §13).
+
+## 18. A settings page, because 320px was the constraint (2026-09-21)
+
+WebCLI shipped with one surface: a 320px toolbar popup. By 0.4.0 it was carrying
+five jobs — what the product IS, whether the daemon is connected, the one setup
+command, the tool-set profile, and standing control over every site script an
+agent had installed. The last two are the ones that broke.
+
+**A list you have to audit does not fit in a popup.** A site script is a rule
+that keeps running on your pages until you remove it. Deciding whether to keep
+one means reading its match patterns, what it actually does, and where it came
+from. The popup could show a name, a three-letter badge and a checkbox — enough
+to delete the wrong one. The catalog had the same problem from the other end:
+the profile knob showed `39/39` and two sentences, so "what is in Core" was a
+number the user had to take on faith.
+
+So the split is the one localmd Connect already arrived at
+([localmd-connect.md](./localmd-connect.md)): **the popup is the quick thing you
+open it for — am I connected — and the settings page is everything read rarely
+and carefully.** `manifest.webcli.json` gains `options_ui` with
+`open_in_tab: true`; `src/webcli/options.html` + `options.ts` are the page.
+
+Three sections, in the order a user meets them:
+
+| Section          | What it holds                                                                                                                               |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Connection**   | the daemon state and port, the skill install command, and the daemon command for someone who would rather run it in a terminal they can see |
+| **Tools**        | the All / Core choice **plus the catalog itself** — every tool, one line each, `core` flagged                                               |
+| **Site scripts** | one card per rule: matches, origin, date, source on demand, pause, delete                                                                   |
+
+Three things are load-bearing in how it is built:
+
+- **The nav is built FROM the sections** (`data-nav`, `data-icon`), so adding a
+  section is one edit to the HTML. Navigation goes through `location.hash`, which
+  makes Back work and makes the popup's deep link (`…/options.html#site-scripts`)
+  the same mechanism the nav uses rather than a special case.
+- **`.nav-item[hidden] { display: none }` is there from the first commit.** An
+  author `display` beats the UA stylesheet's `[hidden]`, and that is exactly how
+  localmd Connect shipped a dev-only nav entry visible to every user
+  ([localmd-connect.md](./localmd-connect.md) §16.1). Paying for that bug once
+  was enough.
+- **Core DIMS the rows it stops advertising; it never removes them.** Hidden is
+  not disabled (`core/tool-profile.ts`): every tool stays callable by name under
+  either profile. A list that deleted the row would teach the user the opposite,
+  and they would find out from a "tool not found" three steps into a task.
+
+**The deep link reads its path from the manifest**, never a literal
+`options.html`. The bundler emits extension pages at their SOURCE path
+(`src/webcli/options.html`), so a hand-written URL is one that has never existed
+— and it fails as a blank tab with no error anywhere. Pinned by
+`tests/webcli-popup.test.ts`.
+
+Both pages are covered by jsdom tests that load the real HTML and import the real
+module (`tests/webcli-options.test.ts`, `tests/webcli-popup.test.ts`). The bug
+class they exist for is specific: settings MOVED between two files, and a moved
+block that loses an element id dies on load, taking every listener after it with
+it and leaving a page that looks right and does nothing. TypeScript cannot see an
+id that only exists in HTML.
+
+`src/ui/icons.ts` is the icon set both shells' pages now share; it lived in
+`src/localmd-connect/` until this page needed the same glyphs.
+
+### 18.1 Three things the first cut got wrong
+
+Caught by looking at the page rather than at the diff:
+
+- **The repository was a grey 12px "Documentation" at the bottom of the nav.**
+  WebCLI is open source, and for an extension asking to drive a logged-in
+  browser that is the most persuasive sentence it has — "you can read exactly
+  what this does". It is a card at the foot of the sidebar now, with the mark
+  and the repo name, and the popup footer says it too.
+- **A tool row showed one sentence and hid the rest in a `title` tooltip.**
+  Nobody hovers. The rows open: the whole description, then every argument with
+  its type, whether it is required, and its help text — the SAME strings the
+  agent is handed (`WEBCLI_TOOLS` now returns the argument schema), not a second
+  set written for humans, because two descriptions drift and then the page
+  documents a tool that does not exist. The panel is built on first open; 39 of
+  them up front is a lot of DOM nobody asked for.
+- **The empty state said "No site scripts yet." and nothing else.** That is the
+  only thing most users will ever see in that section, and it taught them
+  nothing: not what a site script is, not that their AGENT writes one and they
+  approve it, not how to get the first. It now says all three and offers a
+  sentence to hand straight to the agent — and it is **not** an empty state: it
+  stays once scripts exist, as a footnote under the list, with only its heading
+  tracking the count ("No site scripts yet" → "Want another one?"). "How do I
+  get another one" has the same answer as "how do I get the first", and the
+  three things it says are exactly what someone forgets between one script and
+  the next. A card that vanishes the moment it is first acted on is a card most
+  people read once, in a hurry. The element is `#scriptsGuide`, not
+  `#scriptsEmpty` — an id that lies about when it shows is the next person's bug.
+
+### 18.2 Prerequisites, stated where the instruction is
+
+The card says "ask your agent". Two things have to be true for that sentence to
+be actionable, and the page now checks both instead of letting the user find out
+by trying:
+
+- **An agent has to be attached.** No daemon connection, no agent, nothing to
+  ask. The card shows a gate saying so, with a button into the Connection
+  section. It is driven from the 2-second status poll, so it clears by itself the
+  moment the daemon comes up.
+- **Chrome's "Allow user scripts" switch has to be on**, or a rule is saved and
+  inert. The notice used to be one line naming the switch. A permission notice
+  that does not say WHY reads as an extension asking for more than it needs, and
+  this one has a real answer: site scripts are written by the user's agent, NOT
+  shipped inside WebCLI, so Chrome runs them in an isolated world it keeps behind
+  a switch only the user can flip. It now says that, gives the three steps, keeps
+  "every other tool works without it", and offers the button to WebCLI's details
+  page.
+
+**The switch is flipped on a different tab**, so nothing tells this page about
+it. Re-checked on `visibilitychange` and `focus` — a prerequisite notice that
+survives the user doing what it asked is the most discouraging thing it can do.
+
+### 18.3 The copyable example was a command
+
+The guidance offers a sentence to hand to the agent, with a Copy button beside
+it — and a placeholder host inside it. A line with a Copy button next to it reads
+as something to paste verbatim, so it is labelled "For example — swap
+`example.com` for the site you mean", above the button rather than after it.
+
+### 18.4 A `const` read from above its own declaration (2026-09-21)
+
+**Symptom.** Every test in `webcli-options.test.ts` failed at import with the
+other 17 reported as skipped — the page had not finished wiring up.
+
+**Root cause.** `renderStatus` gained one line that reads the site-script gate
+element. `poll()` → `renderStatus()` runs at MODULE level, in the connection
+section; the gate's `const` is declared further down, in the site-script section.
+Reading it from above is a temporal-dead-zone `ReferenceError`, which aborts
+module evaluation and takes every listener after it with it.
+
+**Fix.** A hoisted `function setAgentGate(connected)` is the seam: function
+declarations hoist, `const` does not, and `getElementById` works from anywhere
+because the DOM is already parsed.
+
+**Lesson.** This is the same failure shape as a moved block losing an element id
+— the page loads, looks right, and does nothing — reached by a different route:
+adding a line to a function that runs earlier than the section it belongs to. In
+a file that is one long module-level script, "where the const is declared" is
+control flow. The jsdom test caught it because it imports the real module; no
+type-check can.
+
+## 19. `eval_js` refused a one-line snippet (2026-09-21)
+
+**Symptom.** Driving the shipped tool over the bridge, a perfectly ordinary
+snippet came back as `page.evaluate threw: SyntaxError: Illegal return
+statement` — the exact error `wrapForEval` exists to prevent. The same code,
+pretty-printed onto several lines, worked.
+
+**Root cause.** `wrapForEval` decides whether a snippet is a statement body (wrap
+it in an async IIFE) or a bare expression (leave it alone) by looking for a
+top-level `return`:
+
+```js
+/(?:^|[\n;{])\s*return[\s;(]/;
+```
+
+The character before `return` had to be a newline, a `;` or a `{`. Write the
+snippet on ONE line — which is what an agent does when it is not
+pretty-printing — and the loop before it ends in `}`:
+
+```js
+const out = []; for (const el of els) { … }return out.slice(0, 25);
+//                                      ^ invisible to the test above
+```
+
+so the code fell through to the "bare expression" branch, was sent unwrapped, and
+Chrome rejected it.
+
+**Fix.** `}` joins the class. The guard that keeps this safe is unchanged and is
+the whole design of the branch: a bare expression has no top-level `return`, so
+it still falls through and still keeps its own completion value. Both halves are
+pinned in `tests/page-wrap-for-eval.test.ts`.
+
+**Lesson.** The heuristic was written against the shape an LLM produces when it
+formats code, and tested against exactly that shape. The failing input is the
+same program with the newlines taken out — a variation the tests never tried
+because the person writing them was also writing readable code. It took driving
+the real tool from the outside to produce it, which is the argument for doing
+that at all: `npm run check` was green through every version of this bug.

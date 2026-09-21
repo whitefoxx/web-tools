@@ -31,7 +31,7 @@
       .head {
         display: flex;
         align-items: baseline;
-        justify-content: space-between;
+        gap: 7px;
         margin-bottom: 7px;
       }
       .title {
@@ -41,6 +41,24 @@
       .ver {
         color: var(--muted);
         font-size: 12px;
+        margin-right: auto;
+      }
+      /* The way to the settings page. A gear rather than a labelled row: it is
+         the one control here that is not about the current state. */
+      .gear {
+        align-self: center;
+        display: grid;
+        place-items: center;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 2px;
+        border-radius: 6px;
+      }
+      .gear:hover {
+        color: var(--fg);
+        background: var(--card);
       }
       .card {
         border: 1px solid var(--border);
@@ -49,9 +67,6 @@
       }
       .row {
         padding: 11px 12px;
-      }
-      .row + .row {
-        border-top: 1px solid var(--border);
       }
       .status {
         display: flex;
@@ -69,64 +84,39 @@
       .dot.on {
         background: var(--green);
       }
-      .kv {
+      /* A row that is a way into the settings page, not a control. It shows the
+         number so the popup still answers "how many" without a trip, and hands
+         the reading and the changing to the page with room for both. */
+      button.jump {
         display: flex;
         align-items: center;
         gap: 8px;
+        width: 100%;
+        font: inherit;
+        text-align: left;
+        border: 0;
+        border-top: 1px solid var(--border);
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
       }
-      .kv .label {
-        color: var(--muted);
-        flex: none;
-      }
-      .kv .val {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 12px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        flex: 1;
-      }
-      /* Segmented control instead of a <select>: the choice is binary, so both
-         states can be visible at once — one tap, no dropdown, and nothing whose
-         intrinsic width depends on its longest option text. */
-      .seg {
-        display: flex;
-        flex: none;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        overflow: hidden;
+      button.jump:hover {
         background: var(--card);
       }
-      .seg button {
-        border: 0;
-        background: transparent;
+      .jump .label {
         color: var(--muted);
-        font: inherit;
-        font-size: 12px;
-        padding: 3px 11px;
-        cursor: pointer;
-        transition:
-          background 120ms,
-          color 120ms;
       }
-      .seg button + button {
-        border-left: 1px solid var(--border);
-      }
-      .seg button:hover:not([aria-pressed='true']) {
-        color: var(--fg);
-      }
-      .seg button[aria-pressed='true'] {
-        background: var(--link);
-        color: #fff;
-        font-weight: 600;
-      }
-      .kv .count {
-        flex: none;
+      .jump .count {
         margin-left: auto;
         white-space: nowrap;
-        color: var(--muted);
+        color: var(--fg);
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
         font-size: 12px;
+      }
+      .jump .chev {
+        flex: none;
+        color: var(--muted);
+        font-size: 14px;
       }
       button.copy {
         flex: none;
@@ -143,7 +133,7 @@
       }
       /* The pitch sits ABOVE the card, with the title: it is what the product
          is, not one of its settings. The card below holds only live state and
-         controls. */
+         the ways into the settings page. */
       .intro {
         font-size: 12.5px;
         line-height: 1.55;
@@ -171,10 +161,11 @@
         color: var(--link);
       }
       /* Setup is a disclosure, open only while there is nothing connected — the
-         two commands matter exactly once, then they are clutter above the state
-         the user actually came to check. */
+         command matters exactly once, then it is clutter above the state the
+         user actually came to check. */
       details.setup {
         background: var(--card);
+        border-top: 1px solid var(--border);
       }
       details.setup > summary {
         padding: 11px 12px;
@@ -214,8 +205,7 @@
         gap: 6px;
         margin-top: 4px;
       }
-      .cmd code,
-      .cmd input {
+      .cmd code {
         flex: 1;
         min-width: 0;
         overflow-x: auto;
@@ -228,79 +218,37 @@
         font-size: 11px;
         color: var(--fg);
       }
-      .cmd input:focus {
-        outline: none;
-        border-color: var(--link);
-      }
       .step .after {
         margin-top: 6px;
       }
-      .step a {
-        color: var(--link);
-      }
-      .kv.wrap {
-        flex-wrap: wrap;
-      }
-      .kv .sub {
-        flex-basis: 100%;
-        margin-top: 5px;
-        font-size: 11px;
-        line-height: 1.45;
-        color: var(--muted);
-      }
-      .scripts .warn {
-        flex-basis: 100%;
-        margin: 6px 0 2px;
-        font-size: 11px;
-        line-height: 1.45;
-        color: var(--warn, #b26a00);
-      }
-      .srow {
+      /* The repo, said plainly. "Documentation" was the only link here, and it
+         buried the fact that this extension — which drives a logged-in browser
+         — is open source and readable. That is the most persuasive sentence on
+         the popup, so it gets the mark and the name. */
+      .foot {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 6px 0;
-        border-top: 1px solid var(--border, rgba(127, 127, 127, 0.18));
-      }
-      .srow .sname {
-        flex: 1;
-        min-width: 0;
-        font-size: 12px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .srow .sname.off {
-        color: var(--muted);
-        text-decoration: line-through;
-      }
-      .srow .sdel {
-        border: 0;
-        background: transparent;
-        color: var(--muted);
-        cursor: pointer;
-        font-size: 13px;
-        padding: 2px 4px;
-      }
-      .srow .sdel:hover {
-        color: var(--warn, #b26a00);
-      }
-      .empty {
-        font-size: 11px;
-        color: var(--muted);
-        padding: 6px 0 2px;
-      }
-      .foot {
-        text-align: center;
+        gap: 7px;
         margin-top: 12px;
+        padding: 0 2px;
       }
       .foot a {
-        color: var(--link);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
         text-decoration: none;
-        font-size: 13px;
+        font-size: 12px;
       }
       .foot a:hover {
-        text-decoration: underline;
+        color: var(--link);
+      }
+      .foot .gh-ico {
+        display: grid;
+        place-items: center;
+      }
+      .foot .doc {
+        margin-left: auto;
       }
     </style>
   </head>
@@ -308,6 +256,7 @@
     <div class="head">
       <span class="title">WebCLI</span>
       <span class="ver" id="ver"></span>
+      <button class="gear" id="openOptions" title="Settings" aria-label="Settings"></button>
     </div>
     <div class="intro">
       Let <b>your AI agent</b> drive <b>your logged-in Chrome</b>.
@@ -322,15 +271,16 @@
       <div class="row status">
         <span class="dot" id="dot"></span><span id="statusText">Checking…</span>
       </div>
-      <div class="row kv wrap">
+      <button class="row jump" data-go="tools">
         <span class="label">Tools</span>
-        <div class="seg" id="profileSeg" role="group" aria-label="Tool set">
-          <button type="button" data-profile="full" aria-pressed="true">All</button>
-          <button type="button" data-profile="core" aria-pressed="false">Core</button>
-        </div>
         <span class="count" id="profileCount">…</span>
-        <div class="sub" id="profileDesc"></div>
-      </div>
+        <span class="chev">›</span>
+      </button>
+      <button class="row jump" data-go="site-scripts">
+        <span class="label">Site scripts</span>
+        <span class="count" id="scriptsCount">…</span>
+        <span class="chev">›</span>
+      </button>
       <details class="setup" id="setup">
         <summary>Set up your agent</summary>
         <div class="step">
@@ -344,23 +294,12 @@
         <div class="step" id="setupHint"></div>
       </details>
     </div>
-    <div class="card scripts" id="scriptsCard">
-      <div class="row kv wrap">
-        <span class="label">Site scripts</span>
-        <span class="count" id="scriptsCount"></span>
-        <div class="sub">
-          Persistent page fixes your agent installs (hide clutter, restyle, run a snippet). You can
-          pause or delete any of them here.
-        </div>
-        <div class="warn" id="scriptsWarn" hidden>
-          Turn on <b>Allow user scripts</b> for WebCLI at chrome://extensions so these can run.
-        </div>
-      </div>
-      <div id="scriptList"></div>
-      <div class="empty" id="scriptsEmpty">No site scripts yet.</div>
-    </div>
     <div class="foot">
-      <a id="docLink" href="#" target="_blank" rel="noreferrer">Documentation</a>
+      <a id="ghLink" href="#" target="_blank" rel="noreferrer">
+        <span class="gh-ico" id="ghIco"></span>
+        Open source · whitefoxx/web-tools
+      </a>
+      <a class="doc" id="docLink" href="#" target="_blank" rel="noreferrer">Docs</a>
     </div>
     <script type="module" src="./popup.ts"></script>
   </body>

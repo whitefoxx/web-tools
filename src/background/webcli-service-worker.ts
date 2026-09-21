@@ -182,8 +182,9 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 });
 
-// Status query for the toolbar popup (src/webcli/popup.ts): report the live
-// daemon-connection state + port + tool-profile counts.
+// What the two UI pages ask the SW: the live daemon-connection state + port +
+// tool-profile counts (src/webcli/popup.ts, polled), and the catalog itself
+// (src/webcli/options.html, once on open).
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg?.type === 'WEBCLI_STATUS') {
     const s = wsBridge.status();
@@ -197,6 +198,36 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       profile: toolProfile,
       toolsTotal: all.length,
       toolsAdvertised: all.filter((t) => inProfile(t.function.name)).length,
+    });
+    return true;
+  }
+  // The settings page asks once, on open: the catalog itself, so the user can
+  // SEE which tools each profile advertises instead of reading two numbers and
+  // taking our word for the difference. Its own message rather than a field on
+  // WEBCLI_STATUS — that one is polled every 2s, and 39 descriptions do not
+  // belong in a heartbeat.
+  if (msg?.type === 'WEBCLI_TOOLS') {
+    sendResponse({
+      profile: toolProfile,
+      tools: openAiToolsFromRegistry().map((t) => {
+        const p = t.function.parameters;
+        return {
+          id: t.function.name,
+          name: t.function.name.replace(/^[^_]+__/, ''),
+          description: t.function.description,
+          core: isInProfile(t.function.name, 'core'),
+          // The arguments too: a row the user can open should show what the
+          // tool actually takes. This is the SAME text the agent is given, not
+          // a second description written for humans — if the two drifted, the
+          // page would be documenting a tool that does not exist.
+          args: Object.entries(p.properties).map(([name, spec]) => ({
+            name,
+            type: spec.type,
+            help: spec.description ?? '',
+            required: p.required.includes(name),
+          })),
+        };
+      }),
     });
     return true;
   }

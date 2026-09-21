@@ -452,7 +452,7 @@ cards.push({
       [
         '1',
         'Install WebCLI',
-        'Add it from the Chrome Web Store. It runs headless — only a small status popup.',
+        'Add it from the Chrome Web Store. It runs headless — a popup and a settings page.',
       ],
       [
         '2',
