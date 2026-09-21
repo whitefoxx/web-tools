@@ -40,7 +40,7 @@ import {
   ICON_SPARK,
   ICON_TERMINAL,
   ICON_TRASH,
-} from './ui-icons';
+} from '../ui/icons';
 
 const DOC_URL = 'https://localmd.app';
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;

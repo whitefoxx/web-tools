@@ -21,7 +21,7 @@ import {
   ICON_OPEN_APP,
   ICON_REGION,
   ICON_SETTINGS,
-} from './ui-icons';
+} from '../ui/icons';
 
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 

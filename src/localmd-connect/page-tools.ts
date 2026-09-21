@@ -64,7 +64,7 @@ import {
   ICON_REFRESH,
   ICON_SPARK,
   ICON_TRASH,
-} from './ui-icons';
+} from '../ui/icons';
 
 export {};
 
